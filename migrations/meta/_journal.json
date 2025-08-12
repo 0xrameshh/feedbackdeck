@@ -1,0 +1,69 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1754030544061,
+      "tag": "0000_add-billing-tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1754031444699,
+      "tag": "0001_add-admin-system",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1754032123736,
+      "tag": "0002_add_email_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1754032847027,
+      "tag": "0003_add_file_storage",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1754040158632,
+      "tag": "0004_rich_chimera",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1754685466010,
+      "tag": "0005_classy_amphibian",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1755015491346,
+      "tag": "0006_unusual_lilith",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1755018497764,
+      "tag": "0007_thick_shard",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1755019440652,
+      "tag": "0008_youthful_puma",
+      "breakpoints": true
+    }
+  ]
+}

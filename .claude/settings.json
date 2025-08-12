@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "command": "afplay /System/Library/Sounds/Glass.aiff"
+      }
+    ]
+  }
+}
