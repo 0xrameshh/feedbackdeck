@@ -33,6 +33,8 @@ BETTER_AUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
+NEXT_PUBLIC_APP_URL=""
+
 # Email
 RESEND_API_KEY=your_resend_api_key
 
