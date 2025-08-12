@@ -65,16 +65,10 @@ export function ProjectsList() {
   const generateEmbedCode = (project: Project) => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     
-    return `<script>
-(function() {
-  if (window.location.hostname !== '${project.domain}' && window.location.hostname !== 'localhost') return;
-  
-  var script = document.createElement('script');
-  script.src = '${baseUrl}/widget/widget.js';
-  script.setAttribute('data-project-id', '${project.id}');
-  script.async = true;
-  document.head.appendChild(script);
-})();
+    return `<script 
+  defer 
+  data-project-id="${project.id}"
+  src="${baseUrl}/js/script.js">
 </script>`;
   };
 
