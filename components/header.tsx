@@ -2,18 +2,18 @@
 
 import { Logout } from "./logout";
 import { ModeSwitcher } from "./mode-switcher";
-import { OrganizationSwitcher } from "./organization-switcher";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { useOrganizations } from "@/hooks/use-organizations";
+import { MessageSquare } from "lucide-react";
 
 export function Header() {
-  const { organizations } = useOrganizations();
-
   return (
     <header className="absolute top-0 right-0 flex justify-between items-center p-4 w-full">
       <div className="flex items-center gap-4">
-        <OrganizationSwitcher organizations={organizations} />
+        <div className="flex items-center gap-2">
+          <MessageSquare className="h-6 w-6 text-blue-600" />
+          <span className="font-bold">FeedbackStar</span>
+        </div>
         <nav className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>
             <Link href="/dashboard">Dashboard</Link>

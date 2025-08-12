@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { db } from "@/db";
 import { project } from "@/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
-import { getUserOrganizations } from "@/lib/organizations";
+import { eq, and } from "drizzle-orm";
 
 export async function GET(
   request: NextRequest,
@@ -16,12 +15,6 @@ export async function GET(
     }
 
     const { id: projectId } = await params;
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
-
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
 
     const projectData = await db
       .select()
@@ -29,7 +22,7 @@ export async function GET(
       .where(
         and(
           eq(project.id, projectId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);
@@ -62,13 +55,6 @@ export async function PUT(
     const body = await request.json();
     const { name, domain, widgetSettings, isActive } = body;
 
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
-
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
-
     // Verify project exists and user has access
     const existingProject = await db
       .select()
@@ -76,7 +62,7 @@ export async function PUT(
       .where(
         and(
           eq(project.id, projectId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);
@@ -140,13 +126,6 @@ export async function DELETE(
     }
 
     const { id: projectId } = await params;
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
-
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
-
     // Verify project exists and user has access
     const existingProject = await db
       .select()
@@ -154,7 +133,7 @@ export async function DELETE(
       .where(
         and(
           eq(project.id, projectId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);
