@@ -39,6 +39,10 @@
         primaryColor: settings.primaryColor || '#3b82f6',
         backgroundColor: settings.backgroundColor || '#ffffff',
         textColor: settings.textColor || '#1f2937',
+        borderRadius: settings.borderRadius || 8,
+        buttonSize: settings.buttonSize || 'medium',
+        theme: settings.theme || 'light',
+        showRating: settings.showRating !== false, // default true
         ...settings
       };
       
@@ -46,11 +50,30 @@
       this.init();
     }
 
-    init() {
+    async init() {
+      // Fetch project settings from API
+      await this.loadProjectSettings();
+      
       this.injectStyles();
       this.createTrigger();
       this.createModal();
       this.bindEvents();
+    }
+
+    async loadProjectSettings() {
+      try {
+        const response = await fetch(`${CONFIG.API_BASE}/api/projects/${this.projectId}/settings`);
+        if (response.ok) {
+          const projectSettings = await response.json();
+          // Merge project settings with defaults
+          this.settings = {
+            ...this.settings,
+            ...projectSettings.widgetSettings
+          };
+        }
+      } catch (error) {
+        console.warn('Could not load project settings, using defaults:', error);
+      }
     }
 
     adjustBrightness(hex, percent) {
@@ -89,6 +112,7 @@
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           transform: translateX(0);
           opacity: 1;
+          visibility: visible;
           display: flex;
           align-items: center;
         }
@@ -100,6 +124,12 @@
 
         #${CONFIG.TRIGGER_ID}:active {
           transform: translateX(-2px);
+        }
+
+        #${CONFIG.TRIGGER_ID}.hidden {
+          opacity: 0;
+          visibility: hidden;
+          transform: translateX(100%);
         }
 
         
@@ -487,6 +517,7 @@
                   placeholder="your@email.com"
                 />
               </div>
+              ${this.settings.showRating ? `
               <div class="feedbackstar-field">
                 <label class="feedbackstar-label">
                   Rate your experience (Optional)
@@ -500,6 +531,7 @@
                 </div>
                 <input type="hidden" id="feedbackstar-rating-value" name="rating" value="">
               </div>
+              ` : ''}
               <div class="feedbackstar-buttons">
                 <button type="button" class="feedbackstar-button feedbackstar-button-secondary" id="feedbackstar-cancel">
                   Cancel
@@ -558,42 +590,53 @@
       // Handle form submission
       form.addEventListener('submit', (e) => this.handleSubmit(e));
 
-      // Handle star rating
-      const stars = modal.querySelectorAll('.feedbackstar-star');
-      const ratingInput = modal.querySelector('#feedbackstar-rating-value');
-      
-      stars.forEach((star, index) => {
-        star.addEventListener('click', () => {
-          const rating = index + 1;
-          ratingInput.value = rating;
-          
-          // Update visual state
-          stars.forEach((s, i) => {
-            s.classList.toggle('filled', i < rating);
-          });
-        });
+      // Handle star rating (only if enabled)
+      if (this.settings.showRating) {
+        const stars = modal.querySelectorAll('.feedbackstar-star');
+        const ratingInput = modal.querySelector('#feedbackstar-rating-value');
         
-        star.addEventListener('mouseenter', () => {
-          stars.forEach((s, i) => {
-            s.classList.toggle('active', i <= index);
+        if (stars.length > 0 && ratingInput) {
+          stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+              const rating = index + 1;
+              ratingInput.value = rating;
+              
+              // Update visual state
+              stars.forEach((s, i) => {
+                s.classList.toggle('filled', i < rating);
+              });
+            });
+            
+            star.addEventListener('mouseenter', () => {
+              stars.forEach((s, i) => {
+                s.classList.toggle('active', i <= index);
+              });
+            });
           });
-        });
-      });
-      
-      // Reset hover state on mouse leave
-      modal.querySelector('.feedbackstar-rating').addEventListener('mouseleave', () => {
-        stars.forEach(s => s.classList.remove('active'));
-      });
+          
+          // Reset hover state on mouse leave
+          const ratingContainer = modal.querySelector('.feedbackstar-rating');
+          if (ratingContainer) {
+            ratingContainer.addEventListener('mouseleave', () => {
+              stars.forEach(s => s.classList.remove('active'));
+            });
+          }
+        }
+      }
     }
 
     openModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
       const backdrop = document.getElementById('feedbackstar-backdrop');
+      const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = true;
       backdrop.classList.add('show');
       modal.classList.add('show');
       modal.setAttribute('aria-hidden', 'false');
+      
+      // Hide trigger button
+      trigger.classList.add('hidden');
       
       // Focus management
       setTimeout(() => {
@@ -610,11 +653,15 @@
     closeModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
       const backdrop = document.getElementById('feedbackstar-backdrop');
+      const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = false;
       modal.classList.remove('show');
       backdrop.classList.remove('show');
       modal.setAttribute('aria-hidden', 'true');
+      
+      // Show trigger button again
+      trigger.classList.remove('hidden');
       
       // Wait for animation to complete before cleanup
       setTimeout(() => {

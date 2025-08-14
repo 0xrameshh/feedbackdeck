@@ -95,6 +95,11 @@ export const project = pgTable("project", {
         primaryColor?: string;
         backgroundColor?: string;
         textColor?: string;
+        borderRadius?: number;
+        buttonSize?: 'small' | 'medium' | 'large';
+        theme?: 'light' | 'dark' | 'auto';
+        showRating?: boolean;
+        customCSS?: string;
     }>().default({}),
     isActive: boolean('is_active').default(true),
     createdAt: timestamp('created_at').$defaultFn(() => new Date()).notNull(),
