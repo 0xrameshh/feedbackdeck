@@ -68,12 +68,13 @@ export default function ProjectSettingsPage() {
       if (!response.ok) throw new Error('Failed to fetch project');
       
       const data = await response.json();
-      setProject(data);
+      setProject(data.project);
       
       // Merge existing settings with defaults
+      console.log('Loading widget settings:', data.project.widgetSettings);
       setSettings(prev => ({
         ...prev,
-        ...data.widgetSettings
+        ...data.project.widgetSettings
       }));
     } catch (error) {
       console.error('Error fetching project:', error);
@@ -91,6 +92,7 @@ export default function ProjectSettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      console.log('Saving widget settings:', settings);
       const response = await fetch(`/api/projects/${projectId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -101,6 +103,8 @@ export default function ProjectSettingsPage() {
 
       if (!response.ok) throw new Error('Failed to save settings');
       
+      const result = await response.json();
+      console.log('Save result:', result);
       toast.success('Widget settings saved successfully');
     } catch (error) {
       console.error('Error saving settings:', error);
