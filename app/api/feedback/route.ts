@@ -189,6 +189,7 @@ export async function GET(request: NextRequest) {
         projectDomain: project.domain,
         message: feedback.message,
         category: feedback.category,
+        rating: feedback.rating,
         userEmail: feedback.userEmail,
         pageUrl: feedback.pageUrl,
         userAgent: feedback.userAgent,

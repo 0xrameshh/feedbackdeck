@@ -713,6 +713,7 @@
           projectId: this.projectId,
           message: formData.get('message'),
           category: formData.get('category'),
+          rating: formData.get('rating') ? parseInt(formData.get('rating')) : null,
           userEmail: formData.get('email') || null,
           pageUrl: window.location.href,
           userAgent: navigator.userAgent,

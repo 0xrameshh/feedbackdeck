@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply } from "lucide-react";
+import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply, Star } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -220,6 +220,26 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
     });
   };
 
+  const renderStarRating = (rating: number | null) => {
+    if (!rating) return null;
+    
+    return (
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={`h-3 w-3 ${
+              star <= rating
+                ? 'fill-yellow-400 text-yellow-400'
+                : 'text-gray-300'
+            }`}
+          />
+        ))}
+        <span className="text-xs text-gray-600 ml-1">({rating}/5)</span>
+      </div>
+    );
+  };
+
   if (loading && !feedbackData) {
     return (
       <div className="space-y-4">
@@ -336,9 +356,16 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    <p className="text-sm font-medium text-gray-900">
-                      {item.message}
-                    </p>
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <p className="text-sm font-medium text-gray-900">
+                        {item.message}
+                      </p>
+                      {item.rating && (
+                        <div className="flex-shrink-0">
+                          {renderStarRating(item.rating)}
+                        </div>
+                      )}
+                    </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-gray-600">
                       <span className="flex items-center gap-1">
                         <Globe className="h-3 w-3" />
@@ -356,15 +383,48 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                       </span>
                       {item.metadata?.country && (
                         <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                          {item.metadata.country}
+                          📍 {item.metadata.country}
                         </span>
                       )}
                       {item.metadata?.device && (
                         <span className="text-xs bg-blue-100 px-2 py-1 rounded">
-                          {item.metadata.device}
+                          💻 {item.metadata.device}
+                        </span>
+                      )}
+                      {item.metadata?.os && (
+                        <span className="text-xs bg-green-100 px-2 py-1 rounded">
+                          🖥️ {item.metadata.os}
+                        </span>
+                      )}
+                      {item.metadata?.browserInfo && (
+                        <span className="text-xs bg-purple-100 px-2 py-1 rounded">
+                          🌐 {item.metadata.browserInfo}
+                        </span>
+                      )}
+                      {item.metadata?.language && (
+                        <span className="text-xs bg-orange-100 px-2 py-1 rounded">
+                          🗣️ {item.metadata.language}
+                        </span>
+                      )}
+                      {item.metadata?.timezone && (
+                        <span className="text-xs bg-pink-100 px-2 py-1 rounded">
+                          🕐 {item.metadata.timezone}
+                        </span>
+                      )}
+                      {item.metadata?.screenResolution && (
+                        <span className="text-xs bg-indigo-100 px-2 py-1 rounded">
+                          📺 {item.metadata.screenResolution}
                         </span>
                       )}
                     </div>
+                    {item.metadata?.route && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        <span className="font-medium">Route:</span> 
+                        <span className="bg-yellow-100 px-2 py-1 rounded ml-1 break-all">
+                          🛤️ {item.metadata.route}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
@@ -453,7 +513,14 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
           {selectedFeedback && (
             <div className="space-y-6">
               <div>
-                <h4 className="font-semibold mb-2">Message</h4>
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-semibold">Message</h4>
+                  {selectedFeedback.rating && (
+                    <div className="ml-4">
+                      {renderStarRating(selectedFeedback.rating)}
+                    </div>
+                  )}
+                </div>
                 <p className="text-gray-700 bg-gray-50 p-3 rounded-md">
                   {selectedFeedback.message}
                 </p>
