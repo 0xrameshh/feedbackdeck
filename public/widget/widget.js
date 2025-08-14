@@ -126,19 +126,22 @@
         #${CONFIG.MODAL_ID} {
           position: fixed;
           bottom: 0;
-          left: 50%;
-          transform: translateX(-50%) translateY(100%);
+          right: 0;
+          transform: translateY(100%);
           z-index: 1000000;
-          display: none;
-          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          display: block;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           width: 100%;
           max-width: 420px;
           padding: 0 20px 20px 20px;
         }
 
         #${CONFIG.MODAL_ID}.show {
-          display: block;
-          transform: translateX(-50%) translateY(0);
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
         }
         
         @media (max-width: 480px) {
@@ -171,15 +174,16 @@
           height: 100%;
           background-color: rgba(0, 0, 0, 0.4);
           z-index: 999999;
-          display: none;
+          display: block;
           opacity: 0;
-          transition: opacity 0.4s ease;
+          visibility: hidden;
+          transition: all 0.5s ease;
           backdrop-filter: blur(3px);
         }
 
         .feedbackstar-backdrop.show {
-          display: block;
           opacity: 1;
+          visibility: visible;
         }
 
         .feedbackstar-close {
@@ -509,7 +513,7 @@
         if (firstInput) {
           firstInput.focus();
         }
-      }, 300);
+      }, 500);
       
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
