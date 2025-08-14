@@ -194,6 +194,13 @@ export default function ProjectSettingsPage() {
                 type="color"
                 value={settings.primaryColor}
                 onChange={(e) => setSettings(prev => ({ ...prev, primaryColor: e.target.value }))}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const paste = e.clipboardData.getData('text');
+                  if (paste.match(/^#[0-9A-Fa-f]{6}$/)) {
+                    setSettings(prev => ({ ...prev, primaryColor: paste }));
+                  }
+                }}
               />
             </div>
 
@@ -204,6 +211,13 @@ export default function ProjectSettingsPage() {
                 type="color"
                 value={settings.backgroundColor}
                 onChange={(e) => setSettings(prev => ({ ...prev, backgroundColor: e.target.value }))}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  const paste = e.clipboardData.getData('text');
+                  if (paste.match(/^#[0-9A-Fa-f]{6}$/)) {
+                    setSettings(prev => ({ ...prev, backgroundColor: paste }));
+                  }
+                }}
               />
             </div>
 
@@ -268,7 +282,7 @@ export default function ProjectSettingsPage() {
                 type="number"
                 min="0"
                 max="50"
-                value={settings.borderRadius}
+                value={settings.borderRadius.toString()}
                 onChange={(e) => setSettings(prev => ({ ...prev, borderRadius: parseInt(e.target.value) || 0 }))}
               />
             </div>
