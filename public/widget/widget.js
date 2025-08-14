@@ -82,8 +82,8 @@
           border: none;
           border-radius: 24px;
           font-family: system-ui, -apple-system, sans-serif;
-          font-size: 14px;
-          font-weight: 600;
+          font-size: 15px;
+          font-weight: 700;
           cursor: pointer;
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -91,7 +91,6 @@
           opacity: 1;
           display: flex;
           align-items: center;
-          gap: 8px;
         }
         
         #${CONFIG.TRIGGER_ID}:hover {
@@ -103,10 +102,6 @@
           transform: translateY(0) scale(0.98);
         }
 
-        #${CONFIG.TRIGGER_ID}::before {
-          content: "💬";
-          font-size: 16px;
-        }
         
         #${CONFIG.TRIGGER_ID}.bottom-right {
           bottom: 20px;
@@ -205,16 +200,17 @@
         }
 
         .feedbackstar-title {
-          font-size: 20px;
-          font-weight: 600;
+          font-size: 22px;
+          font-weight: 700;
           margin-bottom: 8px;
-          color: ${this.settings.textColor};
+          color: #1f2937;
         }
 
         .feedbackstar-description {
-          color: #6b7280;
+          color: #4b5563;
           margin-bottom: 24px;
-          font-size: 14px;
+          font-size: 15px;
+          line-height: 1.5;
         }
 
         .feedbackstar-form {
@@ -230,9 +226,9 @@
         }
 
         .feedbackstar-label {
-          font-size: 14px;
-          font-weight: 500;
-          color: ${this.settings.textColor};
+          font-size: 15px;
+          font-weight: 600;
+          color: #1f2937;
         }
 
         .feedbackstar-required {
@@ -242,14 +238,15 @@
         .feedbackstar-input,
         .feedbackstar-textarea,
         .feedbackstar-select {
-          padding: 8px 12px;
+          padding: 10px 14px;
           border: 1px solid #d1d5db;
-          border-radius: 6px;
-          font-size: 14px;
+          border-radius: 8px;
+          font-size: 15px;
           font-family: inherit;
-          background-color: ${this.settings.backgroundColor};
-          color: ${this.settings.textColor};
+          background-color: #ffffff;
+          color: #1f2937;
           transition: border-color 0.2s ease;
+          line-height: 1.4;
         }
 
         .feedbackstar-input:focus,
@@ -273,10 +270,10 @@
         }
 
         .feedbackstar-button {
-          padding: 8px 16px;
-          border-radius: 6px;
-          font-size: 14px;
-          font-weight: 500;
+          padding: 10px 20px;
+          border-radius: 8px;
+          font-size: 15px;
+          font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
           border: 1px solid transparent;
@@ -399,7 +396,7 @@
         <div class="feedbackstar-modal-content">
           <button class="feedbackstar-close" aria-label="Close feedback form">×</button>
           <div id="feedbackstar-form-view">
-            <h2 id="feedbackstar-title" class="feedbackstar-title">💬 Send Feedback</h2>
+            <h2 id="feedbackstar-title" class="feedbackstar-title">Send Feedback</h2>
             <p class="feedbackstar-description">Help us improve by sharing your thoughts!</p>
             <form class="feedbackstar-form" id="feedbackstar-form">
               <div class="feedbackstar-field">
@@ -420,15 +417,15 @@
                 </label>
                 <select id="feedbackstar-category" name="category" class="feedbackstar-select" required>
                   <option value="">Select a category</option>
-                  <option value="general">💬 General</option>
-                  <option value="bug">🐛 Bug Report</option>
-                  <option value="feature">✨ Feature Request</option>
-                  <option value="praise">🎉 Praise</option>
+                  <option value="general">General</option>
+                  <option value="bug">Bug Report</option>
+                  <option value="feature">Feature Request</option>
+                  <option value="praise">Praise</option>
                 </select>
               </div>
               <div class="feedbackstar-field">
                 <label for="feedbackstar-email" class="feedbackstar-label">
-                  📧 Want a reply? (Optional)
+                  Want a reply? (Optional)
                 </label>
                 <input 
                   type="email" 
@@ -443,14 +440,14 @@
                   Cancel
                 </button>
                 <button type="submit" class="feedbackstar-button feedbackstar-button-primary" id="feedbackstar-submit">
-                  🚀 Send Feedback
+                  Send Feedback
                 </button>
               </div>
             </form>
           </div>
           <div id="feedbackstar-success-view" style="display: none;">
             <div class="feedbackstar-success">
-              <div class="feedbackstar-success-icon">✅</div>
+              <div class="feedbackstar-success-icon">✓</div>
               <h2 class="feedbackstar-success-title">Thank you!</h2>
               <p class="feedbackstar-success-message">
                 Your feedback has been sent successfully. We appreciate you taking the time to help us improve!
