@@ -238,14 +238,14 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`h-3 w-3 ${
+            className={`h-3 w-3 sm:h-4 sm:w-4 ${
               star <= rating
                 ? 'fill-yellow-400 text-yellow-400'
                 : 'text-gray-300'
             }`}
           />
         ))}
-        <span className="text-xs text-gray-600 dark:text-gray-400 ml-1">({rating}/5)</span>
+        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-1">({rating}/5)</span>
       </div>
     );
   };
@@ -366,9 +366,10 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                     </div>
                   </div>
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <div className="space-y-3">
+                    {/* Message and Rating */}
+                    <div className="flex items-start gap-2">
+                      <p className="text-sm sm:text-base font-medium text-gray-900 dark:text-gray-100">
                         {item.message}
                       </p>
                       {item.rating && (
@@ -377,93 +378,23 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-gray-600 dark:text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <Globe className="h-3 w-3" />
-                        <span className="truncate">{item.projectName}</span>
-                      </span>
-                      {item.userEmail && (
-                        <span className="flex items-center gap-1">
-                          <Mail className="h-3 w-3" />
-                          <span className="truncate">{item.userEmail}</span>
-                        </span>
-                      )}
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {formatDate(item.createdAt)}
-                      </span>
-                      {item.metadata?.country && (
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded flex items-center gap-1">
-                          <span className="text-sm">{getCountryFlag(item.metadata.country)}</span>
-                          <span>{item.metadata.country}</span>
-                        </span>
-                      )}
-                      {item.metadata?.device && (
-                        <span className="text-xs bg-blue-100 px-2 py-1 rounded">
-                          💻 {item.metadata.device}
-                        </span>
-                      )}
-                      {item.metadata?.os && (
-                        <span className="text-xs bg-green-100 px-2 py-1 rounded">
-                          🖥️ {item.metadata.os}
-                        </span>
-                      )}
-                      {item.metadata?.browserInfo && (
-                        <span className="text-xs bg-purple-100 px-2 py-1 rounded">
-                          🌐 {item.metadata.browserInfo}
-                        </span>
-                      )}
-                      {item.metadata?.language && (
-                        <span className="text-xs bg-orange-100 px-2 py-1 rounded">
-                          🗣️ {item.metadata.language}
-                        </span>
-                      )}
-                      {item.metadata?.timezone && (
-                        <span className="text-xs bg-pink-100 px-2 py-1 rounded">
-                          🕐 {item.metadata.timezone}
-                        </span>
-                      )}
-                      {item.metadata?.screenResolution && (
-                        <span className="text-xs bg-indigo-100 px-2 py-1 rounded">
-                          📺 {item.metadata.screenResolution}
-                        </span>
-                      )}
-                    </div>
-                    {item.metadata?.route && (
-                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                        <span className="font-medium">Route:</span> 
-                        <span className="bg-yellow-100 px-2 py-1 rounded ml-1 break-all">
-                          🛤️ {item.metadata.route}
-                        </span>
-                      </div>
-                    )}
-                  </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                    {/* Action Buttons - All on same line */}
                     <div className="flex flex-wrap gap-2">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => setSelectedFeedback(item)}
-                        className="text-xs"
+                        className="text-xs sm:text-sm"
                       >
                         View Details
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => window.open(item.pageUrl, '_blank')}
-                        className="flex items-center gap-1 text-xs"
-                      >
-                        <ExternalLink className="h-3 w-3" />
-                        View Page
                       </Button>
                       {item.status === 'unread' && (
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => updateFeedbackStatus(item.id, 'read')}
-                          className="text-xs"
+                          className="text-xs sm:text-sm"
                         >
                           Mark as Read
                         </Button>
@@ -473,14 +404,71 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                           size="sm"
                           variant="outline"
                           onClick={() => openEmailReply(item)}
-                          className="flex items-center gap-1 text-xs"
+                          className="flex items-center gap-1 text-xs sm:text-sm"
                         >
-                          <Reply className="h-3 w-3" />
+                          <Reply className="h-3 w-3 sm:h-4 sm:w-4" />
                           Reply
                         </Button>
                       )}
                     </div>
                   </div>
+
+                  {/* Metadata Section - Below the main content */}
+                  {(item.metadata?.country || item.metadata?.device || item.metadata?.os || 
+                    item.metadata?.browserInfo || item.metadata?.language || item.metadata?.timezone || 
+                    item.metadata?.screenResolution || item.metadata?.route) && (
+                    <div className="mt-3">
+                      <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
+                        {item.metadata?.country && (
+                          <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded flex items-center gap-1">
+                            <span className="text-sm sm:text-base">{getCountryFlag(item.metadata.country)}</span>
+                            <span>{item.metadata.country}</span>
+                          </span>
+                        )}
+                        {item.metadata?.device && (
+                          <span className="bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">
+                            💻 {item.metadata.device}
+                          </span>
+                        )}
+                        {item.metadata?.os && (
+                          <span className="bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
+                            🖥️ {item.metadata.os}
+                          </span>
+                        )}
+                        {item.metadata?.browserInfo && (
+                          <span className="bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded">
+                            🌐 {item.metadata.browserInfo}
+                          </span>
+                        )}
+                        {item.metadata?.language && (
+                          <span className="bg-orange-100 dark:bg-orange-900/30 px-2 py-1 rounded">
+                            🗣️ {item.metadata.language}
+                          </span>
+                        )}
+                        {item.metadata?.timezone && (
+                          <span className="bg-pink-100 dark:bg-pink-900/30 px-2 py-1 rounded">
+                            🕐 {item.metadata.timezone}
+                          </span>
+                        )}
+                        {item.metadata?.screenResolution && (
+                          <span className="bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded">
+                            📺 {item.metadata.screenResolution}
+                          </span>
+                        )}
+                        {item.metadata?.route && (
+                          <a 
+                            href={item.pageUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-yellow-100 dark:bg-yellow-900/30 px-2 py-1 rounded inline-flex items-center gap-1 hover:bg-yellow-200 dark:hover:bg-yellow-900/50 transition-colors"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                            {item.metadata.route}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
