@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, MessageSquare, Clock } from "lucide-react";
-import type { Project } from "@/db/schema";
 import { FeedbackPieChart, FeedbackLineChart, FeedbackBarChart } from '@/components/charts/feedback-charts';
 
 interface AnalyticsStats {
@@ -23,28 +22,11 @@ interface AnalyticsStats {
 }
 
 export default function AnalyticsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  // const [projects, setProjects] = useState<Project[]>([]); // Currently unused
   const [stats, setStats] = useState<AnalyticsStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProjects();
-    fetchStats();
-  }, []);
-
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('/api/projects');
-      if (response.ok) {
-        const data = await response.json();
-        setProjects(data.projects || []);
-      }
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-    }
-  };
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await fetch('/api/dashboard/stats');
       if (response.ok) {
@@ -77,7 +59,24 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // fetchProjects(); // Not currently needed
+    fetchStats();
+  }, [fetchStats]);
+
+  // const fetchProjects = async () => {
+  //   try {
+  //     const response = await fetch('/api/projects');
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setProjects(data.projects || []);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching projects:', error);
+  //   }
+  // };
 
   if (loading) {
     return (

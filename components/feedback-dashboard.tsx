@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,7 +46,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchFeedback = async (page = 1, reset = false) => {
+  const fetchFeedback = useCallback(async (page = 1, reset = false) => {
     try {
       setLoading(true);
       
@@ -81,11 +81,11 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedProject, selectedCategory, selectedStatus]);
 
   useEffect(() => {
     fetchFeedback(1, true);
-  }, [selectedProject, selectedCategory, selectedStatus]); // fetchFeedback is stable
+  }, [selectedProject, selectedCategory, selectedStatus, fetchFeedback]); // fetchFeedback is stable
 
   const filteredFeedback = useMemo(() => {
     if (!feedbackData || !searchTerm) return feedbackData?.feedback || [];

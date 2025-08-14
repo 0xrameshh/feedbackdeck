@@ -30,12 +30,12 @@ interface FeedbackChartsProps {
 }
 
 export function FeedbackPieChart({ stats }: FeedbackChartsProps) {
-  const chartData = [
+  const chartData = React.useMemo(() => [
     { category: "General", count: stats.categoryData?.general || 0, fill: "var(--color-general)" },
     { category: "Bug", count: stats.categoryData?.bug || 0, fill: "var(--color-bug)" },
     { category: "Feature", count: stats.categoryData?.feature || 0, fill: "var(--color-feature)" },
     { category: "Praise", count: stats.categoryData?.praise || 0, fill: "var(--color-praise)" },
-  ];
+  ], [stats.categoryData]);
 
   const chartConfig = {
     general: {
@@ -120,7 +120,7 @@ export function FeedbackPieChart({ stats }: FeedbackChartsProps) {
 }
 
 export function FeedbackLineChart({ stats }: FeedbackChartsProps) {
-  const chartData = [
+  const chartData = React.useMemo(() => [
     { day: "Mon", feedback: stats.weeklyData?.[0] || 0 },
     { day: "Tue", feedback: stats.weeklyData?.[1] || 0 },
     { day: "Wed", feedback: stats.weeklyData?.[2] || 0 },
@@ -128,7 +128,7 @@ export function FeedbackLineChart({ stats }: FeedbackChartsProps) {
     { day: "Fri", feedback: stats.weeklyData?.[4] || 0 },
     { day: "Sat", feedback: stats.weeklyData?.[5] || 0 },
     { day: "Sun", feedback: stats.weeklyData?.[6] || 0 },
-  ];
+  ], [stats.weeklyData]);
 
   const chartConfig = {
     feedback: {
@@ -178,12 +178,12 @@ export function FeedbackLineChart({ stats }: FeedbackChartsProps) {
 }
 
 export function FeedbackBarChart({ stats }: FeedbackChartsProps) {
-  const chartData = [
+  const chartData = React.useMemo(() => [
     { category: "General", count: stats.categoryData?.general || 0 },
     { category: "Bug", count: stats.categoryData?.bug || 0 },
     { category: "Feature", count: stats.categoryData?.feature || 0 },
     { category: "Praise", count: stats.categoryData?.praise || 0 },
-  ];
+  ], [stats.categoryData]);
 
   const chartConfig = {
     count: {

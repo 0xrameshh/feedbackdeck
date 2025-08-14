@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,27 +24,7 @@ export function ProjectsList() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [embedCode, setEmbedCode] = useState('');
 
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('/api/projects');
-      if (!response.ok) throw new Error('Failed to fetch projects');
-      
-      const data = await response.json();
-      setProjects(data.projects);
-      
-      // Fetch feedback counts for each project
-      if (data.projects && data.projects.length > 0) {
-        await fetchFeedbackCounts(data.projects);
-      }
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-      toast.error('Failed to load projects');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchFeedbackCounts = async (projectList: Project[]) => {
+  const fetchFeedbackCounts = useCallback(async (projectList: Project[]) => {
     try {
       const counts: Record<string, number> = {};
       
@@ -62,11 +42,32 @@ export function ProjectsList() {
     } catch (error) {
       console.error('Error fetching feedback counts:', error);
     }
-  };
+  }, []);
+
+  const fetchProjects = useCallback(async () => {
+    try {
+      const response = await fetch('/api/projects');
+      if (!response.ok) throw new Error('Failed to fetch projects');
+      
+      const data = await response.json();
+      setProjects(data.projects);
+      
+      // Fetch feedback counts for each project
+      if (data.projects && data.projects.length > 0) {
+        await fetchFeedbackCounts(data.projects);
+      }
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      toast.error('Failed to load projects');
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchFeedbackCounts]);
+
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   const deleteProject = async (projectId: string) => {
     if (!confirm('Are you sure you want to delete this project? This action cannot be undone.')) {

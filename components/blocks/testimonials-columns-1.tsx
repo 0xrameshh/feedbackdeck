@@ -35,6 +35,7 @@ export const TestimonialsColumn = (props: {
                 <div className="p-10 rounded-3xl border shadow-lg shadow-primary/10 max-w-xs w-full" key={i}>
                   <div>{text}</div>
                   <div className="flex items-center gap-2 mt-5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       width={40}
                       height={40}
@@ -56,5 +57,3 @@ export const TestimonialsColumn = (props: {
     </div>
   );
 };
-
-;

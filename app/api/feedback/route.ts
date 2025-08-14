@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Handle CORS preflight requests
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const projectInfo = projectData[0];
+    // const projectInfo = projectData[0]; // Currently unused
 
     // Basic URL validation
     try {

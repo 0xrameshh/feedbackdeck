@@ -3,7 +3,7 @@
 import { CreateProjectForm } from "@/components/forms/create-project-form";
 import { ProjectsList } from "@/components/projects-list";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -36,19 +36,9 @@ interface DashboardStats {
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true); // Currently unused
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  useEffect(() => {
-    if (projects.length >= 0) { // Fetch stats even if no projects (for 0 stats)
-      fetchStats();
-    }
-  }, [projects]);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch('/api/projects');
       if (response.ok) {
@@ -58,9 +48,9 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
-  };
+  }, []);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await fetch('/api/dashboard/stats');
       if (response.ok) {
@@ -93,12 +83,21 @@ export default function DashboardPage() {
         categoryData: { general: 0, bug: 0, feature: 0, praise: 0 }
       });
     } finally {
-      setLoading(false);
+      // setLoading(false); // Loading state currently unused
     }
-  };
+  }, [projects]);
 
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
-  const hasProjects = projects.length > 0;
+  useEffect(() => {
+    if (projects.length >= 0) { // Fetch stats even if no projects (for 0 stats)
+      fetchStats();
+    }
+  }, [projects, fetchStats]);
+
+  // const hasProjects = projects.length > 0; // Currently unused
   return (
     <div className="w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">

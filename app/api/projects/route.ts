@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function generateEmbedCode(projectId: string, domain: string): string {
+function generateEmbedCode(projectId: string, _domain: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   
   return `<script 
