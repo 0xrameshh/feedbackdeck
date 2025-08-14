@@ -97,7 +97,7 @@ export function ProjectsList() {
     return `<script 
   defer 
   data-project-id="${project.id}"
-  src="${baseUrl}/js/script.js">
+  src="${baseUrl}/widget/widget.js">
 </script>`;
   };
 
