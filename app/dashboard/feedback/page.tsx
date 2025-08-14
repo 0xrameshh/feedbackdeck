@@ -98,8 +98,8 @@ export default function FeedbackPage() {
   return (
     <div className="w-full">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Feedback</h1>
-        <p className="text-gray-600 text-sm sm:text-base">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Feedback</h1>
+        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
           Manage feedback from your websites
         </p>
       </div>
@@ -110,8 +110,8 @@ export default function FeedbackPage() {
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total</p>
-                <div className="text-2xl sm:text-3xl font-bold">{stats?.totalFeedback || 0}</div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Total</p>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{stats?.totalFeedback || 0}</div>
               </div>
               <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
             </div>
@@ -122,8 +122,8 @@ export default function FeedbackPage() {
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Pending</p>
-                <div className="text-2xl sm:text-3xl font-bold text-orange-600">{stats?.pending || 0}</div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Pending</p>
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400">{stats?.pending || 0}</div>
               </div>
               <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </div>

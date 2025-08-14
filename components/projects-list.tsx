@@ -126,8 +126,8 @@ export function ProjectsList() {
       <Card>
         <CardContent className="pt-6 text-center">
           <Globe className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
-          <p className="text-gray-600 mb-4">
+          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No projects yet</h3>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             Create your first project to start collecting feedback.
           </p>
           <Dialog>
@@ -167,27 +167,38 @@ export function ProjectsList() {
             </CardHeader>
             <CardContent className="p-4 sm:p-6">
               <div className="space-y-3">
-                <div className="text-xs sm:text-sm text-gray-600">
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <strong>Domain:</strong> <span className="break-all">{project.domain}</span>
                 </div>
                 
-                <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                <div className="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                   {projectFeedbackCounts[project.id] || 0} feedback messages
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => showEmbedCode(project)}
-                    className="flex-1 text-xs sm:text-sm"
-                  >
-                    <Code2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                    Embed
-                  </Button>
+                <div className="flex flex-col gap-2 mt-4">
+                  {(projectFeedbackCounts[project.id] || 0) > 0 && (
+                    <Button
+                      size="sm"
+                      onClick={() => router.push(`/dashboard/feedback?projectId=${project.id}`)}
+                      className="w-full text-xs sm:text-sm"
+                    >
+                      <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                      View Feedback ({projectFeedbackCounts[project.id] || 0})
+                    </Button>
+                  )}
                   
                   <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => showEmbedCode(project)}
+                      className="flex-1 text-xs sm:text-sm"
+                    >
+                      <Code2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                      Embed Code
+                    </Button>
+                    
                     <Button
                       size="sm"
                       variant="outline"

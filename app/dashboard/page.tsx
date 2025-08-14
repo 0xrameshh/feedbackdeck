@@ -102,36 +102,44 @@ export default function DashboardPage() {
     <div className="w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome back</h1>
-          <p className="text-gray-600 text-sm sm:text-base">Here&apos;s what&apos;s happening with your feedback collection today</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Monitor your feedback collection and manage projects</p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="w-full sm:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              New Project
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Project</DialogTitle>
-              <DialogDescription>
-                Add a website to start collecting feedback from your users.
-              </DialogDescription>
-            </DialogHeader>
-            <CreateProjectForm />
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button asChild variant="outline" className="flex-1 sm:flex-none">
+            <Link href="/dashboard/feedback">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              View Feedback
+            </Link>
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="flex-1 sm:flex-none">
+                <Plus className="h-4 w-4 mr-2" />
+                New Project
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Project</DialogTitle>
+                <DialogDescription>
+                  Add a website to start collecting feedback from your users.
+                </DialogDescription>
+              </DialogHeader>
+              <CreateProjectForm />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
-      {/* Key Stats */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6 sm:mb-8">
+      {/* Key Stats - Simplified */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-6 sm:mb-8">
         <Card>
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Feedback</p>
-                <div className="text-2xl sm:text-3xl font-bold">{stats?.totalFeedback || 0}</div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Total Feedback</p>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{stats?.totalFeedback || 0}</div>
               </div>
               <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
             </div>
@@ -142,54 +150,35 @@ export default function DashboardPage() {
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Pending</p>
-                <div className="text-2xl sm:text-3xl font-bold text-orange-600">{stats?.pending || 0}</div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Unread</p>
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400">{stats?.pending || 0}</div>
               </div>
               <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="sm:col-span-2 lg:col-span-1">
+        <Card>
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Active Sites</p>
-                <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats?.activeSites || 0}</div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Active Projects</p>
+                <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{stats?.activeSites || 0}</div>
               </div>
               <Globe className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 mb-6 sm:mb-8">
-        <Card>
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm sm:text-base">Recent Feedback</h3>
-              <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-            </div>
-            <Button asChild variant="outline" className="w-full text-sm">
-              <Link href="/dashboard/feedback">
-                Manage Feedback
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
 
         <Card>
           <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-sm sm:text-base">Analytics</h3>
-              <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">This Week</p>
+                <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">{stats?.thisWeek || 0}</div>
+              </div>
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
             </div>
-            <Button asChild variant="outline" className="w-full text-sm">
-              <Link href="/dashboard/analytics">
-                View Reports
-              </Link>
-            </Button>
           </CardContent>
         </Card>
       </div>
@@ -197,26 +186,7 @@ export default function DashboardPage() {
       {/* Projects Section */}
       <Card id="projects">
         <CardHeader className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <CardTitle className="text-lg sm:text-xl">Your Projects</CardTitle>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="sm" variant="outline" className="w-full sm:w-auto text-sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Project
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Project</DialogTitle>
-                  <DialogDescription>
-                    Add a website to start collecting feedback from your users.
-                  </DialogDescription>
-                </DialogHeader>
-                <CreateProjectForm />
-              </DialogContent>
-            </Dialog>
-          </div>
+          <CardTitle className="text-lg sm:text-xl text-gray-900 dark:text-gray-100">Your Projects</CardTitle>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <ProjectsList />

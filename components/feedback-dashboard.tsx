@@ -47,6 +47,15 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Check URL parameters for initial project filter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('projectId');
+    if (projectId && projects.some(p => p.id === projectId)) {
+      setSelectedProject(projectId);
+    }
+  }, [projects]);
+
   const fetchFeedback = useCallback(async (page = 1, reset = false) => {
     try {
       setLoading(true);
@@ -236,7 +245,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
             }`}
           />
         ))}
-        <span className="text-xs text-gray-600 ml-1">({rating}/5)</span>
+        <span className="text-xs text-gray-600 dark:text-gray-400 ml-1">({rating}/5)</span>
       </div>
     );
   };
@@ -336,8 +345,8 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
           <Card>
             <CardContent className="pt-6 text-center">
               <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-semibold mb-2">No feedback yet</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No feedback yet</h3>
+              <p className="text-gray-600 dark:text-gray-300">
                 Feedback submissions will appear here once users start using your widget.
               </p>
             </CardContent>
@@ -370,7 +379,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
 
                   <div className="space-y-2 mb-4">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {item.message}
                       </p>
                       {item.rating && (
@@ -379,7 +388,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                         </div>
                       )}
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-gray-600">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-gray-600 dark:text-gray-400">
                       <span className="flex items-center gap-1">
                         <Globe className="h-3 w-3" />
                         <span className="truncate">{item.projectName}</span>
@@ -432,7 +441,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                       )}
                     </div>
                     {item.metadata?.route && (
-                      <div className="text-xs text-gray-600 mt-1">
+                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                         <span className="font-medium">Route:</span> 
                         <span className="bg-yellow-100 px-2 py-1 rounded ml-1 break-all">
                           🛤️ {item.metadata.route}
@@ -528,42 +537,42 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
             <div className="space-y-6">
               <div>
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold">Message</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">Message</h4>
                   {selectedFeedback.rating && (
                     <div className="ml-4">
                       {renderStarRating(selectedFeedback.rating)}
                     </div>
                   )}
                 </div>
-                <p className="text-gray-700 bg-gray-50 p-3 rounded-md">
+                <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-3 rounded-md">
                   {selectedFeedback.message}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold mb-2">Project</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Project</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {selectedFeedback.projectName} ({selectedFeedback.projectDomain})
                   </p>
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold mb-2">Date</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Date</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {formatDate(selectedFeedback.createdAt)}
                   </p>
                 </div>
 
                 {selectedFeedback.userEmail && (
                   <div>
-                    <h4 className="font-semibold mb-2">Email</h4>
-                    <p className="text-sm text-gray-600">{selectedFeedback.userEmail}</p>
+                    <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Email</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{selectedFeedback.userEmail}</p>
                   </div>
                 )}
 
                 <div>
-                  <h4 className="font-semibold mb-2">Page URL</h4>
+                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Page URL</h4>
                   <a 
                     href={selectedFeedback.pageUrl} 
                     target="_blank" 
@@ -578,63 +587,63 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
 
               {selectedFeedback.metadata && Object.keys(selectedFeedback.metadata).length > 0 && (
                 <div>
-                  <h4 className="font-semibold mb-2">Technical Details</h4>
+                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Technical Details</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     {selectedFeedback.metadata.country && (
                       <div>
-                        <span className="font-medium text-gray-600">Country:</span>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Country:</span>
                         <div className="mt-1 flex items-center gap-2">
                           <span className="text-lg">{getCountryFlag(selectedFeedback.metadata.country)}</span>
-                          <span>{selectedFeedback.metadata.country}</span>
+                          <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.country}</span>
                         </div>
                       </div>
                     )}
                     {selectedFeedback.metadata.browserInfo && (
                       <div>
-                        <span className="font-medium text-gray-600">Browser:</span>
-                        <p>{selectedFeedback.metadata.browserInfo}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Browser:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.browserInfo}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.os && (
                       <div>
-                        <span className="font-medium text-gray-600">OS:</span>
-                        <p>{selectedFeedback.metadata.os}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">OS:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.os}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.device && (
                       <div>
-                        <span className="font-medium text-gray-600">Device:</span>
-                        <p>{selectedFeedback.metadata.device}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Device:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.device}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.screenResolution && (
                       <div>
-                        <span className="font-medium text-gray-600">Screen:</span>
-                        <p>{selectedFeedback.metadata.screenResolution}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Screen:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.screenResolution}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.route && (
                       <div>
-                        <span className="font-medium text-gray-600">Route:</span>
-                        <p className="break-all">{selectedFeedback.metadata.route}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Route:</span>
+                        <p className="break-all text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.route}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.language && (
                       <div>
-                        <span className="font-medium text-gray-600">Language:</span>
-                        <p>{selectedFeedback.metadata.language}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Language:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.language}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.timezone && (
                       <div>
-                        <span className="font-medium text-gray-600">Timezone:</span>
-                        <p>{selectedFeedback.metadata.timezone}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Timezone:</span>
+                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.timezone}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.referrer && (
                       <div className="col-span-2">
-                        <span className="font-medium text-gray-600">Referrer:</span>
-                        <p className="break-all">{selectedFeedback.metadata.referrer}</p>
+                        <span className="font-medium text-gray-600 dark:text-gray-400">Referrer:</span>
+                        <p className="break-all text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.referrer}</p>
                       </div>
                     )}
                   </div>
