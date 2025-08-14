@@ -8,10 +8,12 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     const { id: projectId } = await params;
 
     if (!projectId) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Project ID is required" },
         { status: 400 }
       );
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      return response;
     }
 
     // Fetch project with widget settings
@@ -27,33 +29,46 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
       .limit(1);
 
     if (projectData.length === 0) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Project not found" },
         { status: 404 }
       );
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      return response;
     }
 
     const projectInfo = projectData[0];
 
     if (!projectInfo.isActive) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Project is inactive" },
         { status: 403 }
       );
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      return response;
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       id: projectInfo.id,
       name: projectInfo.name,
       widgetSettings: projectInfo.widgetSettings || {}
     });
 
+    // Add CORS headers for cross-origin requests
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    return response;
+
   } catch (error) {
     console.error('Error fetching project settings:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    return response;
   }
 }
 
