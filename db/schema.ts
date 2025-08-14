@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, pgEnum, pgTable, text, timestamp, json } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, timestamp, json, integer } from "drizzle-orm/pg-core";
 
 export const systemRole = pgEnum("system_role", ["user", "admin"]);
 
@@ -106,6 +106,7 @@ export const feedback = pgTable("feedback", {
     projectId: text('project_id').notNull().references(() => project.id, { onDelete: 'cascade' }),
     message: text('message').notNull(),
     category: feedbackCategory('category').notNull(),
+    rating: integer('rating'), // 1-5 star rating (optional)
     userEmail: text('user_email'),
     pageUrl: text('page_url').notNull(),
     userAgent: text('user_agent'),

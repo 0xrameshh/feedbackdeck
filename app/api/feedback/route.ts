@@ -22,7 +22,7 @@ import { sendNewFeedbackNotification } from "@/lib/email/notifications";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { projectId, message, category, userEmail, pageUrl, userAgent, metadata } = body;
+    const { projectId, message, category, rating, userEmail, pageUrl, userAgent, metadata } = body;
 
     // Validate required fields
     if (!projectId || !message || !category || !pageUrl) {
@@ -75,6 +75,9 @@ export async function POST(request: NextRequest) {
                      request.headers.get('x-real-ip') ||
                      'unknown';
 
+    // Validate rating if provided
+    const validRating = rating ? Math.max(1, Math.min(5, parseInt(rating))) : null;
+
     // Create feedback entry
     const feedbackId = uuidv4();
     const newFeedback = {
@@ -82,6 +85,7 @@ export async function POST(request: NextRequest) {
       projectId,
       message: message.trim(),
       category: category as 'general' | 'bug' | 'feature' | 'praise',
+      rating: validRating,
       userEmail: userEmail?.trim() || null,
       pageUrl,
       userAgent: userAgent || null,
