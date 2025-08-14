@@ -122,6 +122,12 @@ export const feedback = pgTable("feedback", {
         screenResolution?: string;
         device?: string;
         referrer?: string;
+        country?: string;
+        os?: string;
+        language?: string;
+        timezone?: string;
+        route?: string;
+        timestamp?: string;
     }>().default({}),
     createdAt: timestamp('created_at').$defaultFn(() => new Date()).notNull()
 });

@@ -38,15 +38,26 @@ export default function ProjectSettingsPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<{
+    triggerText: string;
+    position: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+    primaryColor: string;
+    backgroundColor: string;
+    textColor: string;
+    borderRadius: number;
+    buttonSize: 'small' | 'medium' | 'large';
+    theme: 'light' | 'dark' | 'auto';
+    showRating: boolean;
+    customCSS: string;
+  }>({
     triggerText: 'Feedback',
-    position: 'bottom-right' as const,
+    position: 'bottom-right',
     primaryColor: '#3b82f6',
     backgroundColor: '#ffffff',
     textColor: '#1f2937',
     borderRadius: 8,
-    buttonSize: 'medium' as const,
-    theme: 'light' as const,
+    buttonSize: 'medium',
+    theme: 'light',
     showRating: true,
     customCSS: ''
   });
@@ -162,7 +173,7 @@ export default function ProjectSettingsPage() {
               <Label htmlFor="position">Position</Label>
               <Select
                 value={settings.position}
-                onValueChange={(value: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left') => setSettings(prev => ({ ...prev, position: value }))}
+                onValueChange={(value) => setSettings(prev => ({ ...prev, position: value as 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' }))}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -200,7 +211,7 @@ export default function ProjectSettingsPage() {
               <Label htmlFor="buttonSize">Button Size</Label>
               <Select
                 value={settings.buttonSize}
-                onValueChange={(value: 'small' | 'medium' | 'large') => setSettings(prev => ({ ...prev, buttonSize: value }))}
+                onValueChange={(value) => setSettings(prev => ({ ...prev, buttonSize: value as 'small' | 'medium' | 'large' }))}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -237,7 +248,7 @@ export default function ProjectSettingsPage() {
               <Label htmlFor="theme">Theme</Label>
               <Select
                 value={settings.theme}
-                onValueChange={(value: 'light' | 'dark' | 'auto') => setSettings(prev => ({ ...prev, theme: value }))}
+                onValueChange={(value) => setSettings(prev => ({ ...prev, theme: value as 'light' | 'dark' | 'auto' }))}
               >
                 <SelectTrigger>
                   <SelectValue />

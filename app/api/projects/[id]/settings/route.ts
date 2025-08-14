@@ -3,9 +3,9 @@ import { db } from "@/db";
 import { project } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const projectId = params.id;
+    const { id: projectId } = await params;
 
     if (!projectId) {
       return NextResponse.json(
