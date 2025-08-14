@@ -130,34 +130,42 @@
 
         #${CONFIG.MODAL_ID} {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%) translateY(100%);
           z-index: 1000000;
           display: none;
-          opacity: 0;
-          transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-          transform: translateY(20px) scale(0.95);
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          width: 100%;
+          max-width: 420px;
+          padding: 0 20px 20px 20px;
         }
 
         #${CONFIG.MODAL_ID}.show {
           display: block;
-          opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: translateX(-50%) translateY(0);
+        }
+        
+        @media (max-width: 480px) {
+          #${CONFIG.MODAL_ID} {
+            max-width: 100%;
+            padding: 0 15px 15px 15px;
+          }
         }
 
         .feedbackstar-modal-content {
           background-color: ${this.settings.backgroundColor};
-          border-radius: 16px;
+          border-radius: 16px 16px 0 0;
           padding: 24px;
-          width: 400px;
-          max-width: calc(100vw - 40px);
-          max-height: calc(100vh - 100px);
+          width: 100%;
+          max-height: 80vh;
           overflow-y: auto;
           position: relative;
           font-family: system-ui, -apple-system, sans-serif;
           color: ${this.settings.textColor};
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.15), 0 -4px 20px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(0, 0, 0, 0.05);
+          border-bottom: none;
         }
 
         .feedbackstar-backdrop {
@@ -166,12 +174,12 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background-color: rgba(0, 0, 0, 0.3);
+          background-color: rgba(0, 0, 0, 0.4);
           z-index: 999999;
           display: none;
           opacity: 0;
-          transition: opacity 0.3s ease;
-          backdrop-filter: blur(2px);
+          transition: opacity 0.4s ease;
+          backdrop-filter: blur(3px);
         }
 
         .feedbackstar-backdrop.show {
