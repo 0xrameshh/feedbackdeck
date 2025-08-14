@@ -215,7 +215,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
       unread: 'bg-yellow-100 text-yellow-800',
       read: 'bg-blue-100 text-blue-800',
       responded: 'bg-green-100 text-green-800',
-      archived: 'bg-gray-100 text-gray-800'
+      archived: 'bg-gray-100 text-gray-800' // Keep for backward compatibility with existing data
     };
     return colors[status];
   };
@@ -332,7 +332,6 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                 <SelectItem value="unread">Unread</SelectItem>
                 <SelectItem value="read">Read</SelectItem>
                 <SelectItem value="responded">Responded</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -364,16 +363,6 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                       <Badge className={getStatusColor(item.status || 'unread')}>
                         {item.status || 'unread'}
                       </Badge>
-                    </div>
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setSelectedFeedback(item)}
-                        className="w-full sm:w-auto text-xs sm:text-sm"
-                      >
-                        View Details
-                      </Button>
                     </div>
                   </div>
 
@@ -452,6 +441,23 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
 
                   <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                     <div className="flex flex-wrap gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedFeedback(item)}
+                        className="text-xs"
+                      >
+                        View Details
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => window.open(item.pageUrl, '_blank')}
+                        className="flex items-center gap-1 text-xs"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                        View Page
+                      </Button>
                       {item.status === 'unread' && (
                         <Button
                           size="sm"
@@ -473,28 +479,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                           Reply
                         </Button>
                       )}
-                      {item.status !== 'archived' && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateFeedbackStatus(item.id, 'archived')}
-                          className="text-xs"
-                        >
-                          Archive
-                        </Button>
-                      )}
                     </div>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => window.open(item.pageUrl, '_blank')}
-                      className="flex items-center gap-1 text-xs w-full sm:w-auto"
-                    >
-                      <ExternalLink className="h-3 w-3" />
-                      <span className="hidden sm:inline">View Page</span>
-                      <span className="sm:hidden">View</span>
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -667,14 +652,6 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                   >
                     <Reply className="h-4 w-4" />
                     Send Reply
-                  </Button>
-                )}
-                {selectedFeedback.status !== 'archived' && (
-                  <Button
-                    onClick={() => updateFeedbackStatus(selectedFeedback.id, 'archived')}
-                    variant="outline"
-                  >
-                    Archive
                   </Button>
                 )}
                 <Button
