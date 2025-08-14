@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { db } from "@/db";
 import { feedback, project } from "@/db/schema";
-import { eq, and, inArray } from "drizzle-orm";
-import { getUserOrganizations } from "@/lib/organizations";
+import { eq, and } from "drizzle-orm";
 
 // Get individual feedback item
 export async function GET(
@@ -17,14 +16,8 @@ export async function GET(
     }
 
     const { id: feedbackId } = await params;
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
 
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
-
-    // Get feedback with project info and verify access
+    // Get feedback with project info and verify user owns the project
     const feedbackData = await db
       .select({
         id: feedback.id,
@@ -46,7 +39,7 @@ export async function GET(
       .where(
         and(
           eq(feedback.id, feedbackId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);
@@ -89,14 +82,7 @@ export async function PUT(
       );
     }
 
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
-
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
-
-    // Verify feedback exists and user has access
+    // Verify feedback exists and user owns the project
     const existingFeedback = await db
       .select({ id: feedback.id })
       .from(feedback)
@@ -104,7 +90,7 @@ export async function PUT(
       .where(
         and(
           eq(feedback.id, feedbackId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);
@@ -145,14 +131,8 @@ export async function DELETE(
     }
 
     const { id: feedbackId } = await params;
-    const organizations = await getUserOrganizations(session.user.id);
-    const organizationIds = organizations.map(org => org.id);
 
-    if (organizationIds.length === 0) {
-      return NextResponse.json({ error: "No access to organizations" }, { status: 403 });
-    }
-
-    // Verify feedback exists and user has access
+    // Verify feedback exists and user owns the project
     const existingFeedback = await db
       .select({ id: feedback.id })
       .from(feedback)
@@ -160,7 +140,7 @@ export async function DELETE(
       .where(
         and(
           eq(feedback.id, feedbackId),
-          inArray(project.organizationId, organizationIds)
+          eq(project.userId, session.user.id)
         )
       )
       .limit(1);

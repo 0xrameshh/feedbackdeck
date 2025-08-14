@@ -101,3 +101,4 @@ Copy `env.example` to `.env.local` and configure:
 - Use pnpm for all package management operations
 - The project targets rapid delivery (2-week client turnaround) over complex features
 - also dont auto commit, I will do it.
+- dont run pnpm build

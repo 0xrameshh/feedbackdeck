@@ -1,15 +1,35 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AnalyticsDashboard } from "@/components/analytics-dashboard";
+import { Card, CardContent } from "@/components/ui/card";
+import { TrendingUp, MessageSquare, Clock } from "lucide-react";
 import type { Project } from "@/db/schema";
+import { FeedbackPieChart, FeedbackLineChart, FeedbackBarChart } from '@/components/charts/feedback-charts';
+
+interface AnalyticsStats {
+  totalFeedback: number;
+  pending: number;
+  responded: number;
+  thisWeek: number;
+  activeSites: number;
+  responseRate: number;
+  weeklyData: number[];
+  categoryData: {
+    general: number;
+    bug: number;
+    feature: number;
+    praise: number;
+  };
+}
 
 export default function AnalyticsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [stats, setStats] = useState<AnalyticsStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchProjects();
+    fetchStats();
   }, []);
 
   const fetchProjects = async () => {
@@ -17,10 +37,43 @@ export default function AnalyticsPage() {
       const response = await fetch('/api/projects');
       if (response.ok) {
         const data = await response.json();
-        setProjects(data.projects);
+        setProjects(data.projects || []);
       }
     } catch (error) {
       console.error('Error fetching projects:', error);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats');
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data);
+      } else {
+        setStats({
+          totalFeedback: 0,
+          pending: 0,
+          responded: 0,
+          thisWeek: 0,
+          activeSites: 0,
+          responseRate: 0,
+          weeklyData: [0, 0, 0, 0, 0, 0, 0],
+          categoryData: { general: 0, bug: 0, feature: 0, praise: 0 }
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      setStats({
+        totalFeedback: 0,
+        pending: 0,
+        responded: 0,
+        thisWeek: 0,
+        activeSites: 0,
+        responseRate: 0,
+        weeklyData: [0, 0, 0, 0, 0, 0, 0],
+        categoryData: { general: 0, bug: 0, feature: 0, praise: 0 }
+      });
     } finally {
       setLoading(false);
     }
@@ -28,7 +81,7 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-8">
+      <div className="w-full">
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-gray-200 rounded mb-6 w-1/4"></div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -46,16 +99,70 @@ export default function AnalyticsPage() {
     );
   }
 
+  if (!stats) return null;
+
   return (
-    <div className="container mx-auto py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Analytics</h1>
-        <p className="text-gray-600">
-          Insights and trends from your feedback data
+    <div className="w-full">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Analytics</h1>
+        <p className="text-gray-600 text-sm sm:text-base">
+          Insights from your feedback collection
         </p>
       </div>
 
-      <AnalyticsDashboard projects={projects} />
+      {/* Key Metrics */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6 sm:mb-8">
+        <Card>
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Feedback</p>
+                <div className="text-2xl sm:text-3xl font-bold">{stats.totalFeedback}</div>
+              </div>
+              <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">This Week</p>
+                <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats.thisWeek}</div>
+              </div>
+              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="sm:col-span-2 lg:col-span-1">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Response Rate</p>
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600">{stats.responseRate}%</div>
+              </div>
+              <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts */}
+      <div className="grid gap-4 sm:gap-6">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
+          <Card className="p-4 sm:p-6">
+            <FeedbackPieChart stats={stats} />
+          </Card>
+          <Card className="p-4 sm:p-6">
+            <FeedbackLineChart stats={stats} />
+          </Card>
+        </div>
+        <Card className="p-4 sm:p-6">
+          <FeedbackBarChart stats={stats} />
+        </Card>
+      </div>
     </div>
   );
 }

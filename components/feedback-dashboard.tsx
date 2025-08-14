@@ -5,9 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply, Send } from "lucide-react";
+import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -39,9 +38,6 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedFeedback, setSelectedFeedback] = useState<FeedbackWithProject | null>(null);
-  const [showResponseForm, setShowResponseForm] = useState(false);
-  const [responseText, setResponseText] = useState('');
-  const [sendingResponse, setSendingResponse] = useState(false);
   
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -109,7 +105,11 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
         body: JSON.stringify({ status })
       });
 
-      if (!response.ok) throw new Error('Failed to update status');
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('API Error:', errorData);
+        throw new Error(`Failed to update status: ${response.status}`);
+      }
 
       // Update local state
       setFeedbackData(prev => {
@@ -122,6 +122,11 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
         };
       });
 
+      // Update selected feedback if it matches
+      if (selectedFeedback?.id === feedbackId) {
+        setSelectedFeedback(prev => prev ? { ...prev, status } : null);
+      }
+
       toast.success('Status updated successfully');
     } catch (error) {
       console.error('Error updating status:', error);
@@ -129,44 +134,30 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
     }
   };
 
-  const sendResponse = async () => {
-    if (!selectedFeedback || !responseText.trim()) return;
+  const openEmailReply = (feedback: FeedbackWithProject) => {
+    const subject = encodeURIComponent(`Re: Your feedback on ${feedback.projectName}`);
+    const body = encodeURIComponent(
+      `Hi,
 
-    setSendingResponse(true);
-    try {
-      const response = await fetch(`/api/feedback/${selectedFeedback.id}/respond`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: responseText.trim() })
-      });
+Thank you for your feedback on ${feedback.projectName}. 
 
-      if (!response.ok) throw new Error('Failed to send response');
+Your original message:
+"${feedback.message}"
 
-      // Update feedback status in local state
-      setFeedbackData(prev => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          feedback: prev.feedback.map(item =>
-            item.id === selectedFeedback.id ? { ...item, status: 'responded' as const } : item
-          )
-        };
-      });
+[Write your response here]
 
-      // Update selected feedback
-      setSelectedFeedback(prev => 
-        prev ? { ...prev, status: 'responded' as const } : prev
-      );
+Best regards,
+Your Team
 
-      setResponseText('');
-      setShowResponseForm(false);
-      toast.success('Response sent successfully');
-    } catch (error) {
-      console.error('Error sending response:', error);
-      toast.error('Failed to send response');
-    } finally {
-      setSendingResponse(false);
-    }
+---
+This is in response to feedback submitted on ${formatDate(feedback.createdAt)} from ${feedback.pageUrl}`
+    );
+    
+    const mailtoUrl = `mailto:${feedback.userEmail}?subject=${subject}&body=${body}`;
+    window.open(mailtoUrl, '_blank');
+    
+    // Mark as responded
+    updateFeedbackStatus(feedback.id, 'responded');
   };
 
   const deleteFeedback = async (feedbackId: string) => {
@@ -240,18 +231,18 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Filters */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <Filter className="h-4 w-4 sm:h-5 sm:w-5" />
             Filters
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex-1 min-w-[200px]">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+            <div className="flex-1 min-w-full sm:min-w-[200px]">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
@@ -264,7 +255,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
             </div>
             
             <Select value={selectedProject} onValueChange={setSelectedProject}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="All Projects" />
               </SelectTrigger>
               <SelectContent>
@@ -278,7 +269,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
             </Select>
 
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-[150px]">
+              <SelectTrigger className="w-full sm:w-[150px]">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -291,7 +282,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
             </Select>
 
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger className="w-[150px]">
+              <SelectTrigger className="w-full sm:w-[150px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -322,9 +313,9 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
           <>
             {filteredFeedback.map((item) => (
               <Card key={item.id} className="hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
+                <CardContent className="p-4 sm:pt-6 sm:p-6">
+                  <div className="flex flex-col sm:flex-row items-start justify-between mb-4 gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
                       <Badge className={getCategoryColor(item.category)}>
                         {item.category}
                       </Badge>
@@ -332,11 +323,12 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                         {item.status || 'unread'}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => setSelectedFeedback(item)}
+                        className="w-full sm:w-auto text-xs sm:text-sm"
                       >
                         View Details
                       </Button>
@@ -347,15 +339,15 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                     <p className="text-sm font-medium text-gray-900">
                       {item.message}
                     </p>
-                    <div className="flex items-center gap-4 text-xs text-gray-600">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-gray-600">
                       <span className="flex items-center gap-1">
                         <Globe className="h-3 w-3" />
-                        {item.projectName}
+                        <span className="truncate">{item.projectName}</span>
                       </span>
                       {item.userEmail && (
                         <span className="flex items-center gap-1">
                           <Mail className="h-3 w-3" />
-                          {item.userEmail}
+                          <span className="truncate">{item.userEmail}</span>
                         </span>
                       )}
                       <span className="flex items-center gap-1">
@@ -365,13 +357,14 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                    <div className="flex flex-wrap gap-2">
                       {item.status === 'unread' && (
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => updateFeedbackStatus(item.id, 'read')}
+                          className="text-xs"
                         >
                           Mark as Read
                         </Button>
@@ -380,11 +373,8 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => {
-                            setSelectedFeedback(item);
-                            setShowResponseForm(true);
-                          }}
-                          className="flex items-center gap-1"
+                          onClick={() => openEmailReply(item)}
+                          className="flex items-center gap-1 text-xs"
                         >
                           <Reply className="h-3 w-3" />
                           Reply
@@ -395,6 +385,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                           size="sm"
                           variant="outline"
                           onClick={() => updateFeedbackStatus(item.id, 'archived')}
+                          className="text-xs"
                         >
                           Archive
                         </Button>
@@ -405,10 +396,11 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                       size="sm"
                       variant="outline"
                       onClick={() => window.open(item.pageUrl, '_blank')}
-                      className="flex items-center gap-1"
+                      className="flex items-center gap-1 text-xs w-full sm:w-auto"
                     >
                       <ExternalLink className="h-3 w-3" />
-                      View Page
+                      <span className="hidden sm:inline">View Page</span>
+                      <span className="sm:hidden">View</span>
                     </Button>
                   </div>
                 </CardContent>
@@ -432,7 +424,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
       </div>
 
       {/* Feedback Detail Modal */}
-      <Dialog open={!!selectedFeedback && !showResponseForm} onOpenChange={() => setSelectedFeedback(null)}>
+      <Dialog open={!!selectedFeedback} onOpenChange={() => setSelectedFeedback(null)}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
@@ -515,7 +507,7 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
                 )}
                 {selectedFeedback.userEmail && selectedFeedback.status !== 'responded' && (
                   <Button
-                    onClick={() => setShowResponseForm(true)}
+                    onClick={() => openEmailReply(selectedFeedback)}
                     variant="outline"
                     className="flex items-center gap-2"
                   >
@@ -545,81 +537,6 @@ export function FeedbackDashboard({ projects }: FeedbackDashboardProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Response Form Modal */}
-      <Dialog open={showResponseForm} onOpenChange={(open) => {
-        if (!open) {
-          setShowResponseForm(false);
-          setResponseText('');
-        }
-      }}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Reply className="h-5 w-5" />
-              Send Reply to User
-            </DialogTitle>
-          </DialogHeader>
-          
-          {selectedFeedback && (
-            <div className="space-y-4">
-              <div className="bg-gray-50 p-4 rounded-md">
-                <h4 className="font-medium mb-2">Original Feedback</h4>
-                <p className="text-sm text-gray-700 mb-2">&quot;{selectedFeedback.message}&quot;</p>
-                <p className="text-xs text-gray-500">
-                  From: {selectedFeedback.userEmail} • {formatDate(selectedFeedback.createdAt)}
-                </p>
-              </div>
-
-              <div>
-                <label htmlFor="response-message" className="block text-sm font-medium mb-2">
-                  Your Response
-                </label>
-                <Textarea
-                  id="response-message"
-                  placeholder="Write your response to the user..."
-                  value={responseText}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setResponseText(e.target.value)}
-                  rows={6}
-                  className="w-full"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  This will be sent to {selectedFeedback.userEmail}
-                </p>
-              </div>
-
-              <div className="flex gap-2 justify-end">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowResponseForm(false);
-                    setResponseText('');
-                  }}
-                  disabled={sendingResponse}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={sendResponse}
-                  disabled={sendingResponse || !responseText.trim()}
-                  className="flex items-center gap-2"
-                >
-                  {sendingResponse ? (
-                    <>
-                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      Send Reply
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

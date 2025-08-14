@@ -15,6 +15,20 @@ export const polarClient = new Polar({
 });
 
 export const auth = betterAuth({
+    session: {
+        expiresIn: 60 * 60 * 24 * 30, // 30 days in seconds
+        updateAge: 60 * 60 * 24 * 7, // Update session every 7 days
+        cookieCache: {
+            enabled: true,
+            maxAge: 60 * 5 // Cache for 5 minutes
+        }
+    },
+    advanced: {
+        cookiePrefix: "feedbackstar",
+        database: {
+            generateId: () => crypto.randomUUID(),
+        },
+    },
     emailVerification: process.env.RESEND_API_KEY ? {
         sendVerificationEmail: async ({ user, url }) => {
             await sendEmail({

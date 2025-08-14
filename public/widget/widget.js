@@ -53,45 +53,69 @@
       this.bindEvents();
     }
 
+    adjustBrightness(hex, percent) {
+      // Remove the hash if it exists
+      hex = hex.replace('#', '');
+      
+      // Parse the hex values
+      const num = parseInt(hex, 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) + amt;
+      const G = (num >> 8 & 0x00FF) + amt;
+      const B = (num & 0x0000FF) + amt;
+      
+      return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+    }
+
     injectStyles() {
       if (document.getElementById('feedbackstar-styles')) return;
       
       const styles = `
         #${CONFIG.TRIGGER_ID} {
           position: fixed;
-          z-index: 999999;
-          padding: 12px 16px;
-          background-color: ${this.settings.primaryColor};
+          z-index: 999998;
+          padding: 12px 20px;
+          background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.adjustBrightness(this.settings.primaryColor, -20)});
           color: white;
           border: none;
-          border-radius: 6px 6px 0 0;
+          border-radius: 24px;
           font-family: system-ui, -apple-system, sans-serif;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          transition: all 0.2s ease;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           transform: translateY(0);
           opacity: 1;
+          display: flex;
+          align-items: center;
+          gap: 8px;
         }
         
         #${CONFIG.TRIGGER_ID}:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #${CONFIG.TRIGGER_ID}:active {
+          transform: translateY(0) scale(0.98);
+        }
+
+        #${CONFIG.TRIGGER_ID}::before {
+          content: "💬";
+          font-size: 16px;
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-right {
-          bottom: 0;
+          bottom: 20px;
           right: 20px;
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-left {
-          bottom: 0;
+          bottom: 20px;
           left: 20px;
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
         }
         
         #${CONFIG.TRIGGER_ID}.top-right {
@@ -106,42 +130,53 @@
 
         #${CONFIG.MODAL_ID} {
           position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
+          bottom: 20px;
+          right: 20px;
           z-index: 1000000;
           display: none;
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          transform: translateY(20px) scale(0.95);
         }
 
         #${CONFIG.MODAL_ID}.show {
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: block;
           opacity: 1;
+          transform: translateY(0) scale(1);
         }
 
         .feedbackstar-modal-content {
           background-color: ${this.settings.backgroundColor};
-          border-radius: 8px;
+          border-radius: 16px;
           padding: 24px;
-          max-width: 500px;
-          width: 90%;
-          max-height: 90vh;
+          width: 400px;
+          max-width: calc(100vw - 40px);
+          max-height: calc(100vh - 100px);
           overflow-y: auto;
           position: relative;
           font-family: system-ui, -apple-system, sans-serif;
           color: ${this.settings.textColor};
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-          transform: scale(0.9);
-          transition: transform 0.3s ease;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 30px rgba(0, 0, 0, 0.15);
+          border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        #${CONFIG.MODAL_ID}.show .feedbackstar-modal-content {
-          transform: scale(1);
+        .feedbackstar-backdrop {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+          z-index: 999999;
+          display: none;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          backdrop-filter: blur(2px);
+        }
+
+        .feedbackstar-backdrop.show {
+          display: block;
+          opacity: 1;
         }
 
         .feedbackstar-close {
@@ -288,9 +323,20 @@
         }
 
         @media (max-width: 640px) {
+          #${CONFIG.MODAL_ID} {
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: 0;
+          }
+          
           .feedbackstar-modal-content {
-            margin: 16px;
+            width: 100%;
+            max-width: none;
+            margin: 0;
             padding: 20px;
+            border-radius: 16px 16px 0 0;
+            max-height: 80vh;
           }
           
           .feedbackstar-buttons {
@@ -299,6 +345,15 @@
           
           .feedbackstar-button {
             width: 100%;
+          }
+
+          #${CONFIG.TRIGGER_ID} {
+            padding: 10px 16px;
+            font-size: 13px;
+          }
+
+          #${CONFIG.TRIGGER_ID}::before {
+            font-size: 14px;
           }
         }
       `;
@@ -320,6 +375,12 @@
     }
 
     createModal() {
+      // Create backdrop
+      const backdrop = document.createElement('div');
+      backdrop.className = 'feedbackstar-backdrop';
+      backdrop.id = 'feedbackstar-backdrop';
+      
+      // Create modal
       const modal = document.createElement('div');
       modal.id = CONFIG.MODAL_ID;
       modal.setAttribute('role', 'dialog');
@@ -328,9 +389,9 @@
       
       modal.innerHTML = `
         <div class="feedbackstar-modal-content">
-          <button class="feedbackstar-close" aria-label="Close feedback form">&times;</button>
+          <button class="feedbackstar-close" aria-label="Close feedback form">×</button>
           <div id="feedbackstar-form-view">
-            <h2 id="feedbackstar-title" class="feedbackstar-title">Send Feedback</h2>
+            <h2 id="feedbackstar-title" class="feedbackstar-title">💬 Send Feedback</h2>
             <p class="feedbackstar-description">Help us improve by sharing your thoughts!</p>
             <form class="feedbackstar-form" id="feedbackstar-form">
               <div class="feedbackstar-field">
@@ -351,15 +412,15 @@
                 </label>
                 <select id="feedbackstar-category" name="category" class="feedbackstar-select" required>
                   <option value="">Select a category</option>
-                  <option value="general">General</option>
-                  <option value="bug">Bug Report</option>
-                  <option value="feature">Feature Request</option>
-                  <option value="praise">Praise</option>
+                  <option value="general">💬 General</option>
+                  <option value="bug">🐛 Bug Report</option>
+                  <option value="feature">✨ Feature Request</option>
+                  <option value="praise">🎉 Praise</option>
                 </select>
               </div>
               <div class="feedbackstar-field">
                 <label for="feedbackstar-email" class="feedbackstar-label">
-                  Want a reply? (Optional)
+                  📧 Want a reply? (Optional)
                 </label>
                 <input 
                   type="email" 
@@ -374,14 +435,14 @@
                   Cancel
                 </button>
                 <button type="submit" class="feedbackstar-button feedbackstar-button-primary" id="feedbackstar-submit">
-                  Send Feedback
+                  🚀 Send Feedback
                 </button>
               </div>
             </form>
           </div>
           <div id="feedbackstar-success-view" style="display: none;">
             <div class="feedbackstar-success">
-              <div class="feedbackstar-success-icon">✓</div>
+              <div class="feedbackstar-success-icon">✅</div>
               <h2 class="feedbackstar-success-title">Thank you!</h2>
               <p class="feedbackstar-success-message">
                 Your feedback has been sent successfully. We appreciate you taking the time to help us improve!
@@ -391,12 +452,14 @@
         </div>
       `;
       
+      document.body.appendChild(backdrop);
       document.body.appendChild(modal);
     }
 
     bindEvents() {
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       const modal = document.getElementById(CONFIG.MODAL_ID);
+      const backdrop = document.getElementById('feedbackstar-backdrop');
       const closeBtn = modal.querySelector('.feedbackstar-close');
       const cancelBtn = modal.querySelector('#feedbackstar-cancel');
       const form = modal.querySelector('#feedbackstar-form');
@@ -409,8 +472,8 @@
       cancelBtn.addEventListener('click', () => this.closeModal());
       
       // Close on backdrop click
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
           this.closeModal();
         }
       });
@@ -428,15 +491,20 @@
 
     openModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
+      const backdrop = document.getElementById('feedbackstar-backdrop');
+      
       this.isOpen = true;
+      backdrop.classList.add('show');
       modal.classList.add('show');
       modal.setAttribute('aria-hidden', 'false');
       
       // Focus management
-      const firstInput = modal.querySelector('#feedbackstar-message');
-      if (firstInput) {
-        firstInput.focus();
-      }
+      setTimeout(() => {
+        const firstInput = modal.querySelector('#feedbackstar-message');
+        if (firstInput) {
+          firstInput.focus();
+        }
+      }, 300);
       
       // Prevent body scroll
       document.body.style.overflow = 'hidden';
@@ -444,8 +512,11 @@
 
     closeModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
+      const backdrop = document.getElementById('feedbackstar-backdrop');
+      
       this.isOpen = false;
       modal.classList.remove('show');
+      backdrop.classList.remove('show');
       modal.setAttribute('aria-hidden', 'true');
       
       // Restore body scroll
