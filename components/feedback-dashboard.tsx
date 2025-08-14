@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply, Star } from "lucide-react";
 import { toast } from "sonner";
+import { flag } from "country-emoji";
 import {
   Dialog,
   DialogContent,
@@ -240,6 +241,18 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
     );
   };
 
+  // Get flag emoji for country using country-emoji library
+  const getCountryFlag = (countryName: string): string => {
+    try {
+      const flagEmoji = flag(countryName);
+      return flagEmoji || '🌍';
+    } catch {
+      return '🌍';
+    }
+  };
+
+
+
   if (loading && !feedbackData) {
     return (
       <div className="space-y-4">
@@ -382,8 +395,9 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                         {formatDate(item.createdAt)}
                       </span>
                       {item.metadata?.country && (
-                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                          📍 {item.metadata.country}
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded flex items-center gap-1">
+                          <span className="text-sm">{getCountryFlag(item.metadata.country)}</span>
+                          <span>{item.metadata.country}</span>
                         </span>
                       )}
                       {item.metadata?.device && (
@@ -569,7 +583,10 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                     {selectedFeedback.metadata.country && (
                       <div>
                         <span className="font-medium text-gray-600">Country:</span>
-                        <p>{selectedFeedback.metadata.country}</p>
+                        <div className="mt-1 flex items-center gap-2">
+                          <span className="text-lg">{getCountryFlag(selectedFeedback.metadata.country)}</span>
+                          <span>{selectedFeedback.metadata.country}</span>
+                        </div>
                       </div>
                     )}
                     {selectedFeedback.metadata.browserInfo && (
