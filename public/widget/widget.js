@@ -105,7 +105,7 @@
         
         #${CONFIG.TRIGGER_ID}.bottom-right {
           bottom: 0;
-          right: 0;
+          right: 20px;
           transform: translateX(0);
         }
         
