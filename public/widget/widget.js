@@ -104,17 +104,17 @@
 
         
         #${CONFIG.TRIGGER_ID}.bottom-right {
-          bottom: 50%;
+          bottom: 20px;
           right: 0;
-          transform: translateY(50%);
+          transform: translateX(0);
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-right:hover {
-          transform: translateY(50%) translateX(-5px);
+          transform: translateX(-5px);
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-right:active {
-          transform: translateY(50%) translateX(-2px);
+          transform: translateX(-2px);
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-left {
@@ -355,6 +355,30 @@
           font-size: 14px;
         }
 
+        .feedbackstar-rating {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin-top: 4px;
+        }
+
+        .feedbackstar-star {
+          font-size: 24px;
+          color: #d1d5db;
+          cursor: pointer;
+          transition: color 0.2s ease;
+          user-select: none;
+        }
+
+        .feedbackstar-star:hover,
+        .feedbackstar-star.active {
+          color: #fbbf24;
+        }
+
+        .feedbackstar-star.filled {
+          color: #f59e0b;
+        }
+
         @media (max-width: 640px) {
           #${CONFIG.MODAL_ID} {
             bottom: 0;
@@ -463,6 +487,19 @@
                   placeholder="your@email.com"
                 />
               </div>
+              <div class="feedbackstar-field">
+                <label class="feedbackstar-label">
+                  Rate your experience (Optional)
+                </label>
+                <div class="feedbackstar-rating" id="feedbackstar-rating">
+                  <span class="feedbackstar-star" data-rating="1">★</span>
+                  <span class="feedbackstar-star" data-rating="2">★</span>
+                  <span class="feedbackstar-star" data-rating="3">★</span>
+                  <span class="feedbackstar-star" data-rating="4">★</span>
+                  <span class="feedbackstar-star" data-rating="5">★</span>
+                </div>
+                <input type="hidden" id="feedbackstar-rating-value" name="rating" value="">
+              </div>
               <div class="feedbackstar-buttons">
                 <button type="button" class="feedbackstar-button feedbackstar-button-secondary" id="feedbackstar-cancel">
                   Cancel
@@ -520,6 +557,33 @@
 
       // Handle form submission
       form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+      // Handle star rating
+      const stars = modal.querySelectorAll('.feedbackstar-star');
+      const ratingInput = modal.querySelector('#feedbackstar-rating-value');
+      
+      stars.forEach((star, index) => {
+        star.addEventListener('click', () => {
+          const rating = index + 1;
+          ratingInput.value = rating;
+          
+          // Update visual state
+          stars.forEach((s, i) => {
+            s.classList.toggle('filled', i < rating);
+          });
+        });
+        
+        star.addEventListener('mouseenter', () => {
+          stars.forEach((s, i) => {
+            s.classList.toggle('active', i <= index);
+          });
+        });
+      });
+      
+      // Reset hover state on mouse leave
+      modal.querySelector('.feedbackstar-rating').addEventListener('mouseleave', () => {
+        stars.forEach(s => s.classList.remove('active'));
+      });
     }
 
     openModal() {
@@ -570,6 +634,16 @@
       formView.style.display = 'block';
       successView.style.display = 'none';
       form.reset();
+      
+      // Reset star rating
+      const stars = document.querySelectorAll('.feedbackstar-star');
+      const ratingInput = document.getElementById('feedbackstar-rating-value');
+      if (stars && ratingInput) {
+        stars.forEach(star => {
+          star.classList.remove('filled', 'active');
+        });
+        ratingInput.value = '';
+      }
       
       // Re-enable submit button
       const submitBtn = document.getElementById('feedbackstar-submit');
