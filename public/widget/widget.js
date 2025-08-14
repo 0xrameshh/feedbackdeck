@@ -80,47 +80,71 @@
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.adjustBrightness(this.settings.primaryColor, -20)});
           color: white;
           border: none;
-          border-radius: 24px;
+          border-radius: 8px 0 0 8px;
           font-family: system-ui, -apple-system, sans-serif;
           font-size: 15px;
           font-weight: 700;
           cursor: pointer;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+          box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15), -2px 0 8px rgba(0, 0, 0, 0.1);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          transform: translateY(0);
+          transform: translateX(0);
           opacity: 1;
           display: flex;
           align-items: center;
         }
         
         #${CONFIG.TRIGGER_ID}:hover {
-          transform: translateY(-2px) scale(1.05);
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+          transform: translateX(-5px);
+          box-shadow: -6px 0 25px rgba(0, 0, 0, 0.2), -3px 0 12px rgba(0, 0, 0, 0.15);
         }
 
         #${CONFIG.TRIGGER_ID}:active {
-          transform: translateY(0) scale(0.98);
+          transform: translateX(-2px);
         }
 
         
         #${CONFIG.TRIGGER_ID}.bottom-right {
-          bottom: 20px;
-          right: 20px;
+          bottom: 50%;
+          right: 0;
+          transform: translateY(50%);
+        }
+        
+        #${CONFIG.TRIGGER_ID}.bottom-right:hover {
+          transform: translateY(50%) translateX(-5px);
+        }
+        
+        #${CONFIG.TRIGGER_ID}.bottom-right:active {
+          transform: translateY(50%) translateX(-2px);
         }
         
         #${CONFIG.TRIGGER_ID}.bottom-left {
-          bottom: 20px;
-          left: 20px;
+          bottom: 50%;
+          left: 0;
+          transform: translateY(50%);
+          border-radius: 0 8px 8px 0;
+          box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #${CONFIG.TRIGGER_ID}.bottom-left:hover {
+          transform: translateY(50%) translateX(5px);
+        }
+        
+        #${CONFIG.TRIGGER_ID}.bottom-left:active {
+          transform: translateY(50%) translateX(2px);
         }
         
         #${CONFIG.TRIGGER_ID}.top-right {
-          top: 20px;
-          right: 20px;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
         }
         
         #${CONFIG.TRIGGER_ID}.top-left {
-          top: 20px;
-          left: 20px;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+          border-radius: 0 8px 8px 0;
+          box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 2px 0 8px rgba(0, 0, 0, 0.1);
         }
 
         #${CONFIG.MODAL_ID} {
@@ -153,7 +177,7 @@
 
         .feedbackstar-modal-content {
           background-color: ${this.settings.backgroundColor};
-          border-radius: 16px 16px 0 0;
+          border-radius: 16px;
           padding: 24px;
           width: 100%;
           max-height: 80vh;
@@ -163,7 +187,7 @@
           color: ${this.settings.textColor};
           box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.15), 0 -4px 20px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(0, 0, 0, 0.05);
-          border-bottom: none;
+          margin-bottom: 20px;
         }
 
         .feedbackstar-backdrop {
@@ -528,11 +552,14 @@
       backdrop.classList.remove('show');
       modal.setAttribute('aria-hidden', 'true');
       
-      // Restore body scroll
-      document.body.style.overflow = '';
-      
-      // Reset form
-      this.resetForm();
+      // Wait for animation to complete before cleanup
+      setTimeout(() => {
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
+        // Reset form
+        this.resetForm();
+      }, 500);
     }
 
     resetForm() {
