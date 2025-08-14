@@ -354,6 +354,16 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                         <Calendar className="h-3 w-3" />
                         {formatDate(item.createdAt)}
                       </span>
+                      {item.metadata?.country && (
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                          {item.metadata.country}
+                        </span>
+                      )}
+                      {item.metadata?.device && (
+                        <span className="text-xs bg-blue-100 px-2 py-1 rounded">
+                          {item.metadata.device}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -487,11 +497,62 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
 
               {selectedFeedback.metadata && Object.keys(selectedFeedback.metadata).length > 0 && (
                 <div>
-                  <h4 className="font-semibold mb-2">Additional Information</h4>
-                  <div className="bg-gray-50 p-3 rounded-md">
-                    <pre className="text-xs text-gray-600">
-                      {JSON.stringify(selectedFeedback.metadata, null, 2)}
-                    </pre>
+                  <h4 className="font-semibold mb-2">Technical Details</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    {selectedFeedback.metadata.country && (
+                      <div>
+                        <span className="font-medium text-gray-600">Country:</span>
+                        <p>{selectedFeedback.metadata.country}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.browserInfo && (
+                      <div>
+                        <span className="font-medium text-gray-600">Browser:</span>
+                        <p>{selectedFeedback.metadata.browserInfo}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.os && (
+                      <div>
+                        <span className="font-medium text-gray-600">OS:</span>
+                        <p>{selectedFeedback.metadata.os}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.device && (
+                      <div>
+                        <span className="font-medium text-gray-600">Device:</span>
+                        <p>{selectedFeedback.metadata.device}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.screenResolution && (
+                      <div>
+                        <span className="font-medium text-gray-600">Screen:</span>
+                        <p>{selectedFeedback.metadata.screenResolution}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.route && (
+                      <div>
+                        <span className="font-medium text-gray-600">Route:</span>
+                        <p className="break-all">{selectedFeedback.metadata.route}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.language && (
+                      <div>
+                        <span className="font-medium text-gray-600">Language:</span>
+                        <p>{selectedFeedback.metadata.language}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.timezone && (
+                      <div>
+                        <span className="font-medium text-gray-600">Timezone:</span>
+                        <p>{selectedFeedback.metadata.timezone}</p>
+                      </div>
+                    )}
+                    {selectedFeedback.metadata.referrer && (
+                      <div className="col-span-2">
+                        <span className="font-medium text-gray-600">Referrer:</span>
+                        <p className="break-all">{selectedFeedback.metadata.referrer}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

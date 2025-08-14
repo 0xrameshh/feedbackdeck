@@ -75,6 +75,24 @@ export async function POST(request: NextRequest) {
                      request.headers.get('x-real-ip') ||
                      'unknown';
 
+    // Get country from IP (simple approach using cloudflare headers or ip-api)
+    let country = 'Unknown';
+    try {
+      // Try to get country from Cloudflare header first
+      country = request.headers.get('cf-ipcountry') || 'Unknown';
+      
+      // If not available and we have a real IP, use ip-api service
+      if (country === 'Unknown' && clientIP !== 'unknown' && !clientIP.startsWith('192.168.') && !clientIP.startsWith('10.') && clientIP !== '127.0.0.1') {
+        const geoResponse = await fetch(`http://ip-api.com/json/${clientIP}`);
+        if (geoResponse.ok) {
+          const geoData = await geoResponse.json();
+          country = geoData.country || 'Unknown';
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to get country info:', error);
+    }
+
     // Validate rating if provided
     const validRating = rating ? Math.max(1, Math.min(5, parseInt(rating))) : null;
 
@@ -91,7 +109,10 @@ export async function POST(request: NextRequest) {
       userAgent: userAgent || null,
       ipAddress: clientIP,
       status: 'unread' as const,
-      metadata: metadata || {},
+      metadata: {
+        ...metadata,
+        country: country
+      },
       createdAt: new Date()
     };
 

@@ -721,7 +721,11 @@
             screenResolution: `${screen.width}x${screen.height}`,
             device: this.getDeviceType(),
             referrer: document.referrer || null,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            os: this.getOperatingSystem(),
+            language: navigator.language || navigator.userLanguage,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            route: window.location.pathname
           }
         };
 
@@ -766,17 +770,52 @@
     getBrowserInfo() {
       const ua = navigator.userAgent;
       let browser = 'Unknown';
+      let version = '';
       
-      if (ua.includes('Firefox')) browser = 'Firefox';
-      else if (ua.includes('Chrome')) browser = 'Chrome';
-      else if (ua.includes('Safari')) browser = 'Safari';
-      else if (ua.includes('Edge')) browser = 'Edge';
+      if (ua.includes('Firefox')) {
+        browser = 'Firefox';
+        const match = ua.match(/Firefox\/([0-9]+)/);
+        version = match ? match[1] : '';
+      } else if (ua.includes('Chrome')) {
+        browser = 'Chrome';
+        const match = ua.match(/Chrome\/([0-9]+)/);
+        version = match ? match[1] : '';
+      } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+        browser = 'Safari';
+        const match = ua.match(/Version\/([0-9]+)/);
+        version = match ? match[1] : '';
+      } else if (ua.includes('Edge')) {
+        browser = 'Edge';
+        const match = ua.match(/Edge\/([0-9]+)/);
+        version = match ? match[1] : '';
+      }
       
-      return browser;
+      return version ? `${browser} ${version}` : browser;
+    }
+
+    getOperatingSystem() {
+      const ua = navigator.userAgent;
+      
+      if (ua.includes('Windows')) return 'Windows';
+      if (ua.includes('Mac OS')) return 'macOS';
+      if (ua.includes('Linux')) return 'Linux';
+      if (ua.includes('Android')) return 'Android';
+      if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) return 'iOS';
+      
+      return 'Unknown';
     }
 
     getDeviceType() {
+      const ua = navigator.userAgent;
       const width = window.innerWidth;
+      
+      // Mobile detection
+      if (/Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+        if (ua.includes('iPad') || (width >= 768 && width <= 1024)) return 'Tablet';
+        return 'Mobile';
+      }
+      
+      // Desktop detection by screen size
       if (width < 768) return 'Mobile';
       if (width < 1024) return 'Tablet';
       return 'Desktop';

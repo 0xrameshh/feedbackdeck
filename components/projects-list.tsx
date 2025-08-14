@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ import { CreateProjectForm } from "./forms/create-project-form";
 import type { Project } from "@/db/schema";
 
 export function ProjectsList() {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectFeedbackCounts, setProjectFeedbackCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -189,7 +191,7 @@ export function ProjectsList() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => {/* TODO: Navigate to project settings */}}
+                      onClick={() => router.push(`/dashboard/projects/${project.id}/settings`)}
                       className="flex-1 sm:flex-none"
                     >
                       <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
