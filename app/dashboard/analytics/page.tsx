@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, MessageSquare, Clock } from "lucide-react";
-import { FeedbackPieChart, FeedbackLineChart, FeedbackBarChart } from '@/components/charts/feedback-charts';
+import { MessageSquare, TrendingUp, Clock } from "lucide-react";
+import { ChartBarLabel } from "@/components/charts/bar-chart-label";
+import { ChartPieLabel } from "@/components/charts/pie-chart-fixed";
 
 interface AnalyticsStats {
   totalFeedback: number;
@@ -22,11 +23,14 @@ interface AnalyticsStats {
 }
 
 export default function AnalyticsPage() {
-  // const [projects, setProjects] = useState<Project[]>([]); // Currently unused
   const [stats, setStats] = useState<AnalyticsStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchStats = useCallback(async () => {
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
     try {
       const response = await fetch('/api/dashboard/stats');
       if (response.ok) {
@@ -59,40 +63,23 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    // fetchProjects(); // Not currently needed
-    fetchStats();
-  }, [fetchStats]);
-
-  // const fetchProjects = async () => {
-  //   try {
-  //     const response = await fetch('/api/projects');
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setProjects(data.projects || []);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching projects:', error);
-  //   }
-  // };
+  };
 
   if (loading) {
     return (
       <div className="w-full">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded mb-6 w-1/4"></div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded"></div>
+
+        <div className="animate-pulse space-y-8">
+          <div className="space-y-3">
+            <div className="h-8 bg-gray-200 rounded mb-6 w-1/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-32 bg-gray-200 rounded"></div>
             ))}
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-64 bg-gray-200 rounded"></div>
-            ))}
-          </div>
+          <div className="h-96 bg-gray-200 rounded"></div>
         </div>
       </div>
     );
@@ -110,6 +97,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Key Metrics */}
+
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-6 sm:mb-8">
         <Card>
           <CardContent className="p-4 sm:p-6">
@@ -117,8 +105,11 @@ export default function AnalyticsPage() {
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Total Feedback</p>
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.totalFeedback}</div>
+                <p className="text-xs text-green-600 dark:text-green-400 mt-1">+12% from last week</p>
               </div>
-              <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -129,38 +120,38 @@ export default function AnalyticsPage() {
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">This Week</p>
                 <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{stats.thisWeek}</div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">New feedback received</p>
               </div>
-              <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="sm:col-span-2 lg:col-span-1">
+        <Card>
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Response Rate</p>
                 <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400">{stats.responseRate}%</div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Average response time: 2h</p>
               </div>
-              <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
+              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                <Clock className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Charts */}
-      <div className="grid gap-4 sm:gap-6">
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-2">
-          <Card className="p-4 sm:p-6">
-            <FeedbackPieChart stats={stats} />
-          </Card>
-          <Card className="p-4 sm:p-6">
-            <FeedbackLineChart stats={stats} />
-          </Card>
-        </div>
-        <Card className="p-4 sm:p-6">
-          <FeedbackBarChart stats={stats} />
-        </Card>
+      {/* Charts Section */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Daily feedback bar chart */}
+        <ChartBarLabel stats={stats} />
+        
+        {/* Category breakdown pie chart */}
+        <ChartPieLabel stats={stats} />
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Search, Filter, ExternalLink, Calendar, Globe, Mail, Trash2, Reply, Star } from "lucide-react";
+import { MessageSquare, Search, Filter, ExternalLink, Trash2, Reply, Star } from "lucide-react";
 import { toast } from "sonner";
 import { flag } from "country-emoji";
 import {

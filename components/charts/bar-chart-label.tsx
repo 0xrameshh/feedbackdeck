@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
 import {
   Card,
@@ -18,9 +18,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A line chart with dots"
+export const description = "A bar chart with a label"
 
-interface ChartLineDotsProps {
+interface ChartBarLabelProps {
   stats?: {
     weeklyData: number[];
   };
@@ -33,25 +33,25 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ChartLineDots({ stats }: ChartLineDotsProps) {
+export function ChartBarLabel({ stats }: ChartBarLabelProps) {
   // Generate chart data from weekly stats or use default data
   const chartData = stats ? 
     stats.weeklyData.map((count, index) => {
       const date = new Date();
       date.setDate(date.getDate() - (6 - index));
       return {
-        day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        day: date.toLocaleDateString('en-US', { weekday: 'long' }),
         feedback: count
       };
     }) : 
     [
-      { day: "Mon", feedback: 12 },
-      { day: "Tue", feedback: 19 },
-      { day: "Wed", feedback: 3 },
-      { day: "Thu", feedback: 15 },
-      { day: "Fri", feedback: 8 },
-      { day: "Sat", feedback: 7 },
-      { day: "Sun", feedback: 10 },
+      { day: "Monday", feedback: 12 },
+      { day: "Tuesday", feedback: 19 },
+      { day: "Wednesday", feedback: 3 },
+      { day: "Thursday", feedback: 15 },
+      { day: "Friday", feedback: 8 },
+      { day: "Saturday", feedback: 7 },
+      { day: "Sunday", feedback: 10 },
     ];
 
   const totalFeedback = chartData.reduce((sum, item) => sum + item.feedback, 0);
@@ -59,45 +59,39 @@ export function ChartLineDots({ stats }: ChartLineDotsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Feedback Trend</CardTitle>
-        <CardDescription>Daily feedback over the last 7 days</CardDescription>
+        <CardTitle>Daily Feedback</CardTitle>
+        <CardDescription>Feedback count for the last 7 days</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px]">
-          <LineChart
+          <BarChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
               top: 20,
-              bottom: 20,
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="day"
               tickLine={false}
+              tickMargin={10}
               axisLine={false}
-              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
-              dataKey="feedback"
-              type="natural"
-              stroke="var(--color-feedback)"
-              strokeWidth={2}
-              dot={{
-                fill: "var(--color-feedback)",
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            />
-          </LineChart>
+            <Bar dataKey="feedback" fill="var(--color-feedback)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+          </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">

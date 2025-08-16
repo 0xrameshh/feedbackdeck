@@ -22,14 +22,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { authClient } from "@/lib/auth-client";
-
 import { z } from "zod";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-context";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,8 +39,8 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false);
+  const { signIn, googleSignIn } = useAuth();
 
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,30 +50,26 @@ export function LoginForm({
   });
 
   const signInWithGoogle = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-    });
+    try {
+      setIsLoading(true);
+      await googleSignIn();
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Failed to sign in with Google");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-
-    const { error } = await authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-    });
-    const success = !error;
-    const message = error?.message || 'Login successful';
-
-    if (success) {
-      toast.success(message as string);
-      router.push("/dashboard");
-    } else {
-      toast.error(message as string);
+    try {
+      setIsLoading(true);
+      await signIn(values.email, values.password);
+      toast.success('Login successful');
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : 'Login failed');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }
 
   return (

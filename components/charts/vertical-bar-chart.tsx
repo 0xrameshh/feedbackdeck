@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
   Card,
@@ -18,9 +18,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A line chart with dots"
+export const description = "A vertical bar chart"
 
-interface ChartLineDotsProps {
+interface ChartBarVerticalProps {
   stats?: {
     weeklyData: number[];
   };
@@ -29,11 +29,11 @@ interface ChartLineDotsProps {
 const chartConfig = {
   feedback: {
     label: "Feedback",
-    color: "var(--chart-1)",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 
-export function ChartLineDots({ stats }: ChartLineDotsProps) {
+export function ChartBarVertical({ stats }: ChartBarVerticalProps) {
   // Generate chart data from weekly stats or use default data
   const chartData = stats ? 
     stats.weeklyData.map((count, index) => {
@@ -55,28 +55,31 @@ export function ChartLineDots({ stats }: ChartLineDotsProps) {
     ];
 
   const totalFeedback = chartData.reduce((sum, item) => sum + item.feedback, 0);
+  const avgDaily = Math.round(totalFeedback / 7);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Feedback Trend</CardTitle>
-        <CardDescription>Daily feedback over the last 7 days</CardDescription>
+        <CardTitle>Daily Breakdown</CardTitle>
+        <CardDescription>Feedback count by day of week</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px]">
-          <LineChart
+          <BarChart
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
               top: 20,
-              bottom: 20,
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="day"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -85,24 +88,13 @@ export function ChartLineDots({ stats }: ChartLineDotsProps) {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
-              dataKey="feedback"
-              type="natural"
-              stroke="var(--color-feedback)"
-              strokeWidth={2}
-              dot={{
-                fill: "var(--color-feedback)",
-              }}
-              activeDot={{
-                r: 6,
-              }}
-            />
-          </LineChart>
+            <Bar dataKey="feedback" fill="var(--color-feedback)" radius={8} />
+          </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          Total feedback this week: {totalFeedback} <TrendingUp className="h-4 w-4" />
+          Average daily feedback: {avgDaily} <TrendingUp className="h-4 w-4" />
         </div>
         <div className="text-muted-foreground leading-none">
           Showing daily feedback for the last 7 days

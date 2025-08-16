@@ -88,13 +88,6 @@ export async function GET(request: NextRequest) {
 
     // Get weekly data for charts (last 7 days)
     const weeklyData = [];
-    const categoryData = {
-      general: 0,
-      bug: 0,
-      feature: 0,
-      praise: 0
-    };
-
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
@@ -116,6 +109,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get category breakdown
+    const categoryData = { general: 0, bug: 0, feature: 0, praise: 0 };
     if (projectIds.length > 0) {
       const categories = await db
         .select({

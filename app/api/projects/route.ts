@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       project: newProject,
-      embedCode: generateEmbedCode(projectId, domain)
+      embedCode: generateEmbedCode(projectId)
     });
   } catch (error) {
     console.error("Error creating project:", error);
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function generateEmbedCode(projectId: string, _domain: string): string {
+function generateEmbedCode(projectId: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   
   return `<script 

@@ -1,155 +1,150 @@
-import { ModeSwitcher } from "@/components/mode-switcher";
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield } from "lucide-react";
+import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, Check, ArrowRight } from "lucide-react";
+import { HeaderNav } from "@/components/header-nav";
 
 export default function Home() {
   return (
     <>
       {/* Navigation */}
-      <header className="absolute top-0 w-full flex justify-between items-center p-6 z-10">
-        <div className="flex items-center gap-2">
-          <MessageSquare className="h-8 w-8 text-blue-600" />
-          <span className="text-xl font-bold">FeedbackStar</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <ModeSwitcher />
-          <Link href="/login">
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/signup">
-            <Button>Get Started</Button>
-          </Link>
-        </div>
-      </header>
+      <HeaderNav />
 
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-        <Badge className="mb-4" variant="secondary">
-          ⭐ Collect feedback effortlessly
-        </Badge>
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-blue-950 dark:to-indigo-950" />
         
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Turn Feedback Into
-          <br />
-          Growth
-        </h1>
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <Badge className="mb-6 text-sm px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900 dark:to-indigo-900 border-0 shadow-lg" variant="secondary">
+            <Star className="w-4 h-4 mr-2 text-yellow-500" />
+            Collect feedback effortlessly
+          </Badge>
+          
+          <h1 className="text-6xl md:text-8xl font-bold mb-8 leading-tight">
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              Turn Feedback
+            </span>
+            <br />
+            <span className="bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Into Growth
+            </span>
+          </h1>
 
-        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl">
-          A beautiful, lightweight widget that collects user feedback from any website. 
-          Get insights, respond to users, and improve your product with data-driven decisions.
-        </p>
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
+            Beautiful, lightweight feedback widget that fits any website. 
+            <br className="hidden md:block" />
+            Collect insights, engage users, and drive product decisions with real data.
+          </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
-          <Link href="/signup">
-            <Button size="lg" className="text-lg px-8 py-6">
-              Start Collecting Feedback
-              <MessageSquare className="ml-2 h-5 w-5" />
+          <div className="flex flex-col sm:flex-row gap-4 mb-16 justify-center">
+            <Link href="/signup">
+              <Button size="lg" className="text-lg px-10 py-7 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+                Start Free Trial
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
+              View Live Demo
+              <Globe className="ml-2 h-5 w-5" />
             </Button>
-          </Link>
-          <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-            View Demo
-            <Globe className="ml-2 h-5 w-5" />
-          </Button>
-        </div>
+          </div>
 
-        {/* Demo Widget */}
-        <Card className="w-full max-w-2xl">
-          <CardContent className="p-6">
-            <div className="text-sm text-gray-500 mb-4">Add one line of code to your website:</div>
-            <div className="bg-gray-900 dark:bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
-              {`<script defer data-project-id="your-id" 
-  src="https://feedbackstar.com/js/script.js"></script>`}
-            </div>
-          </CardContent>
-        </Card>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Everything you need to collect feedback</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
+      <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <Badge className="mb-4 px-4 py-2" variant="outline">Features</Badge>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              Everything you need to collect feedback
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Simple to set up, powerful to use. Get started in minutes, not hours.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <MessageSquare className="h-6 w-6 text-blue-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <MessageSquare className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Beautiful Widget</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Lightweight, customizable feedback widget that matches your brand. 
-                Works on any website without slowing it down.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Beautiful Widget</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Lightweight, customizable feedback widget that perfectly matches your brand. 
+                Works seamlessly on any website without affecting performance.
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <BarChart3 className="h-6 w-6 text-green-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <BarChart3 className="h-8 w-8 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Smart Analytics</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Understand user sentiment with detailed analytics. Track trends, 
-                categories, and response rates over time.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Smart Analytics</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Deep insights into user sentiment with powerful analytics dashboard. 
+                Track trends, categorize feedback, and monitor response rates over time.
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                  <Mail className="h-6 w-6 text-purple-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <Mail className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Email Responses</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Reply directly to users via email. Build relationships and show 
-                you care about their feedback.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Email Responses</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Respond to users directly via email. Build stronger relationships and show 
+                customers you genuinely care about their feedback and suggestions.
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                  <Zap className="h-6 w-6 text-yellow-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900 dark:to-yellow-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <Zap className="h-8 w-8 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Lightning Fast</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Sub-500ms load times. Your website speed will not be affected by our widget.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Lightning Fast</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Sub-500ms load times with minimal footprint. Your website performance 
+                stays perfect while collecting valuable user feedback.
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-red-100 dark:bg-red-900 rounded-lg">
-                  <Shield className="h-6 w-6 text-red-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="h-8 w-8 text-red-600 dark:text-red-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Privacy First</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                GDPR compliant. Users control what data they share. No tracking, no cookies.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Privacy First</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Fully GDPR compliant with user-controlled data sharing. 
+                No tracking scripts, no unwanted cookies, just pure feedback collection.
               </p>
             </Card>
 
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
-                  <Globe className="h-6 w-6 text-indigo-600" />
+            <Card className="group p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-0 bg-white dark:bg-gray-900 shadow-lg">
+              <div className="mb-6">
+                <div className="p-4 bg-gradient-to-br from-indigo-100 to-indigo-200 dark:from-indigo-900 dark:to-indigo-800 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-300">
+                  <Globe className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
                 </div>
-                <h3 className="text-xl font-semibold">Works Everywhere</h3>
               </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Any website, any framework. React, Vue, WordPress, Shopify - just add one line of code.
+              <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Works Everywhere</h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Compatible with any website or framework. React, Vue, WordPress, Shopify, 
+                or plain HTML - just add one simple line of code.
               </p>
             </Card>
           </div>
@@ -157,32 +152,109 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready to start collecting feedback?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Join hundreds of websites already using FeedbackStar to improve their user experience.
+      <section className="relative py-24 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700" />
+        <div className="absolute inset-0 bg-black/20" />
+        
+        <div className="relative z-10 max-w-5xl mx-auto text-center text-white">
+          <Badge className="mb-6 px-4 py-2 bg-white/20 text-white border-white/30" variant="outline">
+            Ready to get started?
+          </Badge>
+          
+          <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+            Start collecting feedback
+            <br />
+            <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+              in under 2 minutes
+            </span>
+          </h2>
+          
+          <p className="text-xl md:text-2xl mb-10 opacity-90 max-w-3xl mx-auto leading-relaxed">
+            Start collecting valuable user feedback and make data-driven product decisions 
+            that drive real growth.
           </p>
-          <Link href="/signup">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-              Get Started Free
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link href="/signup">
+              <Button size="lg" className="text-lg px-10 py-7 bg-white text-blue-600 hover:bg-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 group">
+                Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-white/30 text-white hover:bg-white/10 transition-all duration-300">
+              Talk to Sales
               <MessageSquare className="ml-2 h-5 w-5" />
             </Button>
-          </Link>
+          </div>
+          
+          {/* Trust Indicators */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm opacity-80">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4" />
+              <span>Free 14-day trial</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-white/30" />
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4" />
+              <span>No credit card required</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-white/30" />
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4" />
+              <span>Cancel anytime</span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <MessageSquare className="h-6 w-6 text-blue-600" />
-            <span className="font-bold">FeedbackStar</span>
+      <footer className="py-16 px-6 bg-gray-900 dark:bg-black text-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
+            {/* Brand */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-blue-600 rounded-lg">
+                  <MessageSquare className="h-6 w-6 text-white" />
+                </div>
+                <span className="text-2xl font-bold">FeedbackStar</span>
+              </div>
+              <p className="text-gray-400 mb-6 max-w-md">
+                Beautiful, lightweight feedback widget that helps you collect user insights 
+                and improve your product with real data-driven decisions.
+              </p>
+            </div>
+            
+            {/* Product */}
+            <div>
+              <h4 className="font-semibold mb-4">Product</h4>
+              <ul className="space-y-3 text-gray-400">
+                <li><Link href="#" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Demo</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">API</Link></li>
+              </ul>
+            </div>
+            
+            {/* Company */}
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-3 text-gray-400">
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Support</Link></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-6 text-sm text-gray-600">
-            <Link href="/privacy" className="hover:text-gray-900">Privacy</Link>
-            <Link href="/terms" className="hover:text-gray-900">Terms</Link>
-            <Link href="/contact" className="hover:text-gray-900">Contact</Link>
+          
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-sm">
+              © 2024 FeedbackStar. All rights reserved.
+            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-400">
+              <span>Built with ❤️ for indie hackers</span>
+            </div>
           </div>
         </div>
       </footer>

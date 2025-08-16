@@ -188,7 +188,7 @@ export function createSummaryEmail(data: SummaryEmailData): EmailTemplate {
     .join('');
 
   const categoryList = Object.entries(stats.categories)
-    .filter(([_, count]) => count > 0)
+    .filter(([, count]) => count > 0)
     .map(([category, count]) => {
       const emoji = { general: '💬', bug: '🐛', feature: '✨', praise: '🎉' }[category as FeedbackCategory];
       return `<li style="margin: 4px 0;">${emoji} ${category}: ${count}</li>`;
@@ -264,10 +264,10 @@ export function createSummaryEmail(data: SummaryEmailData): EmailTemplate {
     ${stats.topProjects.map(p => `- ${p.projectName}: ${p.count} feedback`).join('\n')}
     ` : ''}
 
-    ${Object.entries(stats.categories).filter(([_, count]) => count > 0).length > 0 ? `
+    ${Object.entries(stats.categories).filter(([, count]) => count > 0).length > 0 ? `
     Categories:
     ${Object.entries(stats.categories)
-      .filter(([_, count]) => count > 0)
+      .filter(([, count]) => count > 0)
       .map(([category, count]) => `- ${category}: ${count}`)
       .join('\n')}
     ` : ''}

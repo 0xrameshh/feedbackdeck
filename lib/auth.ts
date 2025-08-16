@@ -17,11 +17,16 @@ export const polarClient = new Polar({
 export const auth = betterAuth({
     session: {
         expiresIn: 60 * 60 * 24 * 30, // 30 days in seconds
-        updateAge: 60 * 60 * 24 * 7, // Update session every 7 days
+        updateAge: 60 * 60 * 24, // Update session every day
         cookieCache: {
             enabled: true,
-            maxAge: 60 * 5 // Cache for 5 minutes
+            maxAge: 60 * 15 // Cache for 15 minutes
         }
+    },
+    cookies: {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax', // Better for cross-origin scenarios
+        httpOnly: true,
     },
     advanced: {
         cookiePrefix: "feedbackstar",

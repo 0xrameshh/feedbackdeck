@@ -67,7 +67,7 @@ export function AnalyticsDashboard({ projects }: AnalyticsDashboardProps) {
 
   useEffect(() => {
     fetchAnalytics();
-  }, [selectedProject, selectedPeriod]); // fetchAnalytics is stable
+  }, [selectedProject, selectedPeriod]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) {
     return (
