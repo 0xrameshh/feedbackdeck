@@ -30,8 +30,6 @@ interface AuthContextType {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
   googleSignIn: () => Promise<void>;
   refreshSession: () => Promise<void>;
@@ -91,68 +89,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await checkAuth();
   };
 
-  const signIn = async (email: string, password: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const result = await authClient.signIn.email({
-        email,
-        password,
-      });
-      
-      if (result.data) {
-        const sessionUser = result.data.user as User;
-        setSession({ 
-          user: sessionUser,
-          token: (result.data as any).token,
-          session: (result.data as any).session
-        });
-        setUser(sessionUser);
-        router.push('/dashboard');
-      } else if (result.error) {
-        throw new Error(result.error.message || 'Sign in failed');
-      }
-    } catch (err: any) {
-      console.error('Sign in error:', err);
-      setError(err.message || 'Failed to sign in');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const signUp = async (email: string, password: string, name: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const result = await authClient.signUp.email({
-        email,
-        password,
-        name,
-      });
-      
-      if (result.data) {
-        const sessionUser = result.data.user as User;
-        setSession({ 
-          user: sessionUser,
-          token: (result.data as any).token,
-          session: (result.data as any).session
-        });
-        setUser(sessionUser);
-        router.push('/dashboard');
-      } else if (result.error) {
-        throw new Error(result.error.message || 'Sign up failed');
-      }
-    } catch (err: any) {
-      console.error('Sign up error:', err);
-      setError(err.message || 'Failed to sign up');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const googleSignIn = async () => {
     try {
@@ -197,8 +133,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     error,
     isAuthenticated,
-    signIn,
-    signUp,
     signOut,
     googleSignIn,
     refreshSession,

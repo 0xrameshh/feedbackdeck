@@ -4,12 +4,77 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, Check, ArrowRight } from "lucide-react";
+import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, ArrowRight } from "lucide-react";
 import { HeaderNav } from "@/components/header-nav";
+import { FeedbackWidget } from "@/components/feedback-widget";
+import { NextSeo } from 'next-seo';
+import { OrganizationJsonLd, WebPageJsonLd, SoftwareAppJsonLd } from 'next-seo';
 
 export default function Home() {
   return (
     <>
+      <NextSeo
+        title="Home"
+        description="Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data."
+        canonical="https://feedbackstar.com"
+        openGraph={{
+          url: 'https://feedbackstar.com',
+          title: 'FeedbackStar - Turn Feedback Into Growth',
+          description: 'Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.',
+        }}
+      />
+      
+      {/* Structured Data */}
+      <OrganizationJsonLd
+        type="Organization"
+        id="https://feedbackstar.com/#organization"
+        name="FeedbackStar"
+        legalName="FeedbackStar LLC"
+        url="https://feedbackstar.com"
+        logo="https://feedbackstar.com/logo.svg"
+        description="FeedbackStar provides beautiful, lightweight feedback widgets for websites to collect user insights and drive product decisions."
+        contactPoint={[
+          {
+            telephone: '+1-555-FEEDBACK',
+            contactType: 'customer service',
+            email: 'support@feedbackstar.com',
+            areaServed: 'US',
+            availableLanguage: ['English']
+          }
+        ]}
+        sameAs={[
+          'https://twitter.com/feedbackstar',
+          'https://github.com/feedbackstar',
+          'https://linkedin.com/company/feedbackstar'
+        ]}
+      />
+      
+      <SoftwareAppJsonLd
+        name="FeedbackStar"
+        price="0"
+        priceCurrency="USD"
+        aggregateRating={{ ratingValue: '4.9', reviewCount: '150' }}
+        operatingSystem="Web"
+        applicationCategory="BusinessApplication"
+        keywords="feedback, analytics, customer insights, user feedback"
+        description="Beautiful feedback widget for collecting user insights and improving products"
+        url="https://feedbackstar.com"
+        author={{
+          '@type': 'Organization',
+          name: 'FeedbackStar Team'
+        }}
+      />
+      
+      <WebPageJsonLd
+        description="Turn feedback into growth with FeedbackStar's beautiful, lightweight feedback widget"
+        id="https://feedbackstar.com/#webpage"
+        lastReviewed={new Date().toISOString()}
+        reviewedBy={{
+          type: 'Organization',
+          name: 'FeedbackStar Team'
+        }}
+      />
+
       {/* Navigation */}
       <HeaderNav />
 
@@ -41,16 +106,12 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-16 justify-center">
-            <Link href="/signup">
+            <Link href="/auth">
               <Button size="lg" className="text-lg px-10 py-7 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                Start Free Trial
+                Get Started
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-              View Live Demo
-              <Globe className="ml-2 h-5 w-5" />
-            </Button>
           </div>
 
         </div>
@@ -175,35 +236,18 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/signup">
+            <Link href="/auth">
               <Button size="lg" className="text-lg px-10 py-7 bg-white text-blue-600 hover:bg-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                Get Started Free
+                Get Started
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="text-lg px-10 py-7 border-white/30 text-white hover:bg-white/10 transition-all duration-300">
+            <Button size="lg" className="text-lg px-10 py-7 bg-white/20 text-white hover:bg-white/30 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-white/40">
               Talk to Sales
               <MessageSquare className="ml-2 h-5 w-5" />
             </Button>
           </div>
           
-          {/* Trust Indicators */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-sm opacity-80">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4" />
-              <span>Free 14-day trial</span>
-            </div>
-            <div className="hidden sm:block w-px h-4 bg-white/30" />
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4" />
-              <span>No credit card required</span>
-            </div>
-            <div className="hidden sm:block w-px h-4 bg-white/30" />
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4" />
-              <span>Cancel anytime</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -214,8 +258,8 @@ export default function Home() {
             {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-blue-600 rounded-lg">
-                  <MessageSquare className="h-6 w-6 text-white" />
+                <div className="p-2 rounded-lg">
+                  <MessageSquare className="h-8 w-8" />
                 </div>
                 <span className="text-2xl font-bold">FeedbackStar</span>
               </div>
@@ -230,8 +274,6 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-gray-400">
                 <li><Link href="#" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Demo</Link></li>
                 <li><Link href="#" className="hover:text-white transition-colors">API</Link></li>
               </ul>
             </div>
@@ -243,7 +285,6 @@ export default function Home() {
                 <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
                 <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Support</Link></li>
               </ul>
             </div>
           </div>
@@ -258,6 +299,12 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Live Demo Widget */}
+      <FeedbackWidget 
+        projectId="demo-homepage"
+        customColor="#2563eb"
+      />
     </>
   );
 }

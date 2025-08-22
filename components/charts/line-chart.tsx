@@ -111,3 +111,4 @@ export function ChartLineDots({ stats }: ChartLineDotsProps) {
     </Card>
   )
 }
+    
