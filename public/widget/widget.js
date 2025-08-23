@@ -69,11 +69,11 @@
       if (document.getElementById('feedbackstar-styles')) return;
       
       const styles = `
-        /* FeedbackStar Logo SVG as data URL */
+        /* FeedbackStar Logo */
         .feedbackstar-logo {
           width: 22px;
           height: 22px;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' fill='white'/%3E%3C/svg%3E");
+          background-image: url("${CONFIG.API_BASE}/icon-192.png");
           background-size: contain;
           background-repeat: no-repeat;
           background-position: center;
@@ -142,7 +142,7 @@
           bottom: 0;
           right: 20px;
           z-index: 1000000;
-          width: 320px;
+          width: 280px;
           max-width: calc(100vw - 40px);
           transform: translateY(100%);
           opacity: 0;
@@ -160,8 +160,8 @@
         .feedbackstar-modal-content {
           background: rgba(255, 255, 255, 0.98);
           backdrop-filter: blur(16px);
-          border-radius: 24px 24px 24px 0;
-          padding: 24px;
+          border-radius: 20px 20px 20px 0;
+          padding: 16px;
           box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.25), 0 -4px 20px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -187,9 +187,9 @@
         /* Header */
         .feedbackstar-header {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
-          margin: -24px -24px 24px -24px;
-          padding: 16px 24px;
-          border-radius: 24px 24px 0 0;
+          margin: -16px -16px 16px -16px;
+          padding: 12px 16px;
+          border-radius: 20px 20px 0 0;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -209,7 +209,7 @@
         }
 
         .feedbackstar-title {
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
           margin: 0;
         }
@@ -240,17 +240,17 @@
         .feedbackstar-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 12px;
         }
 
         .feedbackstar-field {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
 
         .feedbackstar-label {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 500;
           color: #1f2937;
         }
@@ -270,11 +270,11 @@
         .feedbackstar-rating {
           display: flex;
           justify-content: center;
-          gap: 4px;
-          padding: 12px;
+          gap: 2px;
+          padding: 8px;
           background: rgba(0, 0, 0, 0.03);
-          border-radius: 16px;
-          margin-bottom: 8px;
+          border-radius: 12px;
+          margin-bottom: 6px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -284,12 +284,12 @@
         }
 
         .feedbackstar-star {
-          font-size: 24px;
+          font-size: 20px;
           color: #d1d5db;
           cursor: pointer;
           transition: all 0.3s ease;
-          padding: 8px;
-          border-radius: 8px;
+          padding: 4px;
+          border-radius: 6px;
           user-select: none;
         }
 
@@ -337,7 +337,7 @@
 
         .feedbackstar-textarea {
           resize: vertical;
-          min-height: 80px;
+          min-height: 60px;
         }
 
         .feedbackstar-input::placeholder,
@@ -350,9 +350,9 @@
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           color: white;
           border: none;
-          padding: 14px 24px;
-          border-radius: 12px;
-          font-size: 16px;
+          padding: 10px 20px;
+          border-radius: 10px;
+          font-size: 14px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
