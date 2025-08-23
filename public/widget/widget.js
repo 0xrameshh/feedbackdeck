@@ -77,7 +77,6 @@
           background-size: contain;
           background-repeat: no-repeat;
           background-position: center;
-          filter: brightness(0) invert(1);
         }
 
         /* Trigger Button */
@@ -506,7 +505,6 @@
       const trigger = document.createElement('button');
       trigger.id = CONFIG.TRIGGER_ID;
       trigger.innerHTML = `
-        <div class="feedbackstar-logo"></div>
         <span>${this.settings.triggerText}</span>
       `;
       trigger.setAttribute('aria-label', 'Open feedback form');
@@ -525,9 +523,6 @@
         <div class="feedbackstar-modal-content">
           <div class="feedbackstar-header">
             <div class="feedbackstar-header-left">
-              <div class="feedbackstar-header-logo">
-                <div class="feedbackstar-logo"></div>
-              </div>
               <h3 class="feedbackstar-title">Share Your Feedback</h3>
             </div>
             <button class="feedbackstar-close">×</button>
