@@ -7,6 +7,7 @@ import Link from "next/link";
 import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, ArrowRight } from "lucide-react";
 import { HeaderNav } from "@/components/header-nav";
 import { FeedbackWidget } from "@/components/feedback-widget";
+import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
 
 export default function Home() {
   return (
@@ -40,10 +41,6 @@ export default function Home() {
               </Button>
             </Link>
             
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 border-2 shadow-sm">
-              Talk to Sales
-              <MessageSquare className="ml-2 h-5 w-5" />
-            </Button>
           </div>
         </div>
       </section>
@@ -148,10 +145,6 @@ export default function Home() {
               </Button>
             </Link>
             
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6 border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-all">
-              Talk to Sales
-              <MessageSquare className="ml-2 h-5 w-5" />
-            </Button>
           </div>
         </div>
       </section>
@@ -163,9 +156,7 @@ export default function Home() {
             {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg">
-                  <MessageSquare className="h-8 w-8" />
-                </div>
+                <FeedbackStarLogo size={40} />
                 <span className="text-2xl font-bold">FeedbackStar</span>
               </div>
               <p className="text-muted-foreground mb-6 max-w-md">

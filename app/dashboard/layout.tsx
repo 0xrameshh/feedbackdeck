@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
-import { BarChart3, MessageSquare, Home, PanelLeftClose, PanelLeft, CreditCard } from "lucide-react";
+import { BarChart3, MessageSquare, Home, PanelLeftClose, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import AuthGuard from "@/components/auth-guard";
@@ -22,11 +22,6 @@ const links = [
     label: "Analytics",
     href: "/dashboard/analytics",
     icon: <BarChart3 className="h-5 w-5 flex-shrink-0" />,
-  },
-  {
-    label: "Billing",
-    href: "/dashboard/billing",
-    icon: <CreditCard className="h-5 w-5 flex-shrink-0" />,
   },
 ];
 

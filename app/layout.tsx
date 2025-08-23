@@ -15,13 +15,13 @@ export const metadata: Metadata = {
   publisher: "FeedbackStar",
   icons: {
     icon: [
-      { url: '/logo.png', sizes: '600x600', type: 'image/png' },
-      { url: '/logo.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    shortcut: '/logo.png',
+    shortcut: '/icon-192.png',
     apple: {
       url: '/apple-touch-icon.png',
-      sizes: '600x600',
+      sizes: '192x192',
       type: 'image/png',
     },
   },
@@ -75,7 +75,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+        <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body
