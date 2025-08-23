@@ -1,43 +1,41 @@
 "use client";
 
+import { Suspense } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { NextSeo } from 'next-seo';
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from "@/contexts/auth-context";
 import { toast } from "sonner";
+import { createAuthClient } from 'better-auth/client';
 
-export default function AuthPage() {
+const authClient = createAuthClient({
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? process.env.NEXT_PUBLIC_APP_URL 
+    : 'http://localhost:3000',
+});
+
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
+function AuthPageContent() {
   const [isLoading, setIsLoading] = useState(false);
-  const { googleSignIn } = useAuth();
 
   const signInWithGoogle = async () => {
     try {
       setIsLoading(true);
-      await googleSignIn();
+      await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/dashboard',
+      });
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Failed to sign in with Google");
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <NextSeo
-        title="Sign In"
-        description="Sign in to your FeedbackStar account with Google to access your feedback analytics dashboard and manage your projects."
-        canonical="https://feedbackstar.com/auth"
-        noindex={true}
-        openGraph={{
-          title: 'Sign In to FeedbackStar',
-          description: 'Access your feedback analytics dashboard and manage your projects.',
-          url: 'https://feedbackstar.com/auth',
-        }}
-      />
-      <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+    <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
         <div className="flex w-full max-w-sm flex-col gap-6">
           <Link
             href="/"
@@ -116,6 +114,17 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
-    </>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }
