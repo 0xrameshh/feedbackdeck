@@ -450,11 +450,6 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                             🕐 {item.metadata.timezone}
                           </span>
                         )}
-                        {item.metadata?.screenResolution && (
-                          <span className="bg-indigo-100 dark:bg-indigo-900/30 px-2 py-1 rounded">
-                            📺 {item.metadata.screenResolution}
-                          </span>
-                        )}
                         {item.metadata?.route && (
                           <a 
                             href={item.pageUrl}
@@ -587,12 +582,6 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                       <div>
                         <span className="font-medium text-muted-foreground">Device:</span>
                         <p className="text-foreground">{selectedFeedback.metadata.device}</p>
-                      </div>
-                    )}
-                    {selectedFeedback.metadata.screenResolution && (
-                      <div>
-                        <span className="font-medium text-muted-foreground">Screen:</span>
-                        <p className="text-foreground">{selectedFeedback.metadata.screenResolution}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.route && (
