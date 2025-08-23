@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
     // Allow API auth routes to pass through
@@ -7,24 +7,10 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    try {
-        const session = await auth.api.getSession({
-            headers: request.headers
-        });
+    // Simple cookie check - more reliable in edge runtime
+    const sessionCookie = getSessionCookie(request);
 
-        if (!session) {
-            // For API routes, return 401
-            if (request.nextUrl.pathname.startsWith('/api/')) {
-                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-            }
-            // For dashboard routes, redirect to home
-            return NextResponse.redirect(new URL("/", request.url));
-        }
-
-        return NextResponse.next();
-    } catch (error) {
-        console.error('Middleware auth check failed:', error);
-        
+    if (!sessionCookie) {
         // For API routes, return 401
         if (request.nextUrl.pathname.startsWith('/api/')) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -32,6 +18,8 @@ export async function middleware(request: NextRequest) {
         // For dashboard routes, redirect to home
         return NextResponse.redirect(new URL("/", request.url));
     }
+
+    return NextResponse.next();
 }
 
 export const config = {
