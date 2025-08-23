@@ -2,8 +2,8 @@
 
 import { Suspense } from 'react';
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from 'react';
+import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -39,19 +39,12 @@ function AuthPageContent() {
         <div className="flex w-full max-w-sm flex-col gap-6">
           <Link
             href="/"
-            className="flex items-center gap-3 self-center font-medium"
+            className="flex items-center gap-3 self-center font-medium hover:opacity-80 transition-opacity"
           >
-            <div className="flex items-center justify-center">
-              <Image
-                width={40}
-                height={40}
-                src={"/logo.png"}
-                alt="FeedbackStar Logo"
-                priority
-                className="rounded-lg"
-              />
+            <div className="p-2 bg-primary/10 rounded-xl">
+              <FeedbackStarLogo size={32} />
             </div>
-            FeedbackStar
+            <span className="text-xl font-bold">FeedbackStar</span>
           </Link>
           
           <Card>
@@ -101,13 +94,13 @@ function AuthPageContent() {
             </CardContent>
           </Card>
           
-          <div className="text-center text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-center text-sm text-muted-foreground">
             By continuing, you agree to our{" "}
-            <Link href="/terms" className="underline underline-offset-4 hover:text-gray-900 dark:hover:text-white">
+            <Link href="/terms" className="underline underline-offset-4 hover:text-foreground transition-colors">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="underline underline-offset-4 hover:text-gray-900 dark:hover:text-white">
+            <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground transition-colors">
               Privacy Policy
             </Link>
             .
