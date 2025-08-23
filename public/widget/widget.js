@@ -71,8 +71,8 @@
       const styles = `
         /* FeedbackStar Logo */
         .feedbackstar-logo {
-          width: 22px;
-          height: 22px;
+          width: 18px;
+          height: 18px;
           background-image: url("${CONFIG.API_BASE}/icon-192.png");
           background-size: contain;
           background-repeat: no-repeat;
@@ -243,13 +243,13 @@
         .feedbackstar-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 12px;
         }
 
         .feedbackstar-field {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 4px;
         }
 
         .feedbackstar-label {
@@ -273,11 +273,11 @@
         .feedbackstar-rating {
           display: flex;
           justify-content: center;
-          gap: 4px;
-          padding: 12px;
+          gap: 1px;
+          padding: 8px;
           background: rgba(0, 0, 0, 0.03);
-          border-radius: 16px;
-          margin-bottom: 8px;
+          border-radius: 10px;
+          margin-bottom: 4px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -287,12 +287,12 @@
         }
 
         .feedbackstar-star {
-          font-size: 24px;
+          font-size: 20px;
           color: #d1d5db;
           cursor: pointer;
           transition: all 0.3s ease;
-          padding: 8px;
-          border-radius: 8px;
+          padding: 4px;
+          border-radius: 6px;
           user-select: none;
         }
 
@@ -319,10 +319,11 @@
 
         /* Inputs */
         .feedbackstar-input,
-        .feedbackstar-textarea {
-          padding: 12px 16px;
+        .feedbackstar-textarea,
+        .feedbackstar-select {
+          padding: 10px 14px;
           border: 2px solid rgba(209, 213, 219, 0.6);
-          border-radius: 12px;
+          border-radius: 10px;
           font-size: 14px;
           font-family: inherit;
           background: rgba(255, 255, 255, 0.7);
@@ -332,15 +333,26 @@
         }
 
         .feedbackstar-input:focus,
-        .feedbackstar-textarea:focus {
+        .feedbackstar-textarea:focus,
+        .feedbackstar-select:focus {
           border-color: ${this.settings.primaryColor};
           box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
           background: rgba(255, 255, 255, 0.9);
         }
 
+        .feedbackstar-select {
+          cursor: pointer;
+          appearance: none;
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 10px center;
+          background-repeat: no-repeat;
+          background-size: 16px;
+          padding-right: 36px;
+        }
+
         .feedbackstar-textarea {
           resize: vertical;
-          min-height: 80px;
+          min-height: 70px;
         }
 
         .feedbackstar-input::placeholder,
@@ -536,6 +548,16 @@
               </div>
               
               <div class="feedbackstar-field">
+                <label class="feedbackstar-label">Type of feedback</label>
+                <select id="feedbackstar-category" class="feedbackstar-select">
+                  <option value="general">💬 General feedback</option>
+                  <option value="bug">🐛 Bug report</option>
+                  <option value="feature">✨ Feature request</option>
+                  <option value="praise">🎉 Praise</option>
+                </select>
+              </div>
+              
+              <div class="feedbackstar-field">
                 <label class="feedbackstar-label">
                   Tell us more <span style="color: #9ca3af; font-weight: normal;">(optional)</span>
                 </label>
@@ -715,6 +737,7 @@
       const submitBtn = document.getElementById('feedbackstar-submit');
       const message = document.getElementById('feedbackstar-message').value;
       const email = document.getElementById('feedbackstar-email').value;
+      const category = document.getElementById('feedbackstar-category').value;
       
       if (this.rating === 0) {
         alert('Please rate your experience before submitting');
@@ -730,6 +753,7 @@
           rating: this.rating,
           message: message || '',
           email: email || null,
+          category: category || 'general',
           pageUrl: window.location.href,
           userAgent: navigator.userAgent,
           metadata: {
