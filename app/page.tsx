@@ -8,8 +8,10 @@ import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, ArrowRight } 
 import { HeaderNav } from "@/components/header-nav";
 import { FeedbackWidget } from "@/components/feedback-widget";
 import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Home() {
+  const { isAuthenticated, loading } = useAuth();
   return (
     <>
       {/* Navigation */}
@@ -34,13 +36,19 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/auth">
-              <Button size="lg" className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all">
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
+            {loading ? (
+              <Button size="lg" disabled className="text-lg px-8 py-6 shadow-lg">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-2" />
+                Loading...
               </Button>
-            </Link>
-            
+            ) : (
+              <Link href={isAuthenticated ? "/dashboard" : "/auth"}>
+                <Button size="lg" className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all">
+                  {isAuthenticated ? "Go to Dashboard" : "Get Started"}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -138,13 +146,19 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth">
-              <Button size="lg" className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90 shadow-lg hover:shadow-xl transition-all">
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
+            {loading ? (
+              <Button size="lg" disabled className="text-lg px-8 py-6 bg-background text-foreground shadow-lg">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current mr-2" />
+                Loading...
               </Button>
-            </Link>
-            
+            ) : (
+              <Link href={isAuthenticated ? "/dashboard" : "/auth"}>
+                <Button size="lg" className="text-lg px-8 py-6 bg-background text-foreground hover:bg-background/90 shadow-lg hover:shadow-xl transition-all">
+                  {isAuthenticated ? "Go to Dashboard" : "Get Started"}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </section>

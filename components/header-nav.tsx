@@ -42,12 +42,6 @@ export function HeaderNav() {
         ) : (
           <>
             <Link href="/auth">
-              <Button variant="outline" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                Dashboard
-              </Button>
-            </Link>
-            <Link href="/auth">
               <Button>Sign In</Button>
             </Link>
           </>
