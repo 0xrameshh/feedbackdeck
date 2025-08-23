@@ -101,13 +101,13 @@ function AuthPageContent() {
             </CardContent>
           </Card>
           
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-gray-600 dark:text-gray-400">
             By continuing, you agree to our{" "}
-            <Link href="/terms" className="underline underline-offset-4 hover:text-gray-900">
+            <Link href="/terms" className="underline underline-offset-4 hover:text-gray-900 dark:hover:text-white">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="underline underline-offset-4 hover:text-gray-900">
+            <Link href="/privacy" className="underline underline-offset-4 hover:text-gray-900 dark:hover:text-white">
               Privacy Policy
             </Link>
             .

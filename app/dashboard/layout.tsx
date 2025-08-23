@@ -11,22 +11,22 @@ const links = [
   {
     label: "Dashboard",
     href: "/dashboard",
-    icon: <Home className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
+    icon: <Home className="h-5 w-5 flex-shrink-0" />,
   },
   {
     label: "Feedback",
     href: "/dashboard/feedback", 
-    icon: <MessageSquare className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
+    icon: <MessageSquare className="h-5 w-5 flex-shrink-0" />,
   },
   {
     label: "Analytics",
     href: "/dashboard/analytics",
-    icon: <BarChart3 className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
+    icon: <BarChart3 className="h-5 w-5 flex-shrink-0" />,
   },
   {
     label: "Billing",
     href: "/dashboard/billing",
-    icon: <CreditCard className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />,
+    icon: <CreditCard className="h-5 w-5 flex-shrink-0" />,
   },
 ];
 
@@ -39,14 +39,14 @@ export default function DashboardLayout({
 
   return (
     <AuthGuard>
-      <div className="rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1 mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden min-h-screen">
+      <div className="rounded-md flex flex-col md:flex-row bg-muted/50 w-full flex-1 mx-auto border overflow-hidden min-h-screen">
         <Sidebar open={open} setOpen={setOpen} animate={true}>
           <SidebarBody className="justify-between gap-10">
             <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
               <div className="flex items-center justify-between px-2 py-4">
                 <motion.div
                   animate={{ opacity: open ? 1 : 0 }}
-                  className="font-bold text-xl text-neutral-700 dark:text-neutral-200"
+                  className="font-bold text-xl"
                 >
                   {open && "FeedbackStar"}
                 </motion.div>
@@ -57,9 +57,9 @@ export default function DashboardLayout({
                   className="ml-auto hidden md:flex h-10 w-10"
                 >
                   {open ? (
-                    <PanelLeftClose className="h-8 w-8 text-neutral-700 dark:text-neutral-200" />
+                    <PanelLeftClose className="h-8 w-8" />
                   ) : (
-                    <PanelLeft className="h-8 w-8 text-neutral-700 dark:text-neutral-200" />
+                    <PanelLeft className="h-8 w-8" />
                   )}
                 </Button>
               </div>
@@ -72,7 +72,7 @@ export default function DashboardLayout({
           </SidebarBody>
         </Sidebar>
         <div className="flex-1 overflow-hidden">
-          <div className="p-4 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full overflow-y-auto">
+          <div className="p-4 md:p-10 rounded-tl-2xl border bg-background flex flex-col gap-2 flex-1 w-full h-full overflow-y-auto">
             {children}
           </div>
         </div>

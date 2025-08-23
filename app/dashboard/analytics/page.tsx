@@ -79,7 +79,7 @@ export default function AnalyticsPage() {
               <div key={i} className="h-32 bg-gray-200 rounded"></div>
             ))}
           </div>
-          <div className="h-96 bg-gray-200 rounded"></div>
+          <div className="h-96 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -90,8 +90,8 @@ export default function AnalyticsPage() {
   return (
     <div className="w-full">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Analytics</h1>
-        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Analytics</h1>
+        <p className="text-muted-foreground text-sm sm:text-base">
           Insights from your feedback collection
         </p>
       </div>
@@ -103,12 +103,12 @@ export default function AnalyticsPage() {
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">Total Feedback</p>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">{stats.totalFeedback}</div>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Feedback</p>
+                <div className="text-2xl sm:text-3xl font-bold">{stats.totalFeedback}</div>
                 <p className="text-xs text-green-600 dark:text-green-400 mt-1">+12% from last week</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <MessageSquare className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                <MessageSquare className="h-6 w-6 text-primary" />
               </div>
             </div>
           </CardContent>
@@ -118,9 +118,9 @@ export default function AnalyticsPage() {
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">This Week</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">This Week</p>
                 <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{stats.thisWeek}</div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">New feedback received</p>
+                <p className="text-xs text-muted-foreground mt-1">New feedback received</p>
               </div>
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
                 <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />

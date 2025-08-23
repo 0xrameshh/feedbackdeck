@@ -30,8 +30,8 @@ export default function FeedbackPage() {
     return (
       <div className="w-full">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded mb-6 w-1/4"></div>
-          <div className="h-96 bg-gray-200 rounded"></div>
+          <div className="h-8 bg-muted rounded mb-6 w-1/4"></div>
+          <div className="h-96 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -40,8 +40,8 @@ export default function FeedbackPage() {
   return (
     <div className="w-full">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Feedback</h1>
-        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Feedback</h1>
+        <p className="text-muted-foreground text-sm sm:text-base">
           View and manage all feedback from your websites
         </p>
       </div>

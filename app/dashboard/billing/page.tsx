@@ -58,12 +58,12 @@ export default function BillingPage() {
       <div className="w-full">
         <div className="animate-pulse space-y-8">
           <div className="space-y-3">
-            <div className="h-8 bg-gray-200 rounded mb-6 w-1/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-8 bg-muted rounded mb-6 w-1/4"></div>
+            <div className="h-4 bg-muted rounded w-1/2"></div>
           </div>
           <div className="grid gap-6">
-            <div className="h-48 bg-gray-200 rounded"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-48 bg-muted rounded"></div>
+            <div className="h-32 bg-muted rounded"></div>
           </div>
         </div>
       </div>
@@ -73,8 +73,8 @@ export default function BillingPage() {
   return (
     <div className="w-full">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Billing & Subscription</h1>
-        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Billing & Subscription</h1>
+        <p className="text-muted-foreground text-sm sm:text-base">
           Manage your subscription and billing information
         </p>
       </div>
@@ -100,7 +100,7 @@ export default function BillingPage() {
             <div className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Plan</p>
+                  <p className="text-sm font-medium text-muted-foreground">Plan</p>
                   <p className="text-lg font-semibold">
                     {billing?.currentPlan || 'Free Plan'}
                   </p>

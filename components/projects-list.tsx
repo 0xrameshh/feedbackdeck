@@ -125,9 +125,9 @@ export function ProjectsList() {
     return (
       <Card>
         <CardContent className="pt-6 text-center">
-          <Globe className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-          <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No projects yet</h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
+          <Globe className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <h3 className="text-lg font-semibold mb-2">No projects yet</h3>
+          <p className="text-muted-foreground mb-4">
             Create your first project to start collecting feedback.
           </p>
           <Dialog>
@@ -167,11 +167,11 @@ export function ProjectsList() {
             </CardHeader>
             <CardContent className="p-4 sm:p-6">
               <div className="space-y-3">
-                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-xs sm:text-sm text-muted-foreground">
                   <strong>Domain:</strong> <span className="break-all">{project.domain}</span>
                 </div>
                 
-                <div className="flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center text-xs sm:text-sm text-muted-foreground">
                   <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                   {projectFeedbackCounts[project.id] || 0} feedback messages
                 </div>

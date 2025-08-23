@@ -94,7 +94,7 @@ export function FeedbackWidget({
       <div className="fixed bottom-6 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-16 w-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:scale-110 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700 border-0 ring-2 ring-white/20"
+          className="h-16 w-16 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 bg-blue-600 hover:bg-blue-700 border-0"
           aria-label="Open feedback widget"
         >
           <MessageSquare className="h-8 w-8" />
@@ -106,7 +106,7 @@ export function FeedbackWidget({
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-gradient-to-br from-black/30 via-blue-900/20 to-purple-900/30 backdrop-blur-sm z-40 transition-all duration-300"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-all duration-300"
             onClick={handleClose}
           />
           
@@ -114,7 +114,7 @@ export function FeedbackWidget({
           <div className="fixed bottom-24 right-6 z-50 w-80 max-w-[calc(100vw-3rem)] animate-in slide-in-from-bottom-8 slide-in-from-right-8 duration-500">
             <Card className="shadow-2xl border-0 rounded-xl overflow-hidden bg-white dark:bg-gray-900">
               {/* Header */}
-              <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white">
+              <div className="flex items-center justify-between p-4 bg-blue-600 text-white">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5" />
                   <span className="font-semibold">Share Feedback</span>
@@ -133,12 +133,12 @@ export function FeedbackWidget({
                 {isSubmitted ? (
                   /* Success State */
                   <div className="text-center py-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <span className="text-green-600 font-semibold">
+                    <span className="text-green-600 dark:text-green-400 font-semibold">
                       Thank you for your feedback!
                     </span>
                   </div>
@@ -147,7 +147,7 @@ export function FeedbackWidget({
                   <div className="flex flex-col gap-4">
                     {/* Feedback Type Selection */}
                     <div className="flex flex-col gap-2">
-                      <span className="font-semibold text-sm">
+                      <span className="font-semibold text-sm text-gray-900 dark:text-white">
                         How was your experience?
                       </span>
                       <div className="flex gap-2">
@@ -213,23 +213,23 @@ export function FeedbackWidget({
                           type="button"
                           className={`p-2 rounded-full border transition-all ${
                             thumb === "up"
-                              ? "bg-green-100 border-green-400"
-                              : "border-gray-200 hover:border-gray-300"
+                              ? "bg-green-100 dark:bg-green-900/30 border-green-400 dark:border-green-600"
+                              : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                           }`}
                           onClick={() => setThumb("up")}
                         >
-                          <ThumbsUp className="w-5 h-5 text-green-600" />
+                          <ThumbsUp className="w-5 h-5 text-green-600 dark:text-green-400" />
                         </button>
                         <button
                           type="button"
                           className={`p-2 rounded-full border transition-all ${
                             thumb === "down"
-                              ? "bg-red-100 border-red-400"
-                              : "border-gray-200 hover:border-gray-300"
+                              ? "bg-red-100 dark:bg-red-900/30 border-red-400 dark:border-red-600"
+                              : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                           }`}
                           onClick={() => setThumb("down")}
                         >
-                          <ThumbsDown className="w-5 h-5 text-red-600" />
+                          <ThumbsDown className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </button>
                       </div>
                     )}
@@ -239,7 +239,7 @@ export function FeedbackWidget({
                       placeholder="Additional comments (optional)"
                       value={comment}
                       onChange={(value) => setComment(value || "")}
-                      className="text-sm min-h-[60px]"
+                      className="text-sm min-h-[60px] dark:bg-gray-800 dark:text-white dark:border-gray-600"
                     />
 
                     {/* Email */}
@@ -248,7 +248,7 @@ export function FeedbackWidget({
                       placeholder="Email (optional)"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="text-sm"
+                      className="text-sm dark:bg-gray-800 dark:text-white dark:border-gray-600"
                     />
 
                     {/* Submit Button */}
@@ -260,7 +260,7 @@ export function FeedbackWidget({
                         (feedbackType === "thumbs" && !thumb) ||
                         isSubmitting
                       }
-                      className="self-end bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 hover:from-blue-700 hover:via-purple-700 hover:to-indigo-700"
+                      className="self-end bg-blue-600 hover:bg-blue-700"
                     >
                       {isSubmitting ? (
                         <>
@@ -278,9 +278,9 @@ export function FeedbackWidget({
                 )}
 
                 {/* Branding */}
-                <div className="flex items-center justify-center text-xs text-gray-400 mt-4 pt-3 border-t">
+                <div className="flex items-center justify-center text-xs text-gray-400 dark:text-gray-500 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <span>Powered by</span>
-                  <Badge className="ml-1 text-xs bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 px-2 py-0.5">
+                  <Badge className="ml-1 text-xs bg-blue-600 text-white border-0 px-2 py-0.5">
                     ⭐ FeedbackStar
                   </Badge>
                 </div>
