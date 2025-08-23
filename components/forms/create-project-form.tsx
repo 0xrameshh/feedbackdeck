@@ -74,17 +74,17 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
             Your Embed Code
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600">
+        <CardContent className="space-y-6">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             Copy this code and paste it before the closing &lt;/body&gt; tag on your website:
           </p>
-          <div className="bg-gray-100 p-4 rounded-md">
-            <pre className="text-xs overflow-x-auto whitespace-pre-wrap">
+          <div className="bg-muted p-4 rounded-lg border">
+            <pre className="text-xs overflow-x-auto whitespace-pre-wrap text-foreground">
               {embedCode}
             </pre>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={copyEmbedCode} variant="outline">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button onClick={copyEmbedCode} variant="outline" className="flex-1 sm:flex-none">
               Copy Code
             </Button>
             <Button 
@@ -95,6 +95,7 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
                 setEmbedCode('');
                 router.refresh();
               }}
+              className="flex-1 sm:flex-none"
             >
               Create Another Project
             </Button>
@@ -105,41 +106,48 @@ export function CreateProjectForm({ onSuccess }: CreateProjectFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Project Name</Label>
-        <Input
-          id="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="My Awesome Website"
-          required
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="domain">Website Domain</Label>
-        <div className="relative">
-          <Globe className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+    <div className="w-full max-w-lg mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-sm font-medium text-foreground">
+            Project Name
+          </Label>
           <Input
-            id="domain"
+            id="name"
             type="text"
-            value={domain}
-            onChange={(e) => setDomain(e.target.value)}
-            placeholder="example.com or localhost:3001"
-            className="pl-10"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="My Awesome Website"
+            className="h-11"
             required
           />
         </div>
-        <p className="text-xs text-gray-500 mt-1">
-          Enter your domain without http:// or https://. You can use localhost for testing.
-        </p>
-      </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? 'Creating...' : 'Create Project'}
-      </Button>
-    </form>
+        <div className="space-y-2">
+          <Label htmlFor="domain" className="text-sm font-medium text-foreground">
+            Website Domain
+          </Label>
+          <div className="relative">
+            <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              id="domain"
+              type="text"
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              placeholder="example.com"
+              className="pl-10 h-11"
+              required
+            />
+          </div>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Enter your domain without http:// or https://
+          </p>
+        </div>
+
+        <Button type="submit" className="w-full h-11 text-sm font-medium" disabled={isLoading}>
+          {isLoading ? 'Creating Project...' : 'Create Project'}
+        </Button>
+      </form>
+    </div>
   );
 }
