@@ -241,11 +241,11 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
             className={`h-3 w-3 sm:h-4 sm:w-4 ${
               star <= rating
                 ? 'fill-yellow-400 text-yellow-400'
-                : 'text-gray-300'
+                : 'text-muted-foreground'
             }`}
           />
         ))}
-        <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 ml-1">({rating}/5)</span>
+        <span className="text-xs sm:text-sm text-muted-foreground ml-1">({rating}/5)</span>
       </div>
     );
   };
@@ -266,7 +266,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
     return (
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="h-32 bg-gray-200 rounded animate-pulse"></div>
+          <div key={i} className="h-32 bg-muted rounded animate-pulse"></div>
         ))}
       </div>
     );
@@ -286,7 +286,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
           <div className="flex flex-col sm:flex-row flex-wrap gap-4">
             <div className="flex-1 min-w-full sm:min-w-[200px]">
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search feedback..."
                   value={searchTerm}
@@ -343,9 +343,9 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
         {filteredFeedback.length === 0 ? (
           <Card>
             <CardContent className="pt-6 text-center">
-              <MessageSquare className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No feedback yet</h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">No feedback yet</h3>
+              <p className="text-muted-foreground">
                 Feedback submissions will appear here once users start using your widget.
               </p>
             </CardContent>
@@ -369,7 +369,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                   <div className="space-y-3">
                     {/* Message and Rating */}
                     <div className="flex items-start gap-2">
-                      <p className="text-sm sm:text-base font-medium text-gray-900 dark:text-gray-100">
+                      <p className="text-sm sm:text-base font-medium text-foreground">
                         {item.message}
                       </p>
                       {item.rating && (
@@ -420,7 +420,7 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
                     <div className="mt-3">
                       <div className="flex flex-wrap gap-2 text-xs sm:text-sm">
                         {item.metadata?.country && (
-                          <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded flex items-center gap-1">
+                          <span className="bg-muted px-2 py-1 rounded flex items-center gap-1">
                             <span className="text-sm sm:text-base">{getCountryFlag(item.metadata.country)}</span>
                             <span>{item.metadata.country}</span>
                           </span>
@@ -510,42 +510,42 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
             <div className="space-y-6">
               <div>
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">Message</h4>
+                  <h4 className="font-semibold text-foreground">Message</h4>
                   {selectedFeedback.rating && (
                     <div className="ml-4">
                       {renderStarRating(selectedFeedback.rating)}
                     </div>
                   )}
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 p-3 rounded-md">
+                <p className="text-foreground bg-muted p-3 rounded-md">
                   {selectedFeedback.message}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Project</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-semibold mb-2 text-foreground">Project</h4>
+                  <p className="text-sm text-muted-foreground">
                     {selectedFeedback.projectName} ({selectedFeedback.projectDomain})
                   </p>
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Date</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <h4 className="font-semibold mb-2 text-foreground">Date</h4>
+                  <p className="text-sm text-muted-foreground">
                     {formatDate(selectedFeedback.createdAt)}
                   </p>
                 </div>
 
                 {selectedFeedback.userEmail && (
                   <div>
-                    <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Email</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{selectedFeedback.userEmail}</p>
+                    <h4 className="font-semibold mb-2 text-foreground">Email</h4>
+                    <p className="text-sm text-muted-foreground">{selectedFeedback.userEmail}</p>
                   </div>
                 )}
 
                 <div>
-                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Page URL</h4>
+                  <h4 className="font-semibold mb-2 text-foreground">Page URL</h4>
                   <a 
                     href={selectedFeedback.pageUrl} 
                     target="_blank" 
@@ -560,63 +560,63 @@ This is in response to feedback submitted on ${formatDate(feedback.createdAt)} f
 
               {selectedFeedback.metadata && Object.keys(selectedFeedback.metadata).length > 0 && (
                 <div>
-                  <h4 className="font-semibold mb-2 text-gray-900 dark:text-gray-100">Technical Details</h4>
+                  <h4 className="font-semibold mb-2 text-foreground">Technical Details</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     {selectedFeedback.metadata.country && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Country:</span>
+                        <span className="font-medium text-muted-foreground">Country:</span>
                         <div className="mt-1 flex items-center gap-2">
                           <span className="text-lg">{getCountryFlag(selectedFeedback.metadata.country)}</span>
-                          <span className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.country}</span>
+                          <span className="text-foreground">{selectedFeedback.metadata.country}</span>
                         </div>
                       </div>
                     )}
                     {selectedFeedback.metadata.browserInfo && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Browser:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.browserInfo}</p>
+                        <span className="font-medium text-muted-foreground">Browser:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.browserInfo}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.os && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">OS:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.os}</p>
+                        <span className="font-medium text-muted-foreground">OS:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.os}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.device && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Device:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.device}</p>
+                        <span className="font-medium text-muted-foreground">Device:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.device}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.screenResolution && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Screen:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.screenResolution}</p>
+                        <span className="font-medium text-muted-foreground">Screen:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.screenResolution}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.route && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Route:</span>
-                        <p className="break-all text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.route}</p>
+                        <span className="font-medium text-muted-foreground">Route:</span>
+                        <p className="break-all text-foreground">{selectedFeedback.metadata.route}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.language && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Language:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.language}</p>
+                        <span className="font-medium text-muted-foreground">Language:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.language}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.timezone && (
                       <div>
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Timezone:</span>
-                        <p className="text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.timezone}</p>
+                        <span className="font-medium text-muted-foreground">Timezone:</span>
+                        <p className="text-foreground">{selectedFeedback.metadata.timezone}</p>
                       </div>
                     )}
                     {selectedFeedback.metadata.referrer && (
                       <div className="col-span-2">
-                        <span className="font-medium text-gray-600 dark:text-gray-400">Referrer:</span>
-                        <p className="break-all text-gray-900 dark:text-gray-100">{selectedFeedback.metadata.referrer}</p>
+                        <span className="font-medium text-muted-foreground">Referrer:</span>
+                        <p className="break-all text-foreground">{selectedFeedback.metadata.referrer}</p>
                       </div>
                     )}
                   </div>

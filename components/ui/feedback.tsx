@@ -161,7 +161,7 @@ const Default = ({ label }: { label: string }) => {
         <form>
           <div className="flex flex-col gap-2 p-2">
             <Textarea placeholder="Your feedback..." className="h-[100px]" />
-            <div className="flex items-center gap-1 text-sm text-gray-900 ml-auto">
+            <div className="flex items-center gap-1 text-sm text-foreground ml-auto">
               <MSupportedIcon /> supported.
             </div>
           </div>
@@ -173,7 +173,7 @@ const Default = ({ label }: { label: string }) => {
                 shape="rounded"
                 className={clsx(
                   "group hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                  selectedEmoji === 0 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                  selectedEmoji === 0 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
                 )}
                 onClick={(event) => {
                   event.preventDefault();
@@ -191,7 +191,7 @@ const Default = ({ label }: { label: string }) => {
                 shape="rounded"
                 className={clsx(
                   "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                  selectedEmoji === 1 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                  selectedEmoji === 1 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
                 )}
                 onClick={(event) => {
                   event.preventDefault();
@@ -206,7 +206,7 @@ const Default = ({ label }: { label: string }) => {
                 shape="rounded"
                 className={clsx(
                   "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                  selectedEmoji === 2 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                  selectedEmoji === 2 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
                 )}
                 onClick={(event) => {
                   event.preventDefault();
@@ -221,7 +221,7 @@ const Default = ({ label }: { label: string }) => {
                 shape="rounded"
                 className={clsx(
                   "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                  selectedEmoji === 3 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                  selectedEmoji === 3 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
                 )}
                 onClick={(event) => {
                   event.preventDefault();
@@ -270,7 +270,7 @@ const Inline = ({ label }: { label: string }) => {
       ref={ref}
     >
       <div className={clsx("flex items-center justify-center gap-2 py-2 pl-4 pr-2 duration-200", expanded && "!px-[60px]")}>
-        <p className="text-gray-900 text-sm">{label}</p>
+        <p className="text-foreground text-sm">{label}</p>
         <div className="flex justify-between">
           <span className="flex items-center gap-[1px] cursor-pointer">
             <Button
@@ -279,7 +279,7 @@ const Inline = ({ label }: { label: string }) => {
               shape="rounded"
               className={clsx(
                 "group hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                selectedEmoji === 0 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                selectedEmoji === 0 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
               )}
               onClick={(event) => {
                 event.preventDefault();
@@ -298,7 +298,7 @@ const Inline = ({ label }: { label: string }) => {
               shape="rounded"
               className={clsx(
                 "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                selectedEmoji === 1 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                selectedEmoji === 1 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
               )}
               onClick={(event) => {
                 event.preventDefault();
@@ -314,7 +314,7 @@ const Inline = ({ label }: { label: string }) => {
               shape="rounded"
               className={clsx(
                 "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                selectedEmoji === 2 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                selectedEmoji === 2 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
               )}
               onClick={(event) => {
                 event.preventDefault();
@@ -330,7 +330,7 @@ const Inline = ({ label }: { label: string }) => {
               shape="rounded"
               className={clsx(
                 "hover:!bg-blue-300 hover:fill-blue-900 !w-8 !h-8 p-0 duration-200",
-                selectedEmoji === 3 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-gray-900"
+                selectedEmoji === 3 ? "!bg-blue-300 fill-blue-900" : "bg-transparent fill-foreground"
               )}
               onClick={(event) => {
                 event.preventDefault();
@@ -347,7 +347,7 @@ const Inline = ({ label }: { label: string }) => {
         <form className="w-full transition-opacity duration-300 opacity-100">
           <div className="flex flex-col gap-2 p-2 w-full">
             <Textarea placeholder="Your feedback..." className="h-[100px]" ref={textAreaRef} />
-            <div className="flex items-center gap-1 text-xs text-gray-900 ml-auto">
+            <div className="flex items-center gap-1 text-xs text-foreground ml-auto">
               <MSupportedIcon /> supported.
             </div>
           </div>
