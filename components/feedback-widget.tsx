@@ -137,34 +137,39 @@ export function FeedbackWidget({
             }}
           >
             <Card className={cn(
-              "shadow-2xl border-0 rounded-2xl overflow-hidden",
-              "bg-background/95 backdrop-blur-xl",
+              "shadow-2xl border-0 rounded-3xl overflow-hidden",
+              "bg-background/98 backdrop-blur-xl",
               "ring-1 ring-black/5 dark:ring-white/10",
               "transform transition-all duration-300"
             )}>
               
-              {/* Header - Cleaner */}
-              <div className="relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-primary opacity-90"></div>
-                <div className="relative flex items-center justify-between p-4 text-primary-foreground">
-                  <h3 className="font-semibold text-sm">Share Feedback</h3>
+              {/* Header - Enhanced with better radius */}
+              <div className="relative overflow-hidden rounded-t-3xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/90 opacity-95"></div>
+                <div className="relative flex items-center justify-between p-5 text-primary-foreground">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-white/10 rounded-lg">
+                      <FeedbackStarLogo size={16} className="brightness-0 invert" />
+                    </div>
+                    <h3 className="font-semibold text-base">Share Your Feedback</h3>
+                  </div>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleClose}
                     className={cn(
-                      "h-7 w-7 p-0 rounded-full",
-                      "text-primary-foreground/80 hover:text-primary-foreground",
-                      "hover:bg-white/15 active:bg-white/20",
-                      "transition-all duration-200"
+                      "h-8 w-8 p-0 rounded-full",
+                      "text-primary-foreground/70 hover:text-primary-foreground",
+                      "hover:bg-white/20 active:bg-white/25",
+                      "transition-all duration-200 hover:scale-105 active:scale-95"
                     )}
                   >
-                    <X className="h-3.5 w-3.5" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
-              <CardContent className="p-5">
+              <CardContent className="p-6">
                 {isSubmitted ? (
                   /* Success State - Enhanced */
                   <div 
@@ -198,18 +203,19 @@ export function FeedbackWidget({
                     )}
                   >
                     
-                    {/* Star Rating - Much Better */}
-                    <div className="text-center space-y-3">
-                      <p className="text-sm font-medium text-foreground">How was your experience?</p>
-                      <div className="flex justify-center gap-0.5">
+                    {/* Star Rating - Enhanced */}
+                    <div className="text-center space-y-4">
+                      <p className="text-sm font-medium text-foreground">Rate your experience</p>
+                      <div className="flex justify-center gap-1 p-2 rounded-2xl bg-muted/30">
                         {[1, 2, 3, 4, 5].map((n) => (
                           <button
                             key={n}
                             type="button"
                             className={cn(
-                              "p-1.5 transition-all duration-200 ease-out",
-                              "hover:scale-125 active:scale-110",
-                              "focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-full"
+                              "p-2 transition-all duration-300 ease-out rounded-xl",
+                              "hover:scale-110 active:scale-95 hover:bg-background/50",
+                              "focus:outline-none focus:ring-2 focus:ring-primary/30 focus:bg-background/50",
+                              getStarDisplay(n) && "bg-yellow-50 dark:bg-yellow-950/30"
                             )}
                             onClick={() => setRating(n)}
                             onMouseEnter={() => setHoveredStar(n)}
@@ -217,11 +223,11 @@ export function FeedbackWidget({
                           >
                             <Star
                               className={cn(
-                                "w-7 h-7 transition-all duration-200",
+                                "w-6 h-6 transition-all duration-300",
                                 getStarDisplay(n)
-                                  ? "text-yellow-400 fill-yellow-400 drop-shadow-sm" 
-                                  : "text-muted-foreground hover:text-yellow-300",
-                                hoveredStar >= n && "scale-110"
+                                  ? "text-yellow-500 fill-yellow-400 drop-shadow-sm scale-110" 
+                                  : "text-muted-foreground hover:text-yellow-400",
+                                hoveredStar >= n && "scale-125"
                               )}
                             />
                           </button>
@@ -242,27 +248,28 @@ export function FeedbackWidget({
                     </div>
 
                     {/* Comment - Enhanced */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-medium text-foreground block">
-                        Tell us more <span className="text-muted-foreground">(optional)</span>
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-foreground block">
+                        Tell us more <span className="text-muted-foreground font-normal">(optional)</span>
                       </label>
                       <Textarea
-                        placeholder="What can we improve? Any specific feedback?"
+                        placeholder="Share your thoughts, suggestions, or what we can improve..."
                         value={comment}
                         onChange={(value) => setComment(value || "")}
                         className={cn(
-                          "text-sm min-h-[72px] resize-none rounded-lg",
-                          "border-2 border-border focus:border-primary",
-                          "transition-all duration-200",
-                          "bg-background/50 backdrop-blur-sm"
+                          "text-sm min-h-[80px] resize-none rounded-xl",
+                          "border-2 border-border/60 focus:border-primary/70",
+                          "transition-all duration-300 focus:ring-4 focus:ring-primary/10",
+                          "bg-background/70 backdrop-blur-sm",
+                          "placeholder:text-muted-foreground/70"
                         )}
                       />
                     </div>
 
                     {/* Email - Enhanced */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-medium text-foreground block">
-                        Email <span className="text-muted-foreground">(for follow-up)</span>
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-foreground block">
+                        Email <span className="text-muted-foreground font-normal">(for follow-up)</span>
                       </label>
                       <Input
                         type="email"
@@ -270,25 +277,28 @@ export function FeedbackWidget({
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className={cn(
-                          "text-sm h-9 rounded-lg",
-                          "border-2 border-border focus:border-primary",
-                          "transition-all duration-200",
-                          "bg-background/50 backdrop-blur-sm"
+                          "text-sm h-11 rounded-xl",
+                          "border-2 border-border/60 focus:border-primary/70",
+                          "transition-all duration-300 focus:ring-4 focus:ring-primary/10",
+                          "bg-background/70 backdrop-blur-sm",
+                          "placeholder:text-muted-foreground/70"
                         )}
                       />
                     </div>
 
-                    {/* Submit Button - Much Better */}
+                    {/* Submit Button - Premium */}
                     <Button
                       onClick={handleSubmit}
                       disabled={rating === 0 || isSubmitting}
                       className={cn(
-                        "w-full h-10 rounded-lg font-medium",
-                        "bg-primary hover:bg-primary/90 active:bg-primary/95",
-                        "shadow-md hover:shadow-lg active:shadow-sm",
-                        "transform transition-all duration-200",
+                        "w-full h-12 rounded-xl font-semibold text-base",
+                        "bg-gradient-to-r from-primary to-primary/90",
+                        "hover:from-primary/90 hover:to-primary/80",
+                        "shadow-lg hover:shadow-xl active:shadow-md",
+                        "transform transition-all duration-300",
                         "hover:scale-[1.02] active:scale-[0.98]",
-                        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
+                        "focus:ring-4 focus:ring-primary/20"
                       )}
                     >
                       {isSubmitting ? (
@@ -309,28 +319,28 @@ export function FeedbackWidget({
                   </div>
                 )}
 
-                {/* Branding - Clickable Link */}
-                <div className="flex items-center justify-center pt-4 mt-4 border-t border-border/50">
+                {/* Branding - Enhanced */}
+                <div className="flex items-center justify-center pt-5 mt-5 border-t border-border/30">
                   <a 
                     href="https://feedbackstar.vercel.app" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className={cn(
-                      "flex items-center gap-1.5 text-xs text-muted-foreground",
-                      "hover:text-foreground transition-colors duration-200",
-                      "group cursor-pointer"
+                      "flex items-center gap-2 text-xs text-muted-foreground",
+                      "hover:text-foreground transition-all duration-300",
+                      "group cursor-pointer hover:scale-105 active:scale-95"
                     )}
                   >
-                    <span>Powered by</span>
+                    <span className="font-medium">Powered by</span>
                     <Badge variant="outline" className={cn(
-                      "text-xs px-2 py-1 h-6 border-border/50",
-                      "bg-background/50 backdrop-blur-sm",
-                      "group-hover:border-primary/50 group-hover:bg-primary/5",
-                      "transition-all duration-200"
+                      "text-xs px-3 py-1.5 h-7 border-border/40 rounded-lg",
+                      "bg-background/60 backdrop-blur-sm",
+                      "group-hover:border-primary/40 group-hover:bg-primary/5",
+                      "transition-all duration-300 group-hover:shadow-md"
                     )}>
-                      <FeedbackStarLogo size={14} className="mr-1.5 opacity-80 group-hover:opacity-100 transition-opacity duration-200" />
-                      <span className="font-medium">FeedbackStar</span>
-                      <ExternalLink className="ml-1 h-2.5 w-2.5 opacity-50 group-hover:opacity-80 transition-opacity duration-200" />
+                      <FeedbackStarLogo size={14} className="mr-1.5 opacity-70 group-hover:opacity-100 transition-all duration-300" />
+                      <span className="font-semibold">FeedbackStar</span>
+                      <ExternalLink className="ml-1.5 h-3 w-3 opacity-40 group-hover:opacity-70 transition-all duration-300" />
                     </Badge>
                   </a>
                 </div>
