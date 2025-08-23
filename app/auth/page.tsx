@@ -29,9 +29,11 @@ function AuthPageContent() {
       try {
         const session = await authClient.getSession();
         if (session.data) {
+          console.log('User is authenticated, redirecting to dashboard...');
           router.push('/dashboard');
           return;
         }
+        console.log('User not authenticated');
       } catch (error) {
         console.error('Auth check failed:', error);
       } finally {
