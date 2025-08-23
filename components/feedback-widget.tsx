@@ -79,7 +79,7 @@ export function FeedbackWidget({
   return (
     <>
       {/* Widget Trigger Button - Much Better */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-0 right-5 z-50">
         <div className="relative group">
           {/* Glow effect */}
           <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg scale-150 group-hover:bg-primary/30 transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
@@ -122,7 +122,7 @@ export function FeedbackWidget({
           {/* Widget Card - Smooth Spring Animation */}
           <div 
             className={cn(
-              "fixed bottom-6 right-6 z-50 w-80 max-w-[calc(100vw-3rem)]",
+              "fixed bottom-0 right-5 z-50 w-80 max-w-[calc(100vw-2.5rem)]",
               "transition-all duration-500 ease-out",
               "origin-bottom-right",
               isOpen 
@@ -137,10 +137,11 @@ export function FeedbackWidget({
             }}
           >
             <Card className={cn(
-              "shadow-2xl border-0 rounded-3xl overflow-hidden",
+              "shadow-2xl border-0 overflow-hidden",
               "bg-background/98 backdrop-blur-xl",
               "ring-1 ring-black/5 dark:ring-white/10",
-              "transform transition-all duration-300"
+              "transform transition-all duration-300",
+              "rounded-t-3xl rounded-bl-3xl rounded-br-none"
             )}>
               
               {/* Header - Enhanced with better radius */}
