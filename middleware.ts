@@ -1,27 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
-    // Allow API auth routes to pass through
-    if (request.nextUrl.pathname.startsWith('/api/auth')) {
+    // Only protect API routes that need authentication
+    if (request.nextUrl.pathname.startsWith('/api/') && 
+        !request.nextUrl.pathname.startsWith('/api/auth')) {
+        
+        // For API routes, just let them handle their own auth
+        // Individual API routes will check authentication
         return NextResponse.next();
     }
 
-    // Simple cookie check - more reliable in edge runtime
-    const sessionCookie = getSessionCookie(request);
-
-    if (!sessionCookie) {
-        // For API routes, return 401
-        if (request.nextUrl.pathname.startsWith('/api/')) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-        // For dashboard routes, redirect to home
-        return NextResponse.redirect(new URL("/", request.url));
-    }
-
+    // Let all other routes pass through
+    // Dashboard protection will be handled by AuthGuard component
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/dashboard", "/dashboard/(.*)", "/api/dashboard/(.*)", "/api/projects/(.*)", "/api/feedback/(.*)"],
+    matcher: ["/api/projects/(.*)", "/api/feedback/(.*)"],
 };
