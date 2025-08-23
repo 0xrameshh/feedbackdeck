@@ -205,7 +205,7 @@ export default function Home() {
           
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground mb-4 md:mb-0">
-              &copy; 2024 FeedbackStar. All rights reserved.
+              &copy; 2025 FeedbackStar. All rights reserved.
             </p>
             <div className="text-muted-foreground">
               Built for indie hackers
