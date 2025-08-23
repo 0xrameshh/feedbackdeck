@@ -84,30 +84,33 @@
         #${CONFIG.TRIGGER_ID} {
           position: fixed;
           bottom: 0;
-          right: 20px;
+          right: 30px;
           z-index: 999999;
-          width: 56px;
-          height: 56px;
+          padding: 12px 20px;
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 20)});
+          color: white;
           border: none;
-          border-radius: 50%;
+          border-radius: 12px 12px 0 0;
           cursor: pointer;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
           align-items: center;
-          justify-content: center;
+          gap: 8px;
           opacity: 1;
           visibility: visible;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-size: 14px;
+          font-weight: 600;
         }
 
         #${CONFIG.TRIGGER_ID}:hover {
-          transform: scale(1.05);
+          transform: translateY(-3px);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         #${CONFIG.TRIGGER_ID}:active {
-          transform: scale(0.95);
+          transform: translateY(-1px);
         }
 
         #${CONFIG.TRIGGER_ID}.hidden {
@@ -140,9 +143,9 @@
         #${CONFIG.MODAL_ID} {
           position: fixed;
           bottom: 0;
-          right: 20px;
+          right: 30px;
           z-index: 1000000;
-          width: 280px;
+          width: 320px;
           max-width: calc(100vw - 40px);
           transform: translateY(100%);
           opacity: 0;
@@ -160,8 +163,8 @@
         .feedbackstar-modal-content {
           background: rgba(255, 255, 255, 0.98);
           backdrop-filter: blur(16px);
-          border-radius: 20px 20px 20px 0;
-          padding: 16px;
+          border-radius: 24px 24px 24px 0;
+          padding: 24px;
           box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.25), 0 -4px 20px rgba(0, 0, 0, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -187,9 +190,9 @@
         /* Header */
         .feedbackstar-header {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
-          margin: -16px -16px 16px -16px;
-          padding: 12px 16px;
-          border-radius: 20px 20px 0 0;
+          margin: -24px -24px 24px -24px;
+          padding: 16px 24px;
+          border-radius: 24px 24px 0 0;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -209,7 +212,7 @@
         }
 
         .feedbackstar-title {
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 600;
           margin: 0;
         }
@@ -240,17 +243,17 @@
         .feedbackstar-form {
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 20px;
         }
 
         .feedbackstar-field {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
         }
 
         .feedbackstar-label {
-          font-size: 13px;
+          font-size: 14px;
           font-weight: 500;
           color: #1f2937;
         }
@@ -270,11 +273,11 @@
         .feedbackstar-rating {
           display: flex;
           justify-content: center;
-          gap: 2px;
-          padding: 8px;
+          gap: 4px;
+          padding: 12px;
           background: rgba(0, 0, 0, 0.03);
-          border-radius: 12px;
-          margin-bottom: 6px;
+          border-radius: 16px;
+          margin-bottom: 8px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -284,12 +287,12 @@
         }
 
         .feedbackstar-star {
-          font-size: 20px;
+          font-size: 24px;
           color: #d1d5db;
           cursor: pointer;
           transition: all 0.3s ease;
-          padding: 4px;
-          border-radius: 6px;
+          padding: 8px;
+          border-radius: 8px;
           user-select: none;
         }
 
@@ -337,7 +340,7 @@
 
         .feedbackstar-textarea {
           resize: vertical;
-          min-height: 60px;
+          min-height: 80px;
         }
 
         .feedbackstar-input::placeholder,
@@ -350,9 +353,9 @@
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           color: white;
           border: none;
-          padding: 10px 20px;
-          border-radius: 10px;
-          font-size: 14px;
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-size: 16px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -490,7 +493,10 @@
     createTrigger() {
       const trigger = document.createElement('button');
       trigger.id = CONFIG.TRIGGER_ID;
-      trigger.innerHTML = '<div class="feedbackstar-logo"></div>';
+      trigger.innerHTML = `
+        <div class="feedbackstar-logo"></div>
+        <span>${this.settings.triggerText}</span>
+      `;
       trigger.setAttribute('aria-label', 'Open feedback form');
       
       document.body.appendChild(trigger);
