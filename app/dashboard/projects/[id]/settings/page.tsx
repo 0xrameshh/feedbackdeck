@@ -18,13 +18,8 @@ interface Project {
   domain: string;
   widgetSettings: {
     triggerText?: string;
-    position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
     primaryColor?: string;
-    backgroundColor?: string;
     textColor?: string;
-    borderRadius?: number;
-    buttonSize?: 'small' | 'medium' | 'large';
-    theme?: 'light' | 'dark' | 'auto';
     showRating?: boolean;
     customCSS?: string;
   };
@@ -40,24 +35,14 @@ export default function ProjectSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState<{
     triggerText: string;
-    position: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
     primaryColor: string;
-    backgroundColor: string;
     textColor: string;
-    borderRadius: number;
-    buttonSize: 'small' | 'medium' | 'large';
-    theme: 'light' | 'dark' | 'auto';
     showRating: boolean;
     customCSS: string;
   }>({
     triggerText: 'Feedback',
-    position: 'bottom-right',
     primaryColor: '#3b82f6',
-    backgroundColor: '#ffffff',
     textColor: '#1f2937',
-    borderRadius: 8,
-    buttonSize: 'medium',
-    theme: 'light',
     showRating: true,
     customCSS: ''
   });
@@ -173,23 +158,6 @@ export default function ProjectSettingsPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="position">Position</Label>
-              <Select
-                value={settings.position}
-                onValueChange={(value) => setSettings(prev => ({ ...prev, position: value as 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="bottom-right">Bottom Right</SelectItem>
-                  <SelectItem value="bottom-left">Bottom Left</SelectItem>
-                  <SelectItem value="top-right">Top Right</SelectItem>
-                  <SelectItem value="top-left">Top Left</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="space-y-2">
               <Label htmlFor="primaryColor">Primary Color</Label>
@@ -208,39 +176,7 @@ export default function ProjectSettingsPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="backgroundColor">Background Color</Label>
-              <Input
-                id="backgroundColor"
-                type="color"
-                value={settings.backgroundColor}
-                onChange={(e) => setSettings(prev => ({ ...prev, backgroundColor: e.target.value }))}
-                onPaste={(e) => {
-                  e.preventDefault();
-                  const paste = e.clipboardData.getData('text');
-                  if (paste.match(/^#[0-9A-Fa-f]{6}$/)) {
-                    setSettings(prev => ({ ...prev, backgroundColor: paste }));
-                  }
-                }}
-              />
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="buttonSize">Button Size</Label>
-              <Select
-                value={settings.buttonSize}
-                onValueChange={(value) => setSettings(prev => ({ ...prev, buttonSize: value as 'small' | 'medium' | 'large' }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="small">Small</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="large">Large</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </CardContent>
         </Card>
 
@@ -262,34 +198,7 @@ export default function ProjectSettingsPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="theme">Theme</Label>
-              <Select
-                value={settings.theme}
-                onValueChange={(value) => setSettings(prev => ({ ...prev, theme: value as 'light' | 'dark' | 'auto' }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="auto">Auto</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="borderRadius">Border Radius (px)</Label>
-              <Input
-                id="borderRadius"
-                type="number"
-                min="0"
-                max="50"
-                value={settings.borderRadius.toString()}
-                onChange={(e) => setSettings(prev => ({ ...prev, borderRadius: parseInt(e.target.value) || 0 }))}
-              />
-            </div>
           </CardContent>
         </Card>
 
