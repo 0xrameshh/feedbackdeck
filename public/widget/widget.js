@@ -6,18 +6,17 @@
     return;
   }
 
-  // Configuration - automatically detect the API base from script source
+  // Configuration
   function getApiBase() {
     const scriptTag = document.currentScript || 
                      document.querySelector('script[data-project-id]') ||
-                     document.querySelector('script[src*="/js/script.js"]');
+                     document.querySelector('script[src*="/widget/widget.js"]');
     
     if (scriptTag && scriptTag.src) {
       const url = new URL(scriptTag.src);
       return `${url.protocol}//${url.host}`;
     }
     
-    // Fallback to current page's origin for development
     return window.location.origin;
   }
   
@@ -27,33 +26,24 @@
     TRIGGER_ID: 'feedbackstar-trigger',
     MODAL_ID: 'feedbackstar-modal'
   };
-  
-  console.log('FeedbackWidget API_BASE:', CONFIG.API_BASE);
 
   class FeedbackWidget {
     constructor(projectId, settings = {}) {
       this.projectId = projectId;
       this.settings = {
-        triggerText: settings.triggerText || 'Feedback',
-        position: settings.position || 'bottom-right',
-        primaryColor: settings.primaryColor || '#3b82f6',
-        backgroundColor: settings.backgroundColor || '#ffffff',
-        textColor: settings.textColor || '#1f2937',
-        borderRadius: settings.borderRadius || 8,
-        buttonSize: settings.buttonSize || 'medium',
-        theme: settings.theme || 'light',
-        showRating: settings.showRating !== false, // default true
+        triggerText: 'Feedback',
+        primaryColor: '#ea580c',
         ...settings
       };
       
       this.isOpen = false;
+      this.rating = 0;
+      this.hoveredStar = 0;
       this.init();
     }
 
     async init() {
-      // Fetch project settings from API
       await this.loadProjectSettings();
-      
       this.injectStyles();
       this.createTrigger();
       this.createModal();
@@ -65,7 +55,6 @@
         const response = await fetch(`${CONFIG.API_BASE}/api/projects/${this.projectId}/settings`);
         if (response.ok) {
           const projectSettings = await response.json();
-          // Merge project settings with defaults
           this.settings = {
             ...this.settings,
             ...projectSettings.widgetSettings
@@ -76,163 +65,70 @@
       }
     }
 
-    adjustBrightness(hex, percent) {
-      // Remove the hash if it exists
-      hex = hex.replace('#', '');
-      
-      // Parse the hex values
-      const num = parseInt(hex, 16);
-      const amt = Math.round(2.55 * percent);
-      const R = (num >> 16) + amt;
-      const G = (num >> 8 & 0x00FF) + amt;
-      const B = (num & 0x0000FF) + amt;
-      
-      return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-        (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
-    }
-
     injectStyles() {
       if (document.getElementById('feedbackstar-styles')) return;
       
       const styles = `
+        /* FeedbackStar Logo SVG as data URL */
+        .feedbackstar-logo {
+          width: 22px;
+          height: 22px;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' fill='white'/%3E%3C/svg%3E");
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          filter: brightness(0) invert(1);
+        }
+
+        /* Trigger Button */
         #${CONFIG.TRIGGER_ID} {
           position: fixed;
-          z-index: 999998;
-          padding: 12px 20px;
-          background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.adjustBrightness(this.settings.primaryColor, -20)});
-          color: white;
+          bottom: 0;
+          right: 20px;
+          z-index: 999999;
+          width: 56px;
+          height: 56px;
+          background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 20)});
           border: none;
-          border-radius: 8px 0 0 8px;
-          font-family: system-ui, -apple-system, sans-serif;
-          font-size: 15px;
-          font-weight: 700;
+          border-radius: 50%;
           cursor: pointer;
-          box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15), -2px 0 8px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          transform: translateX(0);
-          opacity: 1;
-          visibility: visible;
           display: flex;
           align-items: center;
+          justify-content: center;
+          opacity: 1;
+          visibility: visible;
         }
-        
+
         #${CONFIG.TRIGGER_ID}:hover {
-          transform: translateX(-5px);
-          box-shadow: -6px 0 25px rgba(0, 0, 0, 0.2), -3px 0 12px rgba(0, 0, 0, 0.15);
+          transform: scale(1.05);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         #${CONFIG.TRIGGER_ID}:active {
-          transform: translateX(-2px);
+          transform: scale(0.95);
         }
 
         #${CONFIG.TRIGGER_ID}.hidden {
           opacity: 0;
           visibility: hidden;
-          transform: translateX(100%);
+          transform: scale(0.8);
         }
 
-        
-        #${CONFIG.TRIGGER_ID}.bottom-right {
-          bottom: 0;
-          right: 20px;
-          transform: translateX(0);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.bottom-right:hover {
-          transform: translateX(-5px);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.bottom-right:active {
-          transform: translateX(-2px);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.bottom-left {
-          bottom: 50%;
-          left: 0;
-          transform: translateY(50%);
-          border-radius: 0 8px 8px 0;
-          box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 2px 0 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.bottom-left:hover {
-          transform: translateY(50%) translateX(5px);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.bottom-left:active {
-          transform: translateY(50%) translateX(2px);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.top-right {
-          top: 50%;
-          right: 0;
-          transform: translateY(-50%);
-        }
-        
-        #${CONFIG.TRIGGER_ID}.top-left {
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-          border-radius: 0 8px 8px 0;
-          box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 2px 0 8px rgba(0, 0, 0, 0.1);
-        }
-
-        #${CONFIG.MODAL_ID} {
-          position: fixed;
-          bottom: 0;
-          right: 0;
-          transform: translateY(100%);
-          z-index: 1000000;
-          display: block;
-          opacity: 0;
-          visibility: hidden;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          width: 100%;
-          max-width: 420px;
-          padding: 0 20px 20px 20px;
-        }
-
-        #${CONFIG.MODAL_ID}.show {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-        }
-        
-        @media (max-width: 480px) {
-          #${CONFIG.MODAL_ID} {
-            max-width: 100%;
-            padding: 0 15px 15px 15px;
-          }
-        }
-
-        .feedbackstar-modal-content {
-          background-color: ${this.settings.backgroundColor};
-          border-radius: 16px;
-          padding: 24px;
-          width: 100%;
-          max-height: 80vh;
-          overflow-y: auto;
-          position: relative;
-          font-family: system-ui, -apple-system, sans-serif;
-          color: ${this.settings.textColor};
-          box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.15), 0 -4px 20px rgba(0, 0, 0, 0.1);
-          border: 1px solid rgba(0, 0, 0, 0.05);
-          margin-bottom: 20px;
-        }
-
+        /* Backdrop */
         .feedbackstar-backdrop {
           position: fixed;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
-          background-color: rgba(0, 0, 0, 0.4);
-          z-index: 999999;
-          display: block;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 999998;
           opacity: 0;
           visibility: hidden;
-          transition: all 0.5s ease;
-          backdrop-filter: blur(3px);
+          transition: all 0.3s ease;
         }
 
         .feedbackstar-backdrop.show {
@@ -240,207 +136,336 @@
           visibility: visible;
         }
 
-        .feedbackstar-close {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          background: none;
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-          color: #9ca3af;
-          padding: 4px;
-          line-height: 1;
+        /* Modal */
+        #${CONFIG.MODAL_ID} {
+          position: fixed;
+          bottom: 0;
+          right: 20px;
+          z-index: 1000000;
+          width: 320px;
+          max-width: calc(100vw - 40px);
+          transform: translateY(100%);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .feedbackstar-close:hover {
-          color: #6b7280;
+        #${CONFIG.MODAL_ID}.show {
+          transform: translateY(-70px);
+          opacity: 1;
+          visibility: visible;
         }
 
-        .feedbackstar-title {
-          font-size: 22px;
-          font-weight: 700;
-          margin-bottom: 8px;
+        /* Modal Content */
+        .feedbackstar-modal-content {
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(16px);
+          border-radius: 24px 24px 24px 0;
+          padding: 24px;
+          box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.25), 0 -4px 20px rgba(0, 0, 0, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           color: #1f2937;
         }
 
-        .feedbackstar-description {
-          color: #4b5563;
-          margin-bottom: 24px;
-          font-size: 15px;
-          line-height: 1.5;
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+          .feedbackstar-modal-content {
+            background: rgba(31, 41, 55, 0.98);
+            color: #f9fafb;
+            border-color: rgba(255, 255, 255, 0.1);
+          }
+          
+          .feedbackstar-input,
+          .feedbackstar-textarea {
+            background: rgba(55, 65, 81, 0.8) !important;
+            border-color: rgba(75, 85, 99, 0.6) !important;
+            color: #f9fafb !important;
+          }
         }
 
+        /* Header */
+        .feedbackstar-header {
+          background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
+          margin: -24px -24px 24px -24px;
+          padding: 16px 24px;
+          border-radius: 24px 24px 0 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: white;
+        }
+
+        .feedbackstar-header-left {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .feedbackstar-header-logo {
+          padding: 6px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+        }
+
+        .feedbackstar-title {
+          font-size: 16px;
+          font-weight: 600;
+          margin: 0;
+        }
+
+        .feedbackstar-close {
+          background: none;
+          border: none;
+          color: rgba(255, 255, 255, 0.7);
+          cursor: pointer;
+          padding: 6px;
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          transition: all 0.2s ease;
+        }
+
+        .feedbackstar-close:hover {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          transform: scale(1.1);
+        }
+
+        /* Form */
         .feedbackstar-form {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 20px;
         }
 
         .feedbackstar-field {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
         }
 
         .feedbackstar-label {
-          font-size: 15px;
-          font-weight: 600;
-          color: #1f2937;
-        }
-
-        .feedbackstar-required {
-          color: #ef4444;
-        }
-
-        .feedbackstar-input,
-        .feedbackstar-textarea,
-        .feedbackstar-select {
-          padding: 10px 14px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
-          font-size: 15px;
-          font-family: inherit;
-          background-color: #ffffff;
-          color: #1f2937;
-          transition: border-color 0.2s ease;
-          line-height: 1.4;
-        }
-
-        .feedbackstar-input:focus,
-        .feedbackstar-textarea:focus,
-        .feedbackstar-select:focus {
-          outline: none;
-          border-color: ${this.settings.primaryColor};
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .feedbackstar-textarea {
-          resize: vertical;
-          min-height: 100px;
-        }
-
-        .feedbackstar-buttons {
-          display: flex;
-          gap: 12px;
-          justify-content: flex-end;
-          margin-top: 8px;
-        }
-
-        .feedbackstar-button {
-          padding: 10px 20px;
-          border-radius: 8px;
-          font-size: 15px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: 1px solid transparent;
-        }
-
-        .feedbackstar-button-primary {
-          background-color: ${this.settings.primaryColor};
-          color: white;
-        }
-
-        .feedbackstar-button-primary:hover:not(:disabled) {
-          opacity: 0.9;
-          transform: translateY(-1px);
-        }
-
-        .feedbackstar-button-primary:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        .feedbackstar-button-secondary {
-          background-color: transparent;
-          color: #6b7280;
-          border-color: #d1d5db;
-        }
-
-        .feedbackstar-button-secondary:hover {
-          background-color: #f9fafb;
-        }
-
-        .feedbackstar-success {
-          text-align: center;
-          padding: 40px 20px;
-        }
-
-        .feedbackstar-success-icon {
-          font-size: 48px;
-          color: #10b981;
-          margin-bottom: 16px;
-        }
-
-        .feedbackstar-success-title {
-          font-size: 18px;
-          font-weight: 600;
-          margin-bottom: 8px;
-          color: ${this.settings.textColor};
-        }
-
-        .feedbackstar-success-message {
-          color: #6b7280;
           font-size: 14px;
+          font-weight: 500;
+          color: #1f2937;
         }
 
+        @media (prefers-color-scheme: dark) {
+          .feedbackstar-label {
+            color: #f9fafb;
+          }
+        }
+
+        .feedbackstar-rating-label {
+          text-align: center;
+          margin-bottom: 8px;
+        }
+
+        /* Star Rating */
         .feedbackstar-rating {
           display: flex;
-          align-items: center;
+          justify-content: center;
           gap: 4px;
-          margin-top: 4px;
+          padding: 12px;
+          background: rgba(0, 0, 0, 0.03);
+          border-radius: 16px;
+          margin-bottom: 8px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .feedbackstar-rating {
+            background: rgba(255, 255, 255, 0.05);
+          }
         }
 
         .feedbackstar-star {
           font-size: 24px;
           color: #d1d5db;
           cursor: pointer;
-          transition: color 0.2s ease;
+          transition: all 0.3s ease;
+          padding: 8px;
+          border-radius: 8px;
           user-select: none;
         }
 
         .feedbackstar-star:hover,
         .feedbackstar-star.active {
-          color: #fbbf24;
+          color: #f59e0b;
+          transform: scale(1.1);
+          background: rgba(245, 158, 11, 0.1);
         }
 
         .feedbackstar-star.filled {
           color: #f59e0b;
+          transform: scale(1.1);
         }
 
+        /* Rating Messages */
+        .feedbackstar-rating-message {
+          text-align: center;
+          font-size: 12px;
+          color: #6b7280;
+          min-height: 16px;
+          transition: all 0.3s ease;
+        }
+
+        /* Inputs */
+        .feedbackstar-input,
+        .feedbackstar-textarea {
+          padding: 12px 16px;
+          border: 2px solid rgba(209, 213, 219, 0.6);
+          border-radius: 12px;
+          font-size: 14px;
+          font-family: inherit;
+          background: rgba(255, 255, 255, 0.7);
+          color: #1f2937;
+          transition: all 0.3s ease;
+          outline: none;
+        }
+
+        .feedbackstar-input:focus,
+        .feedbackstar-textarea:focus {
+          border-color: ${this.settings.primaryColor};
+          box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
+          background: rgba(255, 255, 255, 0.9);
+        }
+
+        .feedbackstar-textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+
+        .feedbackstar-input::placeholder,
+        .feedbackstar-textarea::placeholder {
+          color: #9ca3af;
+        }
+
+        /* Submit Button */
+        .feedbackstar-submit {
+          background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
+          color: white;
+          border: none;
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+
+        .feedbackstar-submit:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
+        }
+
+        .feedbackstar-submit:active {
+          transform: translateY(0);
+        }
+
+        .feedbackstar-submit:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        /* Success State */
+        .feedbackstar-success {
+          text-align: center;
+          padding: 32px 20px;
+        }
+
+        .feedbackstar-success-icon {
+          width: 56px;
+          height: 56px;
+          background: linear-gradient(135deg, #10b981, #059669);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 16px;
+          font-size: 24px;
+          color: white;
+        }
+
+        .feedbackstar-success-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #1f2937;
+        }
+
+        .feedbackstar-success-message {
+          font-size: 14px;
+          color: #6b7280;
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .feedbackstar-success-title {
+            color: #f9fafb;
+          }
+          .feedbackstar-success-message {
+            color: #9ca3af;
+          }
+        }
+
+        /* Branding */
+        .feedbackstar-branding {
+          text-align: center;
+          margin-top: 20px;
+          padding-top: 16px;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+          .feedbackstar-branding {
+            border-top-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+
+        .feedbackstar-branding a {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          color: #6b7280;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          padding: 6px 12px;
+          border-radius: 8px;
+          border: 1px solid transparent;
+        }
+
+        .feedbackstar-branding a:hover {
+          color: ${this.settings.primaryColor};
+          border-color: rgba(234, 88, 12, 0.2);
+          background: rgba(234, 88, 12, 0.05);
+          transform: scale(1.05);
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 640px) {
           #${CONFIG.MODAL_ID} {
             bottom: 0;
             right: 0;
             left: 0;
-            margin: 0;
+            width: auto;
+            max-width: none;
+          }
+          
+          #${CONFIG.MODAL_ID}.show {
+            transform: translateY(0);
           }
           
           .feedbackstar-modal-content {
-            width: 100%;
-            max-width: none;
-            margin: 0;
-            padding: 20px;
-            border-radius: 16px 16px 0 0;
+            border-radius: 24px 24px 0 0;
             max-height: 80vh;
-          }
-          
-          .feedbackstar-buttons {
-            flex-direction: column;
-          }
-          
-          .feedbackstar-button {
-            width: 100%;
-          }
-
-          #${CONFIG.TRIGGER_ID} {
-            padding: 10px 16px;
-            font-size: 13px;
-          }
-
-          #${CONFIG.TRIGGER_ID}::before {
-            font-size: 14px;
+            overflow-y: auto;
           }
         }
       `;
@@ -451,77 +476,49 @@
       document.head.appendChild(styleSheet);
     }
 
+    darkenColor(hex, percent) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      const amt = Math.round(2.55 * percent);
+      const R = (num >> 16) - amt;
+      const G = (num >> 8 & 0x00FF) - amt;
+      const B = (num & 0x0000FF) - amt;
+      return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+        (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+        (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+    }
+
     createTrigger() {
       const trigger = document.createElement('button');
       trigger.id = CONFIG.TRIGGER_ID;
-      trigger.className = this.settings.position;
-      trigger.textContent = this.settings.triggerText;
+      trigger.innerHTML = '<div class="feedbackstar-logo"></div>';
       trigger.setAttribute('aria-label', 'Open feedback form');
       
       document.body.appendChild(trigger);
     }
 
     createModal() {
-      // Create backdrop
       const backdrop = document.createElement('div');
       backdrop.className = 'feedbackstar-backdrop';
       backdrop.id = 'feedbackstar-backdrop';
       
-      // Create modal
       const modal = document.createElement('div');
       modal.id = CONFIG.MODAL_ID;
-      modal.setAttribute('role', 'dialog');
-      modal.setAttribute('aria-labelledby', 'feedbackstar-title');
-      modal.setAttribute('aria-hidden', 'true');
-      
       modal.innerHTML = `
         <div class="feedbackstar-modal-content">
-          <button class="feedbackstar-close" aria-label="Close feedback form">×</button>
+          <div class="feedbackstar-header">
+            <div class="feedbackstar-header-left">
+              <div class="feedbackstar-header-logo">
+                <div class="feedbackstar-logo"></div>
+              </div>
+              <h3 class="feedbackstar-title">Share Your Feedback</h3>
+            </div>
+            <button class="feedbackstar-close">×</button>
+          </div>
+          
           <div id="feedbackstar-form-view">
-            <h2 id="feedbackstar-title" class="feedbackstar-title">Send Feedback</h2>
-            <p class="feedbackstar-description">Help us improve by sharing your thoughts!</p>
             <form class="feedbackstar-form" id="feedbackstar-form">
               <div class="feedbackstar-field">
-                <label for="feedbackstar-message" class="feedbackstar-label">
-                  What's on your mind? <span class="feedbackstar-required">*</span>
-                </label>
-                <textarea 
-                  id="feedbackstar-message" 
-                  name="message" 
-                  class="feedbackstar-textarea" 
-                  placeholder="Tell us what you think..."
-                  required
-                ></textarea>
-              </div>
-              <div class="feedbackstar-field">
-                <label for="feedbackstar-category" class="feedbackstar-label">
-                  What type of feedback? <span class="feedbackstar-required">*</span>
-                </label>
-                <select id="feedbackstar-category" name="category" class="feedbackstar-select" required>
-                  <option value="">Select a category</option>
-                  <option value="general">General</option>
-                  <option value="bug">Bug Report</option>
-                  <option value="feature">Feature Request</option>
-                  <option value="praise">Praise</option>
-                </select>
-              </div>
-              <div class="feedbackstar-field">
-                <label for="feedbackstar-email" class="feedbackstar-label">
-                  Want a reply? (Optional)
-                </label>
-                <input 
-                  type="email" 
-                  id="feedbackstar-email" 
-                  name="email" 
-                  class="feedbackstar-input" 
-                  placeholder="your@email.com"
-                />
-              </div>
-              ${this.settings.showRating ? `
-              <div class="feedbackstar-field">
-                <label class="feedbackstar-label">
-                  Rate your experience (Optional)
-                </label>
+                <label class="feedbackstar-label feedbackstar-rating-label">Rate your experience</label>
                 <div class="feedbackstar-rating" id="feedbackstar-rating">
                   <span class="feedbackstar-star" data-rating="1">★</span>
                   <span class="feedbackstar-star" data-rating="2">★</span>
@@ -529,27 +526,53 @@
                   <span class="feedbackstar-star" data-rating="4">★</span>
                   <span class="feedbackstar-star" data-rating="5">★</span>
                 </div>
-                <input type="hidden" id="feedbackstar-rating-value" name="rating" value="">
+                <div class="feedbackstar-rating-message" id="feedbackstar-rating-message"></div>
               </div>
-              ` : ''}
-              <div class="feedbackstar-buttons">
-                <button type="button" class="feedbackstar-button feedbackstar-button-secondary" id="feedbackstar-cancel">
-                  Cancel
-                </button>
-                <button type="submit" class="feedbackstar-button feedbackstar-button-primary" id="feedbackstar-submit">
-                  Send Feedback
-                </button>
+              
+              <div class="feedbackstar-field">
+                <label class="feedbackstar-label">
+                  Tell us more <span style="color: #9ca3af; font-weight: normal;">(optional)</span>
+                </label>
+                <textarea 
+                  id="feedbackstar-message" 
+                  class="feedbackstar-textarea" 
+                  placeholder="Share your thoughts, suggestions, or what we can improve..."
+                ></textarea>
               </div>
+              
+              <div class="feedbackstar-field">
+                <label class="feedbackstar-label">
+                  Email <span style="color: #9ca3af; font-weight: normal;">(for follow-up)</span>
+                </label>
+                <input 
+                  type="email" 
+                  id="feedbackstar-email" 
+                  class="feedbackstar-input" 
+                  placeholder="your@email.com"
+                />
+              </div>
+              
+              <button type="submit" class="feedbackstar-submit" id="feedbackstar-submit">
+                Send Feedback
+              </button>
             </form>
           </div>
+          
           <div id="feedbackstar-success-view" style="display: none;">
             <div class="feedbackstar-success">
               <div class="feedbackstar-success-icon">✓</div>
-              <h2 class="feedbackstar-success-title">Thank you!</h2>
-              <p class="feedbackstar-success-message">
-                Your feedback has been sent successfully. We appreciate you taking the time to help us improve!
-              </p>
+              <h4 class="feedbackstar-success-title">Thank you!</h4>
+              <p class="feedbackstar-success-message">Your feedback helps us improve</p>
             </div>
+          </div>
+          
+          <div class="feedbackstar-branding">
+            <a href="https://feedbackstar.vercel.app" target="_blank" rel="noopener noreferrer">
+              <span style="font-weight: 500;">Powered by</span>
+              <div class="feedbackstar-logo"></div>
+              <span style="font-weight: 600;">FeedbackStar</span>
+              <span style="font-size: 10px;">↗</span>
+            </a>
           </div>
         </div>
       `;
@@ -563,66 +586,69 @@
       const modal = document.getElementById(CONFIG.MODAL_ID);
       const backdrop = document.getElementById('feedbackstar-backdrop');
       const closeBtn = modal.querySelector('.feedbackstar-close');
-      const cancelBtn = modal.querySelector('#feedbackstar-cancel');
       const form = modal.querySelector('#feedbackstar-form');
+      const stars = modal.querySelectorAll('.feedbackstar-star');
+      const ratingMessage = modal.querySelector('#feedbackstar-rating-message');
 
       // Open modal
       trigger.addEventListener('click', () => this.openModal());
 
       // Close modal
       closeBtn.addEventListener('click', () => this.closeModal());
-      cancelBtn.addEventListener('click', () => this.closeModal());
-      
-      // Close on backdrop click
-      backdrop.addEventListener('click', (e) => {
-        if (e.target === backdrop) {
-          this.closeModal();
-        }
-      });
+      backdrop.addEventListener('click', () => this.closeModal());
 
-      // Close on escape key
+      // Close on escape
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this.isOpen) {
           this.closeModal();
         }
       });
 
-      // Handle form submission
-      form.addEventListener('submit', (e) => this.handleSubmit(e));
-
-      // Handle star rating (only if enabled)
-      if (this.settings.showRating) {
-        const stars = modal.querySelectorAll('.feedbackstar-star');
-        const ratingInput = modal.querySelector('#feedbackstar-rating-value');
+      // Star rating
+      stars.forEach((star, index) => {
+        star.addEventListener('click', () => {
+          this.rating = index + 1;
+          this.updateStars();
+          this.updateRatingMessage();
+        });
         
-        if (stars.length > 0 && ratingInput) {
-          stars.forEach((star, index) => {
-            star.addEventListener('click', () => {
-              const rating = index + 1;
-              ratingInput.value = rating;
-              
-              // Update visual state
-              stars.forEach((s, i) => {
-                s.classList.toggle('filled', i < rating);
-              });
-            });
-            
-            star.addEventListener('mouseenter', () => {
-              stars.forEach((s, i) => {
-                s.classList.toggle('active', i <= index);
-              });
-            });
-          });
-          
-          // Reset hover state on mouse leave
-          const ratingContainer = modal.querySelector('.feedbackstar-rating');
-          if (ratingContainer) {
-            ratingContainer.addEventListener('mouseleave', () => {
-              stars.forEach(s => s.classList.remove('active'));
-            });
-          }
-        }
-      }
+        star.addEventListener('mouseenter', () => {
+          this.hoveredStar = index + 1;
+          this.updateStars();
+        });
+      });
+
+      const ratingContainer = modal.querySelector('.feedbackstar-rating');
+      ratingContainer.addEventListener('mouseleave', () => {
+        this.hoveredStar = 0;
+        this.updateStars();
+      });
+
+      // Form submission
+      form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    updateStars() {
+      const stars = document.querySelectorAll('.feedbackstar-star');
+      const displayRating = this.hoveredStar || this.rating;
+      
+      stars.forEach((star, index) => {
+        star.classList.toggle('filled', index < this.rating);
+        star.classList.toggle('active', index < displayRating);
+      });
+    }
+
+    updateRatingMessage() {
+      const messages = {
+        1: "We're sorry to hear that 😔",
+        2: "We'll work on improving 💪", 
+        3: "Thanks for your feedback 👍",
+        4: "Glad you liked it! 😊",
+        5: "Awesome! Thank you! 🎉"
+      };
+      
+      const messageEl = document.getElementById('feedbackstar-rating-message');
+      messageEl.textContent = this.rating > 0 ? messages[this.rating] : '';
     }
 
     openModal() {
@@ -633,21 +659,14 @@
       this.isOpen = true;
       backdrop.classList.add('show');
       modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-      
-      // Hide trigger button
       trigger.classList.add('hidden');
       
-      // Focus management
-      setTimeout(() => {
-        const firstInput = modal.querySelector('#feedbackstar-message');
-        if (firstInput) {
-          firstInput.focus();
-        }
-      }, 500);
-      
-      // Prevent body scroll
       document.body.style.overflow = 'hidden';
+      
+      setTimeout(() => {
+        const messageInput = document.getElementById('feedbackstar-message');
+        if (messageInput) messageInput.focus();
+      }, 400);
     }
 
     closeModal() {
@@ -658,63 +677,53 @@
       this.isOpen = false;
       modal.classList.remove('show');
       backdrop.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      
-      // Show trigger button again
       trigger.classList.remove('hidden');
       
-      // Wait for animation to complete before cleanup
       setTimeout(() => {
-        // Restore body scroll
         document.body.style.overflow = '';
-        
-        // Reset form
         this.resetForm();
-      }, 500);
+      }, 400);
     }
 
     resetForm() {
+      const form = document.getElementById('feedbackstar-form');
       const formView = document.getElementById('feedbackstar-form-view');
       const successView = document.getElementById('feedbackstar-success-view');
-      const form = document.getElementById('feedbackstar-form');
+      const submitBtn = document.getElementById('feedbackstar-submit');
       
+      form.reset();
       formView.style.display = 'block';
       successView.style.display = 'none';
-      form.reset();
-      
-      // Reset star rating
-      const stars = document.querySelectorAll('.feedbackstar-star');
-      const ratingInput = document.getElementById('feedbackstar-rating-value');
-      if (stars && ratingInput) {
-        stars.forEach(star => {
-          star.classList.remove('filled', 'active');
-        });
-        ratingInput.value = '';
-      }
-      
-      // Re-enable submit button
-      const submitBtn = document.getElementById('feedbackstar-submit');
       submitBtn.disabled = false;
       submitBtn.textContent = 'Send Feedback';
+      
+      this.rating = 0;
+      this.hoveredStar = 0;
+      this.updateStars();
+      this.updateRatingMessage();
     }
 
     async handleSubmit(e) {
       e.preventDefault();
       
       const submitBtn = document.getElementById('feedbackstar-submit');
-      const formData = new FormData(e.target);
+      const message = document.getElementById('feedbackstar-message').value;
+      const email = document.getElementById('feedbackstar-email').value;
       
-      // Disable submit button
+      if (this.rating === 0) {
+        alert('Please rate your experience before submitting');
+        return;
+      }
+      
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
       
       try {
         const payload = {
           projectId: this.projectId,
-          message: formData.get('message'),
-          category: formData.get('category'),
-          rating: formData.get('rating') ? parseInt(formData.get('rating')) : null,
-          userEmail: formData.get('email') || null,
+          rating: this.rating,
+          message: message || '',
+          email: email || null,
           pageUrl: window.location.href,
           userAgent: navigator.userAgent,
           metadata: {
@@ -732,24 +741,17 @@
 
         const response = await fetch(`${CONFIG.API_BASE}/api/feedback`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        // Show success view
         this.showSuccess();
         
       } catch (error) {
         console.error('Failed to submit feedback:', error);
         alert('Failed to send feedback. Please try again.');
-        
-        // Re-enable submit button
         submitBtn.disabled = false;
         submitBtn.textContent = 'Send Feedback';
       }
@@ -762,10 +764,7 @@
       formView.style.display = 'none';
       successView.style.display = 'block';
       
-      // Auto-close after 3 seconds
-      setTimeout(() => {
-        this.closeModal();
-      }, 3000);
+      setTimeout(() => this.closeModal(), 2500);
     }
 
     getBrowserInfo() {
@@ -823,28 +822,19 @@
     }
   }
 
-  // Expose FeedbackWidget globally for manual initialization
-  window.FeedbackWidget = FeedbackWidget;
-
   // Initialize widget
   function initializeWidget() {
     const scripts = document.querySelectorAll('script[data-project-id]');
-    const script = scripts[scripts.length - 1]; // Get the current script
+    const script = scripts[scripts.length - 1];
     
-    // If no script with data-project-id found, skip auto-initialization
-    if (!script) {
-      console.log('FeedbackStar: No auto-initialization script found. Use new FeedbackWidget(projectId) manually.');
-      return;
-    }
+    if (!script) return;
     
     const projectId = script.getAttribute('data-project-id');
-    
     if (!projectId) {
       console.error('FeedbackStar: Missing data-project-id attribute');
       return;
     }
 
-    // Wait for DOM to be ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         window.FeedbackStarWidget = new FeedbackWidget(projectId);
@@ -854,7 +844,10 @@
     }
   }
 
-  // Initialize when script loads
+  // Expose globally
+  window.FeedbackWidget = FeedbackWidget;
+  
+  // Initialize
   initializeWidget();
 
 })();

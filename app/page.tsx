@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, ArrowRight } from "lucide-react";
 import { HeaderNav } from "@/components/header-nav";
-import { FeedbackWidget } from "@/components/feedback-widget";
 import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -228,8 +227,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Feedback Widget */}
-      <FeedbackWidget />
     </>
   );
 }
