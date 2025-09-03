@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { db } from '@/db';
 import { organization, project, user as userTable, feedback } from '@/db/schema';
 import { getSession } from '@/lib/auth';
@@ -7,7 +7,12 @@ import { sql } from 'drizzle-orm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function AdminPage() {
-  const session = await getSession({ headers: headers() });
+  // Build a standard Headers object from Next cookies for better-auth
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join('; ');
+  const h = new Headers();
+  if (cookieHeader) h.set('cookie', cookieHeader);
+  const session = await getSession({ headers: h });
   if (!session?.user?.id) {
     redirect('/');
   }
@@ -82,4 +87,3 @@ export default async function AdminPage() {
     </div>
   );
 }
-
