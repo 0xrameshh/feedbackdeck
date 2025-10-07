@@ -1,46 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { user } from "@/db/schema";
-import { eq } from "drizzle-orm";
 
 export async function middleware(request: NextRequest) {
-    // Protect admin routes
+    // For now, let admin routes pass through - we'll protect them at the page level
+    // This avoids database issues in edge middleware
     if (request.nextUrl.pathname.startsWith('/admin')) {
-        const cookieHeader = request.headers.get('cookie');
-        if (!cookieHeader) {
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
-
-        // Create a mock Headers object for auth
-        const headers = new Headers();
-        headers.set('cookie', cookieHeader);
-
-        try {
-            // Import auth dynamically to avoid issues
-            const { auth } = await import("@/lib/auth");
-            const session = await auth.api.getSession({
-                headers
-            });
-
-            if (!session?.user?.id) {
-                return NextResponse.redirect(new URL('/login', request.url));
-            }
-
-            // Fetch full user from database to check systemRole
-            const [fullUser] = await db
-                .select()
-                .from(user)
-                .where(eq(user.id, session.user.id))
-                .limit(1);
-
-            const userRole = fullUser?.systemRole;
-            if (userRole !== 'admin' && userRole !== 'super_admin') {
-                return NextResponse.redirect(new URL('/dashboard', request.url));
-            }
-        } catch (error) {
-            console.error('Admin middleware error:', error);
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
+        return NextResponse.next();
     }
 
     // Only protect API routes that need authentication
@@ -53,7 +17,6 @@ export async function middleware(request: NextRequest) {
     }
 
     // Let all other routes pass through
-    // Dashboard protection will be handled by AuthGuard component
     return NextResponse.next();
 }
 
