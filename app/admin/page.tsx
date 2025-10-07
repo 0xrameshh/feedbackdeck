@@ -25,6 +25,26 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+// Type definitions
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  systemRole: string;
+  createdAt: Date;
+}
+
+interface Project {
+  name: string;
+  feedbackCount: number;
+  avgRating?: number;
+}
+
+interface Category {
+  category: string;
+  count: number;
+}
+
 export default async function AdminPage() {
   try {
     // Build a standard Headers object from Next cookies for better-auth
@@ -89,7 +109,7 @@ export default async function AdminPage() {
     }
 
     // Super admin additional stats - also wrapped in try-catch
-    let activeUsersResult, adminUsersResult, superAdminUsersResult, recentUsers, topProjects, feedbackByCategory;
+    let activeUsersResult, adminUsersResult, superAdminUsersResult, recentUsers: User[] | null, topProjects: Project[] | null, feedbackByCategory: Category[] | null;
 
     if (isSuperAdmin) {
       try {
@@ -357,7 +377,7 @@ export default async function AdminPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {recentUsers?.slice(0, 5).map((user) => (
+                    {recentUsers?.slice(0, 5).map((user: User) => (
                       <div key={user.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-blue-400 rounded-full flex items-center justify-center text-white text-xs font-bold">
@@ -398,7 +418,7 @@ export default async function AdminPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {topProjects?.slice(0, 5).map((project, index) => (
+                    {topProjects?.slice(0, 5).map((project: Project, index: number) => (
                       <div key={project.name} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-400 rounded-lg flex items-center justify-center text-white font-bold text-sm">
@@ -439,7 +459,7 @@ export default async function AdminPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-                    {feedbackByCategory.map((category) => (
+                    {feedbackByCategory?.map((category: Category) => (
                       <div key={category.category} className="text-center p-4 rounded-lg bg-muted/50">
                         <div className="text-2xl font-bold text-primary">{category.count}</div>
                         <p className="text-sm text-muted-foreground capitalize">{category.category}</p>
