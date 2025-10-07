@@ -26,82 +26,119 @@ import {
 import Link from 'next/link';
 
 export default async function AdminPage() {
-  // Build a standard Headers object from Next cookies for better-auth
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join('; ');
-  const h = new Headers();
-  if (cookieHeader) h.set('cookie', cookieHeader);
-  const session = await getSession({ headers: h });
-  if (!session?.user?.id) {
-    redirect('/');
-  }
+  try {
+    // Build a standard Headers object from Next cookies for better-auth
+    const cookieStore = await cookies();
+    const cookieHeader = cookieStore.getAll().map(c => `${c.name}=${c.value}`).join('; ');
+    const h = new Headers();
+    if (cookieHeader) h.set('cookie', cookieHeader);
+    const session = await getSession({ headers: h });
+    if (!session?.user?.id) {
+      redirect('/');
+    }
 
-  // Fetch full user to verify systemRole from DB to be safe
-  const [dbUser] = await db
-    .select()
-    .from(userTable)
-    .where(sql`${userTable.id} = ${session.user.id}`)
-    .limit(1);
+    // Fetch full user to verify systemRole from DB to be safe
+    const [dbUser] = await db
+      .select()
+      .from(userTable)
+      .where(sql`${userTable.id} = ${session.user.id}`)
+      .limit(1);
 
-  if (!dbUser || (dbUser.systemRole !== 'admin' && dbUser.systemRole !== 'super_admin')) {
-    redirect('/');
-  }
+    if (!dbUser || (dbUser.systemRole !== 'admin' && dbUser.systemRole !== 'super_admin')) {
+      redirect('/');
+    }
 
-  const isSuperAdmin = dbUser.systemRole === 'super_admin';
+    const isSuperAdmin = dbUser.systemRole === 'super_admin';
 
-  // Enhanced analytics with more detailed data
-  const [
-    [orgCount],
-    [userCount],
-    [projectCount],
-    [feedbackCount],
-    [activeProjects],
-    [verifiedUsers],
-    [thisMonthFeedback],
-    [avgRating]
-  ] = await Promise.all([
-    db.select({ count: sql<number>`count(*)` }).from(organization),
-    db.select({ count: sql<number>`count(*)` }).from(userTable),
-    db.select({ count: sql<number>`count(*)` }).from(project),
-    db.select({ count: sql<number>`count(*)` }).from(feedback),
-    db.select({ count: sql<number>`count(*)` }).from(project).where(eq(project.isActive, true)),
-    db.select({ count: sql<number>`count(*)` }).from(userTable).where(eq(userTable.emailVerified, true)),
-    db.select({ count: sql<number>`count(*)` }).from(feedback).where(
-      gte(feedback.createdAt, new Date(new Date().getFullYear(), new Date().getMonth(), 1))
-    ),
-    db.select({ avg: sql<number>`avg(rating)` }).from(feedback).where(sql`rating IS NOT NULL`)
-  ]);
+    // Enhanced analytics with more detailed data - wrapped in try-catch for safety
+    let orgCount, userCount, projectCount, feedbackCount, activeProjects, verifiedUsers, thisMonthFeedback, avgRating;
 
-  // Super admin additional stats
-  const [
-    activeUsersResult,
-    adminUsersResult,
-    superAdminUsersResult,
-    recentUsers,
-    topProjects,
-    feedbackByCategory
-  ] = isSuperAdmin ? await Promise.all([
-    db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "user")),
-    db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "admin")),
-    db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "super_admin")),
-    db.select().from(userTable).orderBy(desc(userTable.createdAt)).limit(5),
-    db.select({
-      name: project.name,
-      feedbackCount: count(feedback.id),
-      avgRating: sql<number>`avg(${feedback.rating})`
-    }).from(project).leftJoin(feedback, eq(project.id, feedback.projectId))
-      .groupBy(project.id).orderBy(desc(count(feedback.id))).limit(5),
-    db.select({
-      category: feedback.category,
-      count: count(feedback.id)
-    }).from(feedback).groupBy(feedback.category)
-  ]) : [null, null, null, null, null, null];
+    try {
+      [
+        [orgCount],
+        [userCount],
+        [projectCount],
+        [feedbackCount],
+        [activeProjects],
+        [verifiedUsers],
+        [thisMonthFeedback],
+        [avgRating]
+      ] = await Promise.all([
+        db.select({ count: sql<number>`count(*)` }).from(organization),
+        db.select({ count: sql<number>`count(*)` }).from(userTable),
+        db.select({ count: sql<number>`count(*)` }).from(project),
+        db.select({ count: sql<number>`count(*)` }).from(feedback),
+        db.select({ count: sql<number>`count(*)` }).from(project).where(eq(project.isActive, true)),
+        db.select({ count: sql<number>`count(*)` }).from(userTable).where(eq(userTable.emailVerified, true)),
+        db.select({ count: sql<number>`count(*)` }).from(feedback).where(
+          gte(feedback.createdAt, new Date(new Date().getFullYear(), new Date().getMonth(), 1))
+        ),
+        db.select({ avg: sql<number>`avg(rating)` }).from(feedback).where(sql`rating IS NOT NULL`)
+      ]);
+    } catch (error) {
+      console.error('Error fetching admin stats:', error);
+      // Fallback values
+      orgCount = { count: 0 };
+      userCount = { count: 0 };
+      projectCount = { count: 0 };
+      feedbackCount = { count: 0 };
+      activeProjects = { count: 0 };
+      verifiedUsers = { count: 0 };
+      thisMonthFeedback = { count: 0 };
+      avgRating = { avg: 0 };
+    }
 
-  const activeUsers = activeUsersResult?.[0];
-  const adminUsers = adminUsersResult?.[0];
-  const superAdminUsers = superAdminUsersResult?.[0];
+    // Super admin additional stats - also wrapped in try-catch
+    let activeUsersResult, adminUsersResult, superAdminUsersResult, recentUsers, topProjects, feedbackByCategory;
 
-  return (
+    if (isSuperAdmin) {
+      try {
+        [
+          activeUsersResult,
+          adminUsersResult,
+          superAdminUsersResult,
+          recentUsers,
+          topProjects,
+          feedbackByCategory
+        ] = await Promise.all([
+          db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "user")),
+          db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "admin")),
+          db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "super_admin")),
+          db.select().from(userTable).orderBy(desc(userTable.createdAt)).limit(5),
+          db.select({
+            name: project.name,
+            feedbackCount: count(feedback.id),
+            avgRating: sql<number>`avg(${feedback.rating})`
+          }).from(project).leftJoin(feedback, eq(project.id, feedback.projectId))
+            .groupBy(project.id).orderBy(desc(count(feedback.id))).limit(5),
+          db.select({
+            category: feedback.category,
+            count: count(feedback.id)
+          }).from(feedback).groupBy(feedback.category)
+        ]);
+      } catch (error) {
+        console.error('Error fetching super admin stats:', error);
+        activeUsersResult = [{ count: 0 }];
+        adminUsersResult = [{ count: 0 }];
+        superAdminUsersResult = [{ count: 0 }];
+        recentUsers = [];
+        topProjects = [];
+        feedbackByCategory = [];
+      }
+    } else {
+      activeUsersResult = null;
+      adminUsersResult = null;
+      superAdminUsersResult = null;
+      recentUsers = null;
+      topProjects = null;
+      feedbackByCategory = null;
+    }
+
+    const activeUsers = activeUsersResult?.[0];
+    const adminUsers = adminUsersResult?.[0];
+    const superAdminUsers = superAdminUsersResult?.[0];
+
+    return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto p-6 space-y-8">
         {/* Header */}
@@ -528,5 +565,26 @@ export default async function AdminPage() {
         </div>
       </div>
     </div>
-  );
+    );
+  } catch (error) {
+    console.error('Admin dashboard error:', error);
+
+    // Return a fallback error page
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center space-y-4 p-8">
+          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
+            <Shield className="w-8 h-8 text-red-600 dark:text-red-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">Admin Dashboard Error</h1>
+          <p className="text-muted-foreground max-w-md">
+            There was an error loading the admin dashboard. Please try again later or contact support if the issue persists.
+          </p>
+          <Button asChild>
+            <Link href="/dashboard">Return to Dashboard</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 }
