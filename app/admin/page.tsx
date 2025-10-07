@@ -589,20 +589,55 @@ export default async function AdminPage() {
   } catch (error) {
     console.error('Admin dashboard error:', error);
 
-    // Return a fallback error page
+    // Show detailed error information in development
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
+
+    // Return a fallback error page with debugging info
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
-        <div className="text-center space-y-4 p-8">
+        <div className="text-center space-y-4 p-8 max-w-2xl">
           <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
             <Shield className="w-8 h-8 text-red-600 dark:text-red-400" />
           </div>
           <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">Admin Dashboard Error</h1>
-          <p className="text-muted-foreground max-w-md">
-            There was an error loading the admin dashboard. Please try again later or contact support if the issue persists.
+
+          <p className="text-muted-foreground">
+            There was an error loading the admin dashboard. This could be due to database connectivity issues.
           </p>
-          <Button asChild>
-            <Link href="/dashboard">Return to Dashboard</Link>
-          </Button>
+
+          {isDevelopment && (
+            <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 text-left">
+              <h3 className="font-bold text-red-700 dark:text-red-300 mb-2">Debug Information:</h3>
+              <p className="text-sm text-red-600 dark:text-red-400 font-mono">
+                Error: {errorMessage}
+              </p>
+              {errorStack && (
+                <details className="mt-2">
+                  <summary className="cursor-pointer text-sm text-red-600 dark:text-red-400">Stack Trace</summary>
+                  <pre className="mt-2 text-xs text-red-500 dark:text-red-500 whitespace-pre-wrap overflow-auto max-h-40">
+                    {errorStack}
+                  </pre>
+                </details>
+              )}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Button asChild className="w-full">
+              <Link href="/dashboard">Return to Dashboard</Link>
+            </Button>
+            <Button variant="outline" onClick={() => window.location.reload()} className="w-full">
+              Try Again
+            </Button>
+          </div>
+
+          {!isDevelopment && (
+            <p className="text-xs text-muted-foreground mt-4">
+              Check the server logs for more details about this error.
+            </p>
+          )}
         </div>
       </div>
     );
