@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { db } from '@/db';
-import { organization, project, user as userTable, feedback, member } from '@/db/schema';
+import { organization, project, user as userTable, feedback } from '@/db/schema';
 import { getSession } from '@/lib/auth';
-import { sql, eq, count, desc, and, gte, lte } from 'drizzle-orm';
+import { sql, eq, count, desc, gte } from 'drizzle-orm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,26 +12,16 @@ import {
   Building2,
   MessageSquare,
   Activity,
-  TrendingUp,
-  AlertCircle,
   Shield,
   Settings,
-  Eye,
   UserCheck,
-  UserX,
   Clock,
   Star,
   BarChart3,
-  LineChart,
   PieChart,
   Zap,
-  Globe,
   Lock,
-  Unlock,
-  ArrowUpRight,
-  ArrowDownRight,
-  Calendar,
-  Filter
+  ArrowUpRight
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -88,7 +78,6 @@ export default async function AdminPage() {
     adminUsersResult,
     superAdminUsersResult,
     recentUsers,
-    recentOrgs,
     topProjects,
     feedbackByCategory
   ] = isSuperAdmin ? await Promise.all([
@@ -96,7 +85,6 @@ export default async function AdminPage() {
     db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "admin")),
     db.select({ count: count() }).from(userTable).where(eq(userTable.systemRole, "super_admin")),
     db.select().from(userTable).orderBy(desc(userTable.createdAt)).limit(5),
-    db.select().from(organization).orderBy(desc(organization.createdAt)).limit(5),
     db.select({
       name: project.name,
       feedbackCount: count(feedback.id),
@@ -107,7 +95,7 @@ export default async function AdminPage() {
       category: feedback.category,
       count: count(feedback.id)
     }).from(feedback).groupBy(feedback.category)
-  ]) : [null, null, null, null, null, null, null];
+  ]) : [null, null, null, null, null, null];
 
   const activeUsers = activeUsersResult?.[0];
   const adminUsers = adminUsersResult?.[0];
