@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import ReloadButton from '@/components/admin/ReloadButton';
 import { db } from '@/db';
 import { organization, project, user as userTable, feedback } from '@/db/schema';
 import { getSession } from '@/lib/auth';
@@ -628,9 +629,7 @@ export default async function AdminPage() {
             <Button asChild className="w-full">
               <Link href="/dashboard">Return to Dashboard</Link>
             </Button>
-            <Button variant="outline" onClick={() => window.location.reload()} className="w-full">
-              Try Again
-            </Button>
+            <ReloadButton className="w-full" />
           </div>
 
           {!isDevelopment && (
@@ -643,3 +642,5 @@ export default async function AdminPage() {
     );
   }
 }
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
