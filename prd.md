@@ -174,7 +174,7 @@ Simple feedback collection tool for indie hackers and small teams. Users embed a
 <script>
 !function(){
   var script = document.createElement('script');
-  script.src = 'https://widget.feedbacksimple.com/widget.js';
+  script.src = 'https://widget.feedbacksimple.com/js/script.js';
   script.setAttribute('data-project', 'YOUR_PROJECT_ID');
   document.head.appendChild(script);
 }();

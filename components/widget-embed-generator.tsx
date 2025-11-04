@@ -11,48 +11,19 @@ import { Copy, Check, Code2, Palette } from "lucide-react";
 
 interface EmbedGeneratorProps {
   projectId: string;
-  apiKey: string;
+  apiKey: string; // retained for compatibility; not required in embed anymore
 }
 
-export function WidgetEmbedGenerator({ projectId, apiKey }: EmbedGeneratorProps) {
+export function WidgetEmbedGenerator({ projectId }: EmbedGeneratorProps) {
   const [customColor, setCustomColor] = useState("#2563eb");
+  const [triggerText, setTriggerText] = useState("Feedback");
   const [copied, setCopied] = useState(false);
 
+  const escapeAttr = (s: string) => s.replace(/"/g, '&quot;');
+
   const generateEmbedCode = () => {
-    return `<!-- FeedbackStar Widget -->
-<script>
-  (function() {
-    // Create widget container
-    const widgetContainer = document.createElement('div');
-    widgetContainer.id = 'feedbackstar-widget';
-    document.body.appendChild(widgetContainer);
-
-    // Widget configuration
-    window.FeedbackStarConfig = {
-      projectId: '${projectId}',
-      apiKey: '${apiKey}',
-      customColor: '${customColor}',
-      apiUrl: '${process.env.NODE_ENV === 'production' ? 'https://feedbackstar.com' : 'http://localhost:3001'}/api/feedback'
-    };
-
-    // Load widget script
-    const script = document.createElement('script');
-    script.src = '${process.env.NODE_ENV === 'production' ? 'https://feedbackstar.com' : 'http://localhost:3001'}/widget.js';
-    script.async = true;
-    script.onload = function() {
-      if (window.FeedbackStar) {
-        window.FeedbackStar.init(window.FeedbackStarConfig);
-      }
-    };
-    document.head.appendChild(script);
-
-    // Load widget styles
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '${process.env.NODE_ENV === 'production' ? 'https://feedbackstar.com' : 'http://localhost:3001'}/widget.css';
-    document.head.appendChild(link);
-  })();
-</script>`;
+    const base = process.env.NODE_ENV === 'production' ? 'https://feedbackstar.com' : 'http://localhost:3000';
+    return `<!-- FeedbackStar Widget -->\n<script async data-project-id="${escapeAttr(projectId)}" data-trigger-text="${escapeAttr(triggerText)}" data-primary-color="${escapeAttr(customColor)}" src="${base}/js/script.js"></script>`;
   };
 
   const copyToClipboard = async () => {
@@ -93,6 +64,18 @@ export function WidgetEmbedGenerator({ projectId, apiKey }: EmbedGeneratorProps)
           </div>
           
           <div>
+            <Label htmlFor="trigger-text" className="text-sm font-medium">
+              Button Text
+            </Label>
+            <Input
+              id="trigger-text"
+              value={triggerText}
+              onChange={(e) => setTriggerText(e.target.value)}
+              placeholder="Feedback"
+            />
+          </div>
+
+          <div className="md:col-span-2">
             <Label htmlFor="widget-color" className="text-sm font-medium flex items-center gap-2">
               <Palette className="h-4 w-4" />
               Widget Color
@@ -132,6 +115,7 @@ export function WidgetEmbedGenerator({ projectId, apiKey }: EmbedGeneratorProps)
             <Badge className="absolute top-2 left-2" variant="secondary">
               Your website content here
             </Badge>
+            <div className="absolute bottom-4 right-20 text-xs text-muted-foreground">{triggerText}</div>
           </div>
         </div>
 

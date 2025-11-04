@@ -10,7 +10,7 @@
   function getApiBase() {
     const scriptTag = document.currentScript || 
                      document.querySelector('script[data-project-id]') ||
-                     document.querySelector('script[src*="/widget/widget.js"]');
+                     document.querySelector('script[src*="/js/script.js"], script[src*="/widget/widget.js"]');
     
     if (scriptTag && scriptTag.src) {
       const url = new URL(scriptTag.src);

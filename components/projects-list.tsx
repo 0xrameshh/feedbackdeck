@@ -101,7 +101,7 @@ export function ProjectsList() {
   data-project-id="${project.id}"
   data-trigger-text="${trig}"
   data-primary-color="${color}"
-  src="${baseUrl}/widget/widget.js"></script>`;
+  src="${baseUrl}/js/script.js"></script>`;
   };
 
   const showEmbedCode = (project: Project) => {
