@@ -872,21 +872,36 @@
   function initializeWidget() {
     const scripts = document.querySelectorAll('script[data-project-id]');
     const script = scripts[scripts.length - 1];
-    
     if (!script) return;
-    
+
     const projectId = script.getAttribute('data-project-id');
     if (!projectId) {
       console.error('FeedbackStar: Missing data-project-id attribute');
       return;
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        window.FeedbackStarWidget = new FeedbackWidget(projectId);
-      });
+    // Read initial settings from data-* attributes to avoid flash of defaults
+    const ds = script.dataset || {};
+    const initialSettings = {};
+    if (ds.triggerText) initialSettings.triggerText = ds.triggerText;
+    if (ds.primaryColor) initialSettings.primaryColor = ds.primaryColor;
+
+    const run = () => {
+      window.FeedbackStarWidget = new FeedbackWidget(projectId, initialSettings);
+    };
+
+    // Mount as soon as body is ready (handles async/ defer/ inline)
+    if (document.body) {
+      run();
+    } else if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run, { once: true });
     } else {
-      window.FeedbackStarWidget = new FeedbackWidget(projectId);
+      const obs = new MutationObserver(() => {
+        if (document.body) { obs.disconnect(); run(); }
+      });
+      obs.observe(document.documentElement, { childList: true });
+      // Fallback timeout in unlikely case body never appears via observer
+      setTimeout(() => { if (!window.FeedbackStarWidget && document.body) run(); }, 2000);
     }
   }
 
