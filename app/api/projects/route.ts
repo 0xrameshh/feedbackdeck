@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       project: newProject,
-      embedCode: generateEmbedCode(projectId)
+      embedCode: generateEmbedCode(projectId, newProject.widgetSettings?.triggerText || 'Feedback', newProject.widgetSettings?.primaryColor || '#3b82f6')
     });
   } catch (error) {
     console.error("Error creating project:", error);
@@ -86,12 +86,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function generateEmbedCode(projectId: string): string {
+function generateEmbedCode(projectId: string, triggerText: string, primaryColor: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   
   return `<script 
-  defer 
+  async 
   data-project-id="${projectId}"
-  src="${baseUrl}/js/script.js">
-</script>`;
+  data-trigger-text="${triggerText}"
+  data-primary-color="${primaryColor}"
+  src="${baseUrl}/js/script.js"></script>`;
 }

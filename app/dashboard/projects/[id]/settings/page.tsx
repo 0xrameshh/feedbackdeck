@@ -100,11 +100,14 @@ export default function ProjectSettingsPage() {
 
   const generatePreviewCode = () => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const trig = settings.triggerText || 'Feedback';
+    const color = settings.primaryColor || '#3b82f6';
     return `<script 
-  defer 
+  async 
   data-project-id="${projectId}"
-  src="${baseUrl}/js/script.js">
-</script>`;
+  data-trigger-text="${trig}"
+  data-primary-color="${color}"
+  src="${baseUrl}/js/script.js"></script>`;
   };
 
   if (loading) {
