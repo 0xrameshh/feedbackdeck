@@ -31,7 +31,7 @@ Based on PRD requirements, implementing a feedback collection SaaS tool for indi
 - [x] **Build Success** - TypeScript compilation and Next.js build working
 
 ### Feedback Collection System ✅
-- [x] **Vanilla JS Widget** - Lightweight embeddable widget (`/js/script.js` → serves `public/widget/widget.js`)
+- [x] **Vanilla JS Widget** - Lightweight embeddable widget (`/public/widget/widget.js`)
   - Customizable trigger button with positioning options
   - Responsive modal form with 3 fields (message, category, email)
   - Auto-context capture (URL, browser, device, timestamp)

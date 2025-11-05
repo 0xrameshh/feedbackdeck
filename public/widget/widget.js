@@ -10,7 +10,7 @@
   function getApiBase() {
     const scriptTag = document.currentScript || 
                      document.querySelector('script[data-project-id]') ||
-                     document.querySelector('script[src*="/js/script.js"], script[src*="/widget/widget.js"]');
+                     document.querySelector('script[src*="/widget/widget.js"]');
     
     if (scriptTag && scriptTag.src) {
       const url = new URL(scriptTag.src);
@@ -43,18 +43,11 @@
     }
 
     async init() {
-      // Render immediately with defaults; fetch settings in background
+      await this.loadProjectSettings();
       this.injectStyles();
       this.createTrigger();
       this.createModal();
       this.bindEvents();
-
-      // Load project-specific settings without blocking initial render
-      this.loadProjectSettings()
-        .then(() => {
-          try { this.applySettings(); } catch (e) { console.warn('Apply settings failed:', e); }
-        })
-        .catch((err) => console.warn('Could not load project settings, using defaults:', err));
     }
 
     async loadProjectSettings() {
@@ -73,6 +66,7 @@
     }
 
     injectStyles() {
+      if (document.getElementById('feedbackstar-styles')) return;
       const styles = `
         /* FeedbackStar Logo */
         .feedbackstar-logo {
@@ -489,27 +483,12 @@
         }
       `;
 
-      const existing = document.getElementById('feedbackstar-styles');
-      if (existing) {
-        existing.textContent = styles;
-        return;
-      }
-
       const styleSheet = document.createElement('style');
       styleSheet.id = 'feedbackstar-styles';
       styleSheet.textContent = styles;
       document.head.appendChild(styleSheet);
     }
 
-    applySettings() {
-      // Update trigger text
-      const trigger = document.getElementById(CONFIG.TRIGGER_ID);
-      if (trigger) {
-        trigger.innerHTML = `<span>${this.settings.triggerText}</span>`;
-      }
-      // Rebuild styles to reflect any color changes
-      this.injectStyles();
-    }
 
     darkenColor(hex, percent) {
       const num = parseInt(hex.replace('#', ''), 16);
@@ -872,36 +851,21 @@
   function initializeWidget() {
     const scripts = document.querySelectorAll('script[data-project-id]');
     const script = scripts[scripts.length - 1];
+    
     if (!script) return;
-
+    
     const projectId = script.getAttribute('data-project-id');
     if (!projectId) {
       console.error('FeedbackStar: Missing data-project-id attribute');
       return;
     }
 
-    // Read initial settings from data-* attributes to avoid flash of defaults
-    const ds = script.dataset || {};
-    const initialSettings = {};
-    if (ds.triggerText) initialSettings.triggerText = ds.triggerText;
-    if (ds.primaryColor) initialSettings.primaryColor = ds.primaryColor;
-
-    const run = () => {
-      window.FeedbackStarWidget = new FeedbackWidget(projectId, initialSettings);
-    };
-
-    // Mount as soon as body is ready (handles async/ defer/ inline)
-    if (document.body) {
-      run();
-    } else if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', run, { once: true });
-    } else {
-      const obs = new MutationObserver(() => {
-        if (document.body) { obs.disconnect(); run(); }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        window.FeedbackStarWidget = new FeedbackWidget(projectId);
       });
-      obs.observe(document.documentElement, { childList: true });
-      // Fallback timeout in unlikely case body never appears via observer
-      setTimeout(() => { if (!window.FeedbackStarWidget && document.body) run(); }, 2000);
+    } else {
+      window.FeedbackStarWidget = new FeedbackWidget(projectId);
     }
   }
 

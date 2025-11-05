@@ -93,15 +93,10 @@ export function ProjectsList() {
 
   const generateEmbedCode = (project: Project) => {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const trig = project.widgetSettings?.triggerText || 'Feedback';
-    const color = project.widgetSettings?.primaryColor || '#3b82f6';
-    // Use data-* to avoid flash of defaults; mount as soon as body exists
     return `<script 
-  async
+  defer 
   data-project-id="${project.id}"
-  data-trigger-text="${trig}"
-  data-primary-color="${color}"
-  src="${baseUrl}/js/script.js"></script>`;
+  src="${baseUrl}/widget/widget.js"></script>`;
   };
 
   const showEmbedCode = (project: Project) => {

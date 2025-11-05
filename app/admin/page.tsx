@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
-import ReloadButton from '@/components/admin/ReloadButton';
 import { db } from '@/db';
 import { organization, project, user as userTable, feedback } from '@/db/schema';
 import { getSession } from '@/lib/auth';
@@ -629,7 +628,9 @@ export default async function AdminPage() {
             <Button asChild className="w-full">
               <Link href="/dashboard">Return to Dashboard</Link>
             </Button>
-            <ReloadButton className="w-full" />
+            <Button asChild variant="outline" className="w-full">
+              <Link href="/admin">Try Again</Link>
+            </Button>
           </div>
 
           {!isDevelopment && (
