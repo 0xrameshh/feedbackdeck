@@ -1,57 +1,52 @@
-# SaaS Starter Template
+# Feedbackstar
 
-## Overview
+A minimal, production-ready SaaS starter built with the modern Next.js stack. Includes auth, billing, email, and multi-tenant organizations out of the box.
 
-A minimal, production-ready SaaS starter template using Next.js, Better Auth, Shadcn/UI, Drizzle ORM, and Polar.sh billing.
+**Live demo:** https://feedbackstar.vercel.app
+
+## Stack
+
+- **Framework** - Next.js 15 (App Router)
+- **Auth** - Better Auth (Google OAuth + email/password)
+- **Database** - PostgreSQL + Drizzle ORM + Supabase
+- **Billing** - Polar.sh (subscriptions + payments)
+- **Email** - Resend + React Email
+- **UI** - shadcn/ui + Tailwind CSS v4 + Radix UI
+- **Analytics** - Vercel Analytics
 
 ## Features
 
-- 🔐 **Authentication** - Better Auth with Google OAuth + email/password
-- 🏢 **Organizations** - Simple multi-tenant organization management  
-- 💳 **Billing** - Polar.sh integration for subscriptions and payments
-- 📧 **Email** - Resend integration for transactional emails
-- 🎨 **UI** - Beautiful Shadcn/UI components with Tailwind CSS
-- 🗄️ **Database** - PostgreSQL with Drizzle ORM
+- Google OAuth + email/password login
+- Multi-tenant organization management
+- Subscription billing with Polar.sh webhooks
+- Transactional emails via Resend
+- Dark/light mode
+- Type-safe throughout with Zod + TypeScript
 
 ## Getting Started
 
-1. Clone this repository
-2. Install dependencies: `pnpm install`
-3. Copy `.env.example` to `.env.local` and fill in your environment variables
-4. Run database migrations: `pnpm drizzle-kit migrate`
-5. Start development server: `pnpm dev`
+```bash
+git clone https://github.com/rameshvoodi/feedbackstar
+cd feedbackstar
+pnpm install
+cp .env.example .env.local
+pnpm drizzle-kit migrate
+pnpm dev
+```
 
 ## Environment Variables
 
 ```env
-# Database
-DATABASE_URL=your_postgres_url
-
-# Auth
-BETTER_AUTH_SECRET=your_secret_key
+DATABASE_URL=
+BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:3000
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-NEXT_PUBLIC_APP_URL=""
-
-# Email
-RESEND_API_KEY=your_resend_api_key
-
-# Billing
-POLAR_ACCESS_TOKEN=your_polar_access_token
-POLAR_WEBHOOK_SECRET=your_polar_webhook_secret
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+NEXT_PUBLIC_APP_URL=
+RESEND_API_KEY=
+POLAR_ACCESS_TOKEN=
+POLAR_WEBHOOK_SECRET=
 ```
-
-## Tech Stack
-
-- **Framework:** Next.js 14 (App Router)
-- **Authentication:** Better Auth
-- **Database:** PostgreSQL with Drizzle ORM
-- **Billing:** Polar.sh
-- **Styling:** Tailwind CSS + Shadcn/UI
-- **Email:** Resend
-- **TypeScript:** Full type safety
 
 ## License
 
