@@ -36,7 +36,6 @@ interface DashboardStats {
 export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  // const [loading, setLoading] = useState(true); // Currently unused
 
   const fetchProjects = useCallback(async () => {
     try {
@@ -97,7 +96,6 @@ export default function DashboardPage() {
     }
   }, [projects, fetchStats]);
 
-  // const hasProjects = projects.length > 0; // Currently unused
   return (
     <div className="w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">

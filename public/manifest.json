@@ -1,7 +1,7 @@
 {
   "name": "FeedbackStar - Feedback Collection Widget",
   "short_name": "FeedbackStar",
-  "description": "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
+  "description": "Embeddable feedback widget and analytics dashboard for any website.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -10,38 +10,24 @@
   "icons": [
     {
       "src": "/favicon.ico",
-      "sizes": "600x600",
-      "type": "image/png"
+      "sizes": "48x48",
+      "type": "image/x-icon"
     },
     {
       "src": "/apple-touch-icon.png",
-      "sizes": "600x600",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
       "src": "/icon-192.png",
-      "sizes": "600x600",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
       "src": "/icon-512.png",
-      "sizes": "600x600",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ],
-  "categories": ["business", "productivity", "utilities"],
-  "screenshots": [
-    {
-      "src": "/screenshot-wide.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshot-narrow.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ]
+  "categories": ["business", "productivity", "utilities"]
 }

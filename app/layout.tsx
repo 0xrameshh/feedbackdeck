@@ -7,13 +7,15 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { Analytics } from "@vercel/analytics/next";
 
 
+const siteUrl = "https://feedbackstar.vercel.app";
+
 export const metadata: Metadata = {
   title: "FeedbackStar - Turn Feedback Into Growth",
   description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
-  keywords: "feedback widget, user feedback, customer feedback, website feedback, feedback collection, analytics dashboard, user insights, product feedback, feedback management, SaaS feedback tool",
-  authors: [{ name: "FeedbackStar Team" }],
-  creator: "FeedbackStar",
-  publisher: "FeedbackStar",
+  keywords: "feedback widget, user feedback, customer feedback, website feedback, feedback collection, analytics dashboard, product feedback",
+  authors: [{ name: "Ramesh Kumar", url: "https://github.com/0xrameshh" }],
+  creator: "Ramesh Kumar",
+  metadataBase: new URL(siteUrl),
   icons: {
     icon: [
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
@@ -38,32 +40,26 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://feedbackstar.com',
-    siteName: 'FeedbackStar',
-    title: 'FeedbackStar - Turn Feedback Into Growth',
-    description: 'Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.',
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "FeedbackStar",
+    title: "FeedbackStar - Turn Feedback Into Growth",
+    description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
     images: [
       {
-        url: 'https://feedbackstar.com/og-image.jpg',
+        url: "/og-image.jpg",
         width: 600,
         height: 600,
-        alt: 'FeedbackStar - Feedback Collection Widget',
-        type: 'image/png',
+        alt: "FeedbackStar - Feedback Collection Widget",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    site: '@feedbackstar',
-    creator: '@feedbackstar',
-    title: 'FeedbackStar - Turn Feedback Into Growth',
-    description: 'Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.',
-    images: ['https://feedbackstar.com/og-image.jpg'],
-  },
-  verification: {
-    google: 'your-google-site-verification',
+    card: "summary_large_image",
+    title: "FeedbackStar - Turn Feedback Into Growth",
+    description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
+    images: ["/og-image.jpg"],
   },
 };
 

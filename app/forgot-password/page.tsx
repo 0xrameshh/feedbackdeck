@@ -1,9 +1,8 @@
 import Link from "next/link";
-
-import Image from "next/image";
 import { ForgotPasswordForm } from "@/components/forms/forgot-password-form";
+import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -11,16 +10,8 @@ export default function LoginPage() {
           href="/"
           className="flex items-center gap-2 self-center font-medium"
         >
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <Image
-              width={50}
-              height={50}
-              src={"/logo.png"}
-              alt="SaaS Starter Logo"
-              priority
-            />
-          </div>
-          SaaS Starter
+          <FeedbackStarLogo size={24} />
+          FeedbackStar
         </Link>
         <ForgotPasswordForm />
       </div>

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { Suspense } from "react";
 import { ResetPasswordForm } from "@/components/forms/reset-password-form";
-import Image from "next/image";
+import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
 
 export default function ResetPasswordPage() {
   return (
@@ -13,16 +13,8 @@ export default function ResetPasswordPage() {
           href="/"
           className="flex items-center gap-2 self-center font-medium"
         >
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <Image
-              width={50}
-              height={50}
-              src={"/logo.png"}
-              alt="SaaS Starter Logo"
-              priority
-            />
-          </div>
-          SaaS Starter
+          <FeedbackStarLogo size={24} />
+          FeedbackStar
         </Link>
         <Suspense fallback={<div>Loading...</div>}>
           <ResetPasswordForm />

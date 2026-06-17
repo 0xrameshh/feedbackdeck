@@ -88,10 +88,9 @@ export async function POST(request: NextRequest) {
 
 function generateEmbedCode(projectId: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  
-  return `<script 
-  defer 
+
+  return `<script
+  defer
   data-project-id="${projectId}"
-  src="${baseUrl}/js/script.js">
-</script>`;
+  src="${baseUrl}/widget/widget.js"></script>`;
 }
