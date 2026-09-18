@@ -12,7 +12,7 @@ export function Header() {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <MessageSquare className="h-6 w-6 text-blue-600" />
-          <span className="font-bold">Hark</span>
+          <span className="font-bold">Sujhav</span>
         </div>
         <nav className="flex items-center gap-2">
           <Button variant="ghost" size="sm" asChild>

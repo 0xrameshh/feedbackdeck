@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { ResetPasswordForm } from "@/components/forms/reset-password-form";
-import { HarkLogo } from "@/components/hark-logo";
+import { SujhavLogo } from "@/components/sujhav-logo";
 
 export default function ResetPasswordPage() {
   return (
@@ -13,8 +13,8 @@ export default function ResetPasswordPage() {
           href="/"
           className="flex items-center gap-2 self-center font-medium"
         >
-          <HarkLogo size={24} />
-          Hark
+          <SujhavLogo size={24} />
+          Sujhav
         </Link>
         <Suspense fallback={<div>Loading...</div>}>
           <ResetPasswordForm />

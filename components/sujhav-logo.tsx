@@ -1,15 +1,15 @@
 import Image from "next/image";
 
-interface HarkLogoProps {
+interface SujhavLogoProps {
   size?: number;
   className?: string;
 }
 
-export function HarkLogo({ size = 32, className = "" }: HarkLogoProps) {
+export function SujhavLogo({ size = 32, className = "" }: SujhavLogoProps) {
   return (
     <Image
       src="/icon-192.png"
-      alt="Hark"
+      alt="Sujhav"
       width={size}
       height={size}
       className={className}

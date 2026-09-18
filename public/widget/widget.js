@@ -2,7 +2,7 @@
   'use strict';
 
   // Prevent multiple initializations
-  if (window.HarkWidget) {
+  if (window.SujhavWidget) {
     return;
   }
 
@@ -22,9 +22,9 @@
   
   const CONFIG = {
     API_BASE: getApiBase(),
-    WIDGET_ID: 'hark-widget',
-    TRIGGER_ID: 'hark-trigger',
-    MODAL_ID: 'hark-modal'
+    WIDGET_ID: 'sujhav-widget',
+    TRIGGER_ID: 'sujhav-trigger',
+    MODAL_ID: 'sujhav-modal'
   };
 
   class FeedbackWidget {
@@ -66,10 +66,10 @@
     }
 
     injectStyles() {
-      if (document.getElementById('hark-styles')) return;
+      if (document.getElementById('sujhav-styles')) return;
       const styles = `
-        /* Hark Logo */
-        .hark-logo {
+        /* Sujhav Logo */
+        .sujhav-logo {
           width: 18px;
           height: 18px;
           background-image: url("${CONFIG.API_BASE}/icon-192.png");
@@ -118,7 +118,7 @@
         }
 
         /* Backdrop */
-        .hark-backdrop {
+        .sujhav-backdrop {
           position: fixed;
           top: 0;
           left: 0;
@@ -132,7 +132,7 @@
           transition: all 0.3s ease;
         }
 
-        .hark-backdrop.show {
+        .sujhav-backdrop.show {
           opacity: 1;
           visibility: visible;
         }
@@ -158,7 +158,7 @@
         }
 
         /* Modal Content */
-        .hark-modal-content {
+        .sujhav-modal-content {
           background: rgba(255, 255, 255, 0.98);
           backdrop-filter: blur(16px);
           border-radius: 24px 24px 24px 0;
@@ -171,14 +171,14 @@
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
-          .hark-modal-content {
+          .sujhav-modal-content {
             background: rgba(31, 41, 55, 0.98);
             color: #f9fafb;
             border-color: rgba(255, 255, 255, 0.1);
           }
           
-          .hark-input,
-          .hark-textarea {
+          .sujhav-input,
+          .sujhav-textarea {
             background: rgba(55, 65, 81, 0.8) !important;
             border-color: rgba(75, 85, 99, 0.6) !important;
             color: #f9fafb !important;
@@ -186,7 +186,7 @@
         }
 
         /* Header */
-        .hark-header {
+        .sujhav-header {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           margin: -24px -24px 24px -24px;
           padding: 16px 24px;
@@ -197,25 +197,25 @@
           color: white;
         }
 
-        .hark-header-left {
+        .sujhav-header-left {
           display: flex;
           align-items: center;
           gap: 8px;
         }
 
-        .hark-header-logo {
+        .sujhav-header-logo {
           padding: 6px;
           background: rgba(255, 255, 255, 0.1);
           border-radius: 8px;
         }
 
-        .hark-title {
+        .sujhav-title {
           font-size: 16px;
           font-weight: 600;
           margin: 0;
         }
 
-        .hark-close {
+        .sujhav-close {
           background: none;
           border: none;
           color: rgba(255, 255, 255, 0.7);
@@ -231,44 +231,44 @@
           transition: all 0.2s ease;
         }
 
-        .hark-close:hover {
+        .sujhav-close:hover {
           background: rgba(255, 255, 255, 0.2);
           color: white;
           transform: scale(1.1);
         }
 
         /* Form */
-        .hark-form {
+        .sujhav-form {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .hark-field {
+        .sujhav-field {
           display: flex;
           flex-direction: column;
           gap: 4px;
         }
 
-        .hark-label {
+        .sujhav-label {
           font-size: 14px;
           font-weight: 500;
           color: #1f2937;
         }
 
         @media (prefers-color-scheme: dark) {
-          .hark-label {
+          .sujhav-label {
             color: #f9fafb;
           }
         }
 
-        .hark-rating-label {
+        .sujhav-rating-label {
           text-align: center;
           margin-bottom: 8px;
         }
 
         /* Star Rating */
-        .hark-rating {
+        .sujhav-rating {
           display: flex;
           justify-content: center;
           gap: 1px;
@@ -279,12 +279,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .hark-rating {
+          .sujhav-rating {
             background: rgba(255, 255, 255, 0.05);
           }
         }
 
-        .hark-star {
+        .sujhav-star {
           font-size: 20px;
           color: #d1d5db;
           cursor: pointer;
@@ -294,20 +294,20 @@
           user-select: none;
         }
 
-        .hark-star:hover,
-        .hark-star.active {
+        .sujhav-star:hover,
+        .sujhav-star.active {
           color: #f59e0b;
           transform: scale(1.1);
           background: rgba(245, 158, 11, 0.1);
         }
 
-        .hark-star.filled {
+        .sujhav-star.filled {
           color: #f59e0b;
           transform: scale(1.1);
         }
 
         /* Rating Messages */
-        .hark-rating-message {
+        .sujhav-rating-message {
           text-align: center;
           font-size: 12px;
           color: #6b7280;
@@ -316,9 +316,9 @@
         }
 
         /* Inputs */
-        .hark-input,
-        .hark-textarea,
-        .hark-select {
+        .sujhav-input,
+        .sujhav-textarea,
+        .sujhav-select {
           padding: 10px 14px;
           border: 2px solid rgba(209, 213, 219, 0.6);
           border-radius: 10px;
@@ -330,15 +330,15 @@
           outline: none;
         }
 
-        .hark-input:focus,
-        .hark-textarea:focus,
-        .hark-select:focus {
+        .sujhav-input:focus,
+        .sujhav-textarea:focus,
+        .sujhav-select:focus {
           border-color: ${this.settings.primaryColor};
           box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
           background: rgba(255, 255, 255, 0.9);
         }
 
-        .hark-select {
+        .sujhav-select {
           cursor: pointer;
           appearance: none;
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -348,18 +348,18 @@
           padding-right: 36px;
         }
 
-        .hark-textarea {
+        .sujhav-textarea {
           resize: vertical;
           min-height: 70px;
         }
 
-        .hark-input::placeholder,
-        .hark-textarea::placeholder {
+        .sujhav-input::placeholder,
+        .sujhav-textarea::placeholder {
           color: #9ca3af;
         }
 
         /* Submit Button */
-        .hark-submit {
+        .sujhav-submit {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           color: white;
           border: none;
@@ -372,28 +372,28 @@
           box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
         }
 
-        .hark-submit:hover:not(:disabled) {
+        .sujhav-submit:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
         }
 
-        .hark-submit:active {
+        .sujhav-submit:active {
           transform: translateY(0);
         }
 
-        .hark-submit:disabled {
+        .sujhav-submit:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
 
         /* Success State */
-        .hark-success {
+        .sujhav-success {
           text-align: center;
           padding: 32px 20px;
         }
 
-        .hark-success-icon {
+        .sujhav-success-icon {
           width: 56px;
           height: 56px;
           background: linear-gradient(135deg, #10b981, #059669);
@@ -406,29 +406,29 @@
           color: white;
         }
 
-        .hark-success-title {
+        .sujhav-success-title {
           font-size: 18px;
           font-weight: 600;
           margin-bottom: 8px;
           color: #1f2937;
         }
 
-        .hark-success-message {
+        .sujhav-success-message {
           font-size: 14px;
           color: #6b7280;
         }
 
         @media (prefers-color-scheme: dark) {
-          .hark-success-title {
+          .sujhav-success-title {
             color: #f9fafb;
           }
-          .hark-success-message {
+          .sujhav-success-message {
             color: #9ca3af;
           }
         }
 
         /* Branding */
-        .hark-branding {
+        .sujhav-branding {
           text-align: center;
           margin-top: 20px;
           padding-top: 16px;
@@ -436,12 +436,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .hark-branding {
+          .sujhav-branding {
             border-top-color: rgba(255, 255, 255, 0.1);
           }
         }
 
-        .hark-branding a {
+        .sujhav-branding a {
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -454,7 +454,7 @@
           border: 1px solid transparent;
         }
 
-        .hark-branding a:hover {
+        .sujhav-branding a:hover {
           color: ${this.settings.primaryColor};
           border-color: rgba(234, 88, 12, 0.2);
           background: rgba(234, 88, 12, 0.05);
@@ -475,7 +475,7 @@
             transform: translateY(0);
           }
           
-          .hark-modal-content {
+          .sujhav-modal-content {
             border-radius: 24px 24px 0 0;
             max-height: 80vh;
             overflow-y: auto;
@@ -484,7 +484,7 @@
       `;
 
       const styleSheet = document.createElement('style');
-      styleSheet.id = 'hark-styles';
+      styleSheet.id = 'sujhav-styles';
       styleSheet.textContent = styles;
       document.head.appendChild(styleSheet);
     }
@@ -514,37 +514,37 @@
 
     createModal() {
       const backdrop = document.createElement('div');
-      backdrop.className = 'hark-backdrop';
-      backdrop.id = 'hark-backdrop';
+      backdrop.className = 'sujhav-backdrop';
+      backdrop.id = 'sujhav-backdrop';
       
       const modal = document.createElement('div');
       modal.id = CONFIG.MODAL_ID;
       modal.innerHTML = `
-        <div class="hark-modal-content">
-          <div class="hark-header">
-            <div class="hark-header-left">
-              <h3 class="hark-title">Share Your Feedback</h3>
+        <div class="sujhav-modal-content">
+          <div class="sujhav-header">
+            <div class="sujhav-header-left">
+              <h3 class="sujhav-title">Share Your Feedback</h3>
             </div>
-            <button class="hark-close">×</button>
+            <button class="sujhav-close">×</button>
           </div>
           
-          <div id="hark-form-view">
-            <form class="hark-form" id="hark-form">
-              <div class="hark-field">
-                <label class="hark-label hark-rating-label">Rate your experience</label>
-                <div class="hark-rating" id="hark-rating">
-                  <span class="hark-star" data-rating="1">★</span>
-                  <span class="hark-star" data-rating="2">★</span>
-                  <span class="hark-star" data-rating="3">★</span>
-                  <span class="hark-star" data-rating="4">★</span>
-                  <span class="hark-star" data-rating="5">★</span>
+          <div id="sujhav-form-view">
+            <form class="sujhav-form" id="sujhav-form">
+              <div class="sujhav-field">
+                <label class="sujhav-label sujhav-rating-label">Rate your experience</label>
+                <div class="sujhav-rating" id="sujhav-rating">
+                  <span class="sujhav-star" data-rating="1">★</span>
+                  <span class="sujhav-star" data-rating="2">★</span>
+                  <span class="sujhav-star" data-rating="3">★</span>
+                  <span class="sujhav-star" data-rating="4">★</span>
+                  <span class="sujhav-star" data-rating="5">★</span>
                 </div>
-                <div class="hark-rating-message" id="hark-rating-message"></div>
+                <div class="sujhav-rating-message" id="sujhav-rating-message"></div>
               </div>
               
-              <div class="hark-field">
-                <label class="hark-label">Type of feedback</label>
-                <select id="hark-category" class="hark-select">
+              <div class="sujhav-field">
+                <label class="sujhav-label">Type of feedback</label>
+                <select id="sujhav-category" class="sujhav-select">
                   <option value="general">💬 General feedback</option>
                   <option value="bug">🐛 Bug report</option>
                   <option value="feature">✨ Feature request</option>
@@ -552,48 +552,48 @@
                 </select>
               </div>
               
-              <div class="hark-field">
-                <label class="hark-label">
+              <div class="sujhav-field">
+                <label class="sujhav-label">
                   Tell us more <span style="color: #9ca3af; font-weight: normal;">(optional)</span>
                 </label>
                 <textarea 
-                  id="hark-message" 
-                  class="hark-textarea" 
+                  id="sujhav-message" 
+                  class="sujhav-textarea" 
                   placeholder="Share your thoughts, suggestions, or what we can improve..."
                 ></textarea>
               </div>
               
-              <div class="hark-field">
-                <label class="hark-label">
+              <div class="sujhav-field">
+                <label class="sujhav-label">
                   Email <span style="color: #9ca3af; font-weight: normal;">(for follow-up)</span>
                 </label>
                 <input 
                   type="email" 
-                  id="hark-email" 
-                  class="hark-input" 
+                  id="sujhav-email" 
+                  class="sujhav-input" 
                   placeholder="your@email.com"
                 />
               </div>
               
-              <button type="submit" class="hark-submit" id="hark-submit">
+              <button type="submit" class="sujhav-submit" id="sujhav-submit">
                 Send Feedback
               </button>
             </form>
           </div>
           
-          <div id="hark-success-view" style="display: none;">
-            <div class="hark-success">
-              <div class="hark-success-icon">✓</div>
-              <h4 class="hark-success-title">Thank you!</h4>
-              <p class="hark-success-message">Your feedback helps us improve</p>
+          <div id="sujhav-success-view" style="display: none;">
+            <div class="sujhav-success">
+              <div class="sujhav-success-icon">✓</div>
+              <h4 class="sujhav-success-title">Thank you!</h4>
+              <p class="sujhav-success-message">Your feedback helps us improve</p>
             </div>
           </div>
           
-          <div class="hark-branding">
-            <a href="https://usehark.vercel.app" target="_blank" rel="noopener noreferrer">
+          <div class="sujhav-branding">
+            <a href="https://feedbackstar.vercel.app" target="_blank" rel="noopener noreferrer">
               <span style="font-weight: 500;">Powered by</span>
-              <div class="hark-logo"></div>
-              <span style="font-weight: 600;">Hark</span>
+              <div class="sujhav-logo"></div>
+              <span style="font-weight: 600;">Sujhav</span>
               <span style="font-size: 10px;">↗</span>
             </a>
           </div>
@@ -607,11 +607,11 @@
     bindEvents() {
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('hark-backdrop');
-      const closeBtn = modal.querySelector('.hark-close');
-      const form = modal.querySelector('#hark-form');
-      const stars = modal.querySelectorAll('.hark-star');
-      const ratingMessage = modal.querySelector('#hark-rating-message');
+      const backdrop = document.getElementById('sujhav-backdrop');
+      const closeBtn = modal.querySelector('.sujhav-close');
+      const form = modal.querySelector('#sujhav-form');
+      const stars = modal.querySelectorAll('.sujhav-star');
+      const ratingMessage = modal.querySelector('#sujhav-rating-message');
 
       // Open modal
       trigger.addEventListener('click', () => this.openModal());
@@ -641,7 +641,7 @@
         });
       });
 
-      const ratingContainer = modal.querySelector('.hark-rating');
+      const ratingContainer = modal.querySelector('.sujhav-rating');
       ratingContainer.addEventListener('mouseleave', () => {
         this.hoveredStar = 0;
         this.updateStars();
@@ -652,7 +652,7 @@
     }
 
     updateStars() {
-      const stars = document.querySelectorAll('.hark-star');
+      const stars = document.querySelectorAll('.sujhav-star');
       const displayRating = this.hoveredStar || this.rating;
       
       stars.forEach((star, index) => {
@@ -670,13 +670,13 @@
         5: "Awesome! Thank you! 🎉"
       };
       
-      const messageEl = document.getElementById('hark-rating-message');
+      const messageEl = document.getElementById('sujhav-rating-message');
       messageEl.textContent = this.rating > 0 ? messages[this.rating] : '';
     }
 
     openModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('hark-backdrop');
+      const backdrop = document.getElementById('sujhav-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = true;
@@ -687,14 +687,14 @@
       document.body.style.overflow = 'hidden';
       
       setTimeout(() => {
-        const messageInput = document.getElementById('hark-message');
+        const messageInput = document.getElementById('sujhav-message');
         if (messageInput) messageInput.focus();
       }, 400);
     }
 
     closeModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('hark-backdrop');
+      const backdrop = document.getElementById('sujhav-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = false;
@@ -709,10 +709,10 @@
     }
 
     resetForm() {
-      const form = document.getElementById('hark-form');
-      const formView = document.getElementById('hark-form-view');
-      const successView = document.getElementById('hark-success-view');
-      const submitBtn = document.getElementById('hark-submit');
+      const form = document.getElementById('sujhav-form');
+      const formView = document.getElementById('sujhav-form-view');
+      const successView = document.getElementById('sujhav-success-view');
+      const submitBtn = document.getElementById('sujhav-submit');
       
       form.reset();
       formView.style.display = 'block';
@@ -729,10 +729,10 @@
     async handleSubmit(e) {
       e.preventDefault();
       
-      const submitBtn = document.getElementById('hark-submit');
-      const message = document.getElementById('hark-message').value;
-      const email = document.getElementById('hark-email').value;
-      const category = document.getElementById('hark-category').value;
+      const submitBtn = document.getElementById('sujhav-submit');
+      const message = document.getElementById('sujhav-message').value;
+      const email = document.getElementById('sujhav-email').value;
+      const category = document.getElementById('sujhav-category').value;
       
       if (this.rating === 0) {
         alert('Please rate your experience before submitting');
@@ -783,8 +783,8 @@
     }
 
     showSuccess() {
-      const formView = document.getElementById('hark-form-view');
-      const successView = document.getElementById('hark-success-view');
+      const formView = document.getElementById('sujhav-form-view');
+      const successView = document.getElementById('sujhav-success-view');
       
       formView.style.display = 'none';
       successView.style.display = 'block';
@@ -856,16 +856,16 @@
     
     const projectId = script.getAttribute('data-project-id');
     if (!projectId) {
-      console.error('Hark: Missing data-project-id attribute');
+      console.error('Sujhav: Missing data-project-id attribute');
       return;
     }
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        window.HarkWidget = new FeedbackWidget(projectId);
+        window.SujhavWidget = new FeedbackWidget(projectId);
       });
     } else {
-      window.HarkWidget = new FeedbackWidget(projectId);
+      window.SujhavWidget = new FeedbackWidget(projectId);
     }
   }
 

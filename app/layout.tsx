@@ -7,10 +7,10 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { Analytics } from "@vercel/analytics/next";
 
 
-const siteUrl = "https://usehark.vercel.app";
+const siteUrl = "https://feedbackstar.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Hark - Turn Feedback Into Growth",
+  title: "Sujhav - Turn Feedback Into Growth",
   description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
   keywords: "feedback widget, user feedback, customer feedback, website feedback, feedback collection, analytics dashboard, product feedback",
   authors: [{ name: "Ramesh Kumar", url: "https://github.com/0xrameshh" }],
@@ -43,21 +43,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Hark",
-    title: "Hark - Turn Feedback Into Growth",
+    siteName: "Sujhav",
+    title: "Sujhav - Turn Feedback Into Growth",
     description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
     images: [
       {
         url: "/og-image.jpg",
         width: 600,
         height: 600,
-        alt: "Hark - Feedback Collection Widget",
+        alt: "Sujhav - Feedback Collection Widget",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hark - Turn Feedback Into Growth",
+    title: "Sujhav - Turn Feedback Into Growth",
     description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
     images: ["/og-image.jpg"],
   },

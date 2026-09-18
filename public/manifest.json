@@ -1,6 +1,6 @@
 {
-  "name": "Hark - Feedback Collection Widget",
-  "short_name": "Hark",
+  "name": "Sujhav - Feedback Collection Widget",
+  "short_name": "Sujhav",
   "description": "Embeddable feedback widget and analytics dashboard for any website.",
   "start_url": "/",
   "display": "standalone",
