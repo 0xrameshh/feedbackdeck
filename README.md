@@ -1,4 +1,4 @@
-# Sujhav
+# FeedbackDeck
 
 Full-stack feedback collection platform — embed a lightweight widget on any site, manage submissions in a React dashboard, and track analytics over time.
 
@@ -13,7 +13,7 @@ Full-stack feedback collection platform — embed a lightweight widget on any si
 
 ## Overview
 
-Sujhav is a production-ready SaaS for collecting in-product feedback. Site owners embed a single script tag; visitors submit bug reports, feature requests, praise, or general comments with optional star ratings. Owners review everything in a multi-project dashboard with category filters, response workflows, and analytics charts.
+FeedbackDeck is a production-ready SaaS for collecting in-product feedback. Site owners embed a single script tag; visitors submit bug reports, feature requests, praise, or general comments with optional star ratings. Owners review everything in a multi-project dashboard with category filters, response workflows, and analytics charts.
 
 Built as a full-stack TypeScript application with multi-tenant organizations, subscription billing, and email notifications.
 
@@ -71,7 +71,7 @@ flowchart LR
 ## Project structure
 
 ```
-sujhav/
+feedbackdeck/
 ├── app/                    # Next.js routes (dashboard, API, auth, pricing)
 ├── components/             # React UI (forms, charts, shadcn components)
 ├── db/                     # Drizzle schema + connection
@@ -92,8 +92,8 @@ sujhav/
 ### Setup
 
 ```bash
-git clone https://github.com/0xrameshh/sujhav.git
-cd sujhav
+git clone https://github.com/0xrameshh/feedbackdeck.git
+cd feedbackdeck
 pnpm install
 cp .env.example .env.local
 # Fill in DATABASE_URL and auth secrets in .env.local

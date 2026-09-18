@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "motion/react";
 import AuthGuard from "@/components/auth-guard";
 import { ModeSwitcher } from "@/components/mode-switcher";
-import { SujhavLogo } from "@/components/sujhav-logo";
+import { FeedbackDeckLogo } from "@/components/feedbackdeck-logo";
 import Link from "next/link";
 import { useAuth } from "@/contexts/auth-context";
 import { usePathname } from "next/navigation";
@@ -108,10 +108,10 @@ export default function DashboardLayout({
                 >
                   <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity group min-w-0">
                     <div className="p-2 bg-primary/10 rounded-xl group-hover:bg-primary/15 transition-colors flex-shrink-0">
-                      <SujhavLogo size={24} className="group-hover:scale-110 transition-transform" />
+                      <FeedbackDeckLogo size={24} className="group-hover:scale-110 transition-transform" />
                     </div>
                     <span className="font-bold text-lg text-foreground truncate">
-                      Sujhav
+                      FeedbackDeck
                     </span>
                   </Link>
                 </motion.div>

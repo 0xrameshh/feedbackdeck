@@ -10,7 +10,7 @@ import { Analytics } from "@vercel/analytics/next";
 const siteUrl = "https://feedbackstar.vercel.app";
 
 export const metadata: Metadata = {
-  title: "Sujhav - Turn Feedback Into Growth",
+  title: "FeedbackDeck - Turn Feedback Into Growth",
   description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
   keywords: "feedback widget, user feedback, customer feedback, website feedback, feedback collection, analytics dashboard, product feedback",
   authors: [{ name: "Ramesh Kumar", url: "https://github.com/0xrameshh" }],
@@ -43,21 +43,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    siteName: "Sujhav",
-    title: "Sujhav - Turn Feedback Into Growth",
+    siteName: "FeedbackDeck",
+    title: "FeedbackDeck - Turn Feedback Into Growth",
     description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
     images: [
       {
         url: "/og-image.jpg",
         width: 600,
         height: 600,
-        alt: "Sujhav - Feedback Collection Widget",
+        alt: "FeedbackDeck - Feedback Collection Widget",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sujhav - Turn Feedback Into Growth",
+    title: "FeedbackDeck - Turn Feedback Into Growth",
     description: "Beautiful, lightweight feedback widget that fits any website. Collect insights, engage users, and drive product decisions with real data.",
     images: ["/og-image.jpg"],
   },

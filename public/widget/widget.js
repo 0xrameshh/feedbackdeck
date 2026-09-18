@@ -2,7 +2,7 @@
   'use strict';
 
   // Prevent multiple initializations
-  if (window.SujhavWidget) {
+  if (window.FeedbackDeckWidget) {
     return;
   }
 
@@ -22,9 +22,9 @@
   
   const CONFIG = {
     API_BASE: getApiBase(),
-    WIDGET_ID: 'sujhav-widget',
-    TRIGGER_ID: 'sujhav-trigger',
-    MODAL_ID: 'sujhav-modal'
+    WIDGET_ID: 'feedbackdeck-widget',
+    TRIGGER_ID: 'feedbackdeck-trigger',
+    MODAL_ID: 'feedbackdeck-modal'
   };
 
   class FeedbackWidget {
@@ -66,10 +66,10 @@
     }
 
     injectStyles() {
-      if (document.getElementById('sujhav-styles')) return;
+      if (document.getElementById('feedbackdeck-styles')) return;
       const styles = `
-        /* Sujhav Logo */
-        .sujhav-logo {
+        /* FeedbackDeck Logo */
+        .feedbackdeck-logo {
           width: 18px;
           height: 18px;
           background-image: url("${CONFIG.API_BASE}/icon-192.png");
@@ -118,7 +118,7 @@
         }
 
         /* Backdrop */
-        .sujhav-backdrop {
+        .feedbackdeck-backdrop {
           position: fixed;
           top: 0;
           left: 0;
@@ -132,7 +132,7 @@
           transition: all 0.3s ease;
         }
 
-        .sujhav-backdrop.show {
+        .feedbackdeck-backdrop.show {
           opacity: 1;
           visibility: visible;
         }
@@ -158,7 +158,7 @@
         }
 
         /* Modal Content */
-        .sujhav-modal-content {
+        .feedbackdeck-modal-content {
           background: rgba(255, 255, 255, 0.98);
           backdrop-filter: blur(16px);
           border-radius: 24px 24px 24px 0;
@@ -171,14 +171,14 @@
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
-          .sujhav-modal-content {
+          .feedbackdeck-modal-content {
             background: rgba(31, 41, 55, 0.98);
             color: #f9fafb;
             border-color: rgba(255, 255, 255, 0.1);
           }
           
-          .sujhav-input,
-          .sujhav-textarea {
+          .feedbackdeck-input,
+          .feedbackdeck-textarea {
             background: rgba(55, 65, 81, 0.8) !important;
             border-color: rgba(75, 85, 99, 0.6) !important;
             color: #f9fafb !important;
@@ -186,7 +186,7 @@
         }
 
         /* Header */
-        .sujhav-header {
+        .feedbackdeck-header {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           margin: -24px -24px 24px -24px;
           padding: 16px 24px;
@@ -197,25 +197,25 @@
           color: white;
         }
 
-        .sujhav-header-left {
+        .feedbackdeck-header-left {
           display: flex;
           align-items: center;
           gap: 8px;
         }
 
-        .sujhav-header-logo {
+        .feedbackdeck-header-logo {
           padding: 6px;
           background: rgba(255, 255, 255, 0.1);
           border-radius: 8px;
         }
 
-        .sujhav-title {
+        .feedbackdeck-title {
           font-size: 16px;
           font-weight: 600;
           margin: 0;
         }
 
-        .sujhav-close {
+        .feedbackdeck-close {
           background: none;
           border: none;
           color: rgba(255, 255, 255, 0.7);
@@ -231,44 +231,44 @@
           transition: all 0.2s ease;
         }
 
-        .sujhav-close:hover {
+        .feedbackdeck-close:hover {
           background: rgba(255, 255, 255, 0.2);
           color: white;
           transform: scale(1.1);
         }
 
         /* Form */
-        .sujhav-form {
+        .feedbackdeck-form {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .sujhav-field {
+        .feedbackdeck-field {
           display: flex;
           flex-direction: column;
           gap: 4px;
         }
 
-        .sujhav-label {
+        .feedbackdeck-label {
           font-size: 14px;
           font-weight: 500;
           color: #1f2937;
         }
 
         @media (prefers-color-scheme: dark) {
-          .sujhav-label {
+          .feedbackdeck-label {
             color: #f9fafb;
           }
         }
 
-        .sujhav-rating-label {
+        .feedbackdeck-rating-label {
           text-align: center;
           margin-bottom: 8px;
         }
 
         /* Star Rating */
-        .sujhav-rating {
+        .feedbackdeck-rating {
           display: flex;
           justify-content: center;
           gap: 1px;
@@ -279,12 +279,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .sujhav-rating {
+          .feedbackdeck-rating {
             background: rgba(255, 255, 255, 0.05);
           }
         }
 
-        .sujhav-star {
+        .feedbackdeck-star {
           font-size: 20px;
           color: #d1d5db;
           cursor: pointer;
@@ -294,20 +294,20 @@
           user-select: none;
         }
 
-        .sujhav-star:hover,
-        .sujhav-star.active {
+        .feedbackdeck-star:hover,
+        .feedbackdeck-star.active {
           color: #f59e0b;
           transform: scale(1.1);
           background: rgba(245, 158, 11, 0.1);
         }
 
-        .sujhav-star.filled {
+        .feedbackdeck-star.filled {
           color: #f59e0b;
           transform: scale(1.1);
         }
 
         /* Rating Messages */
-        .sujhav-rating-message {
+        .feedbackdeck-rating-message {
           text-align: center;
           font-size: 12px;
           color: #6b7280;
@@ -316,9 +316,9 @@
         }
 
         /* Inputs */
-        .sujhav-input,
-        .sujhav-textarea,
-        .sujhav-select {
+        .feedbackdeck-input,
+        .feedbackdeck-textarea,
+        .feedbackdeck-select {
           padding: 10px 14px;
           border: 2px solid rgba(209, 213, 219, 0.6);
           border-radius: 10px;
@@ -330,15 +330,15 @@
           outline: none;
         }
 
-        .sujhav-input:focus,
-        .sujhav-textarea:focus,
-        .sujhav-select:focus {
+        .feedbackdeck-input:focus,
+        .feedbackdeck-textarea:focus,
+        .feedbackdeck-select:focus {
           border-color: ${this.settings.primaryColor};
           box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
           background: rgba(255, 255, 255, 0.9);
         }
 
-        .sujhav-select {
+        .feedbackdeck-select {
           cursor: pointer;
           appearance: none;
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -348,18 +348,18 @@
           padding-right: 36px;
         }
 
-        .sujhav-textarea {
+        .feedbackdeck-textarea {
           resize: vertical;
           min-height: 70px;
         }
 
-        .sujhav-input::placeholder,
-        .sujhav-textarea::placeholder {
+        .feedbackdeck-input::placeholder,
+        .feedbackdeck-textarea::placeholder {
           color: #9ca3af;
         }
 
         /* Submit Button */
-        .sujhav-submit {
+        .feedbackdeck-submit {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           color: white;
           border: none;
@@ -372,28 +372,28 @@
           box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
         }
 
-        .sujhav-submit:hover:not(:disabled) {
+        .feedbackdeck-submit:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
         }
 
-        .sujhav-submit:active {
+        .feedbackdeck-submit:active {
           transform: translateY(0);
         }
 
-        .sujhav-submit:disabled {
+        .feedbackdeck-submit:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
 
         /* Success State */
-        .sujhav-success {
+        .feedbackdeck-success {
           text-align: center;
           padding: 32px 20px;
         }
 
-        .sujhav-success-icon {
+        .feedbackdeck-success-icon {
           width: 56px;
           height: 56px;
           background: linear-gradient(135deg, #10b981, #059669);
@@ -406,29 +406,29 @@
           color: white;
         }
 
-        .sujhav-success-title {
+        .feedbackdeck-success-title {
           font-size: 18px;
           font-weight: 600;
           margin-bottom: 8px;
           color: #1f2937;
         }
 
-        .sujhav-success-message {
+        .feedbackdeck-success-message {
           font-size: 14px;
           color: #6b7280;
         }
 
         @media (prefers-color-scheme: dark) {
-          .sujhav-success-title {
+          .feedbackdeck-success-title {
             color: #f9fafb;
           }
-          .sujhav-success-message {
+          .feedbackdeck-success-message {
             color: #9ca3af;
           }
         }
 
         /* Branding */
-        .sujhav-branding {
+        .feedbackdeck-branding {
           text-align: center;
           margin-top: 20px;
           padding-top: 16px;
@@ -436,12 +436,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .sujhav-branding {
+          .feedbackdeck-branding {
             border-top-color: rgba(255, 255, 255, 0.1);
           }
         }
 
-        .sujhav-branding a {
+        .feedbackdeck-branding a {
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -454,7 +454,7 @@
           border: 1px solid transparent;
         }
 
-        .sujhav-branding a:hover {
+        .feedbackdeck-branding a:hover {
           color: ${this.settings.primaryColor};
           border-color: rgba(234, 88, 12, 0.2);
           background: rgba(234, 88, 12, 0.05);
@@ -475,7 +475,7 @@
             transform: translateY(0);
           }
           
-          .sujhav-modal-content {
+          .feedbackdeck-modal-content {
             border-radius: 24px 24px 0 0;
             max-height: 80vh;
             overflow-y: auto;
@@ -484,7 +484,7 @@
       `;
 
       const styleSheet = document.createElement('style');
-      styleSheet.id = 'sujhav-styles';
+      styleSheet.id = 'feedbackdeck-styles';
       styleSheet.textContent = styles;
       document.head.appendChild(styleSheet);
     }
@@ -514,37 +514,37 @@
 
     createModal() {
       const backdrop = document.createElement('div');
-      backdrop.className = 'sujhav-backdrop';
-      backdrop.id = 'sujhav-backdrop';
+      backdrop.className = 'feedbackdeck-backdrop';
+      backdrop.id = 'feedbackdeck-backdrop';
       
       const modal = document.createElement('div');
       modal.id = CONFIG.MODAL_ID;
       modal.innerHTML = `
-        <div class="sujhav-modal-content">
-          <div class="sujhav-header">
-            <div class="sujhav-header-left">
-              <h3 class="sujhav-title">Share Your Feedback</h3>
+        <div class="feedbackdeck-modal-content">
+          <div class="feedbackdeck-header">
+            <div class="feedbackdeck-header-left">
+              <h3 class="feedbackdeck-title">Share Your Feedback</h3>
             </div>
-            <button class="sujhav-close">×</button>
+            <button class="feedbackdeck-close">×</button>
           </div>
           
-          <div id="sujhav-form-view">
-            <form class="sujhav-form" id="sujhav-form">
-              <div class="sujhav-field">
-                <label class="sujhav-label sujhav-rating-label">Rate your experience</label>
-                <div class="sujhav-rating" id="sujhav-rating">
-                  <span class="sujhav-star" data-rating="1">★</span>
-                  <span class="sujhav-star" data-rating="2">★</span>
-                  <span class="sujhav-star" data-rating="3">★</span>
-                  <span class="sujhav-star" data-rating="4">★</span>
-                  <span class="sujhav-star" data-rating="5">★</span>
+          <div id="feedbackdeck-form-view">
+            <form class="feedbackdeck-form" id="feedbackdeck-form">
+              <div class="feedbackdeck-field">
+                <label class="feedbackdeck-label feedbackdeck-rating-label">Rate your experience</label>
+                <div class="feedbackdeck-rating" id="feedbackdeck-rating">
+                  <span class="feedbackdeck-star" data-rating="1">★</span>
+                  <span class="feedbackdeck-star" data-rating="2">★</span>
+                  <span class="feedbackdeck-star" data-rating="3">★</span>
+                  <span class="feedbackdeck-star" data-rating="4">★</span>
+                  <span class="feedbackdeck-star" data-rating="5">★</span>
                 </div>
-                <div class="sujhav-rating-message" id="sujhav-rating-message"></div>
+                <div class="feedbackdeck-rating-message" id="feedbackdeck-rating-message"></div>
               </div>
               
-              <div class="sujhav-field">
-                <label class="sujhav-label">Type of feedback</label>
-                <select id="sujhav-category" class="sujhav-select">
+              <div class="feedbackdeck-field">
+                <label class="feedbackdeck-label">Type of feedback</label>
+                <select id="feedbackdeck-category" class="feedbackdeck-select">
                   <option value="general">💬 General feedback</option>
                   <option value="bug">🐛 Bug report</option>
                   <option value="feature">✨ Feature request</option>
@@ -552,48 +552,48 @@
                 </select>
               </div>
               
-              <div class="sujhav-field">
-                <label class="sujhav-label">
+              <div class="feedbackdeck-field">
+                <label class="feedbackdeck-label">
                   Tell us more <span style="color: #9ca3af; font-weight: normal;">(optional)</span>
                 </label>
                 <textarea 
-                  id="sujhav-message" 
-                  class="sujhav-textarea" 
+                  id="feedbackdeck-message" 
+                  class="feedbackdeck-textarea" 
                   placeholder="Share your thoughts, suggestions, or what we can improve..."
                 ></textarea>
               </div>
               
-              <div class="sujhav-field">
-                <label class="sujhav-label">
+              <div class="feedbackdeck-field">
+                <label class="feedbackdeck-label">
                   Email <span style="color: #9ca3af; font-weight: normal;">(for follow-up)</span>
                 </label>
                 <input 
                   type="email" 
-                  id="sujhav-email" 
-                  class="sujhav-input" 
+                  id="feedbackdeck-email" 
+                  class="feedbackdeck-input" 
                   placeholder="your@email.com"
                 />
               </div>
               
-              <button type="submit" class="sujhav-submit" id="sujhav-submit">
+              <button type="submit" class="feedbackdeck-submit" id="feedbackdeck-submit">
                 Send Feedback
               </button>
             </form>
           </div>
           
-          <div id="sujhav-success-view" style="display: none;">
-            <div class="sujhav-success">
-              <div class="sujhav-success-icon">✓</div>
-              <h4 class="sujhav-success-title">Thank you!</h4>
-              <p class="sujhav-success-message">Your feedback helps us improve</p>
+          <div id="feedbackdeck-success-view" style="display: none;">
+            <div class="feedbackdeck-success">
+              <div class="feedbackdeck-success-icon">✓</div>
+              <h4 class="feedbackdeck-success-title">Thank you!</h4>
+              <p class="feedbackdeck-success-message">Your feedback helps us improve</p>
             </div>
           </div>
           
-          <div class="sujhav-branding">
+          <div class="feedbackdeck-branding">
             <a href="https://feedbackstar.vercel.app" target="_blank" rel="noopener noreferrer">
               <span style="font-weight: 500;">Powered by</span>
-              <div class="sujhav-logo"></div>
-              <span style="font-weight: 600;">Sujhav</span>
+              <div class="feedbackdeck-logo"></div>
+              <span style="font-weight: 600;">FeedbackDeck</span>
               <span style="font-size: 10px;">↗</span>
             </a>
           </div>
@@ -607,11 +607,11 @@
     bindEvents() {
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('sujhav-backdrop');
-      const closeBtn = modal.querySelector('.sujhav-close');
-      const form = modal.querySelector('#sujhav-form');
-      const stars = modal.querySelectorAll('.sujhav-star');
-      const ratingMessage = modal.querySelector('#sujhav-rating-message');
+      const backdrop = document.getElementById('feedbackdeck-backdrop');
+      const closeBtn = modal.querySelector('.feedbackdeck-close');
+      const form = modal.querySelector('#feedbackdeck-form');
+      const stars = modal.querySelectorAll('.feedbackdeck-star');
+      const ratingMessage = modal.querySelector('#feedbackdeck-rating-message');
 
       // Open modal
       trigger.addEventListener('click', () => this.openModal());
@@ -641,7 +641,7 @@
         });
       });
 
-      const ratingContainer = modal.querySelector('.sujhav-rating');
+      const ratingContainer = modal.querySelector('.feedbackdeck-rating');
       ratingContainer.addEventListener('mouseleave', () => {
         this.hoveredStar = 0;
         this.updateStars();
@@ -652,7 +652,7 @@
     }
 
     updateStars() {
-      const stars = document.querySelectorAll('.sujhav-star');
+      const stars = document.querySelectorAll('.feedbackdeck-star');
       const displayRating = this.hoveredStar || this.rating;
       
       stars.forEach((star, index) => {
@@ -670,13 +670,13 @@
         5: "Awesome! Thank you! 🎉"
       };
       
-      const messageEl = document.getElementById('sujhav-rating-message');
+      const messageEl = document.getElementById('feedbackdeck-rating-message');
       messageEl.textContent = this.rating > 0 ? messages[this.rating] : '';
     }
 
     openModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('sujhav-backdrop');
+      const backdrop = document.getElementById('feedbackdeck-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = true;
@@ -687,14 +687,14 @@
       document.body.style.overflow = 'hidden';
       
       setTimeout(() => {
-        const messageInput = document.getElementById('sujhav-message');
+        const messageInput = document.getElementById('feedbackdeck-message');
         if (messageInput) messageInput.focus();
       }, 400);
     }
 
     closeModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('sujhav-backdrop');
+      const backdrop = document.getElementById('feedbackdeck-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = false;
@@ -709,10 +709,10 @@
     }
 
     resetForm() {
-      const form = document.getElementById('sujhav-form');
-      const formView = document.getElementById('sujhav-form-view');
-      const successView = document.getElementById('sujhav-success-view');
-      const submitBtn = document.getElementById('sujhav-submit');
+      const form = document.getElementById('feedbackdeck-form');
+      const formView = document.getElementById('feedbackdeck-form-view');
+      const successView = document.getElementById('feedbackdeck-success-view');
+      const submitBtn = document.getElementById('feedbackdeck-submit');
       
       form.reset();
       formView.style.display = 'block';
@@ -729,10 +729,10 @@
     async handleSubmit(e) {
       e.preventDefault();
       
-      const submitBtn = document.getElementById('sujhav-submit');
-      const message = document.getElementById('sujhav-message').value;
-      const email = document.getElementById('sujhav-email').value;
-      const category = document.getElementById('sujhav-category').value;
+      const submitBtn = document.getElementById('feedbackdeck-submit');
+      const message = document.getElementById('feedbackdeck-message').value;
+      const email = document.getElementById('feedbackdeck-email').value;
+      const category = document.getElementById('feedbackdeck-category').value;
       
       if (this.rating === 0) {
         alert('Please rate your experience before submitting');
@@ -783,8 +783,8 @@
     }
 
     showSuccess() {
-      const formView = document.getElementById('sujhav-form-view');
-      const successView = document.getElementById('sujhav-success-view');
+      const formView = document.getElementById('feedbackdeck-form-view');
+      const successView = document.getElementById('feedbackdeck-success-view');
       
       formView.style.display = 'none';
       successView.style.display = 'block';
@@ -856,16 +856,16 @@
     
     const projectId = script.getAttribute('data-project-id');
     if (!projectId) {
-      console.error('Sujhav: Missing data-project-id attribute');
+      console.error('FeedbackDeck: Missing data-project-id attribute');
       return;
     }
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        window.SujhavWidget = new FeedbackWidget(projectId);
+        window.FeedbackDeckWidget = new FeedbackWidget(projectId);
       });
     } else {
-      window.SujhavWidget = new FeedbackWidget(projectId);
+      window.FeedbackDeckWidget = new FeedbackWidget(projectId);
     }
   }
 

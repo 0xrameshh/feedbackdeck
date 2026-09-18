@@ -1,6 +1,6 @@
 {
-  "name": "Sujhav - Feedback Collection Widget",
-  "short_name": "Sujhav",
+  "name": "FeedbackDeck - Feedback Collection Widget",
+  "short_name": "FeedbackDeck",
   "description": "Embeddable feedback widget and analytics dashboard for any website.",
   "start_url": "/",
   "display": "standalone",

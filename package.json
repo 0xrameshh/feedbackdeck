@@ -1,5 +1,5 @@
 {
-  "name": "sujhav",
+  "name": "feedbackdeck",
   "version": "1.0.0",
   "description": "Embeddable feedback widget and analytics dashboard — Next.js, PostgreSQL, Better Auth, Polar.sh",
   "author": "Ramesh Kumar <https://github.com/0xrameshh>",
@@ -7,7 +7,7 @@
   "homepage": "https://feedbackstar.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/0xrameshh/sujhav.git"
+    "url": "https://github.com/0xrameshh/feedbackdeck.git"
   },
   "private": true,
   "scripts": {

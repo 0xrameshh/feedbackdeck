@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
-import { SujhavLogo } from "@/components/sujhav-logo";
+import { FeedbackDeckLogo } from "@/components/feedbackdeck-logo";
 
 export function HeaderNav() {
   const { isAuthenticated, loading, signOut } = useAuth();
@@ -13,8 +13,8 @@ export function HeaderNav() {
   return (
     <header className="absolute top-0 w-full flex justify-between items-center p-6 z-10">
       <div className="flex items-center gap-3">
-        <SujhavLogo size={40} />
-        <span className="text-xl font-bold">Sujhav</span>
+        <FeedbackDeckLogo size={40} />
+        <span className="text-xl font-bold">FeedbackDeck</span>
       </div>
       <div className="flex items-center gap-4">
         <ModeSwitcher />

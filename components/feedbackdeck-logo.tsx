@@ -1,15 +1,15 @@
 import Image from "next/image";
 
-interface SujhavLogoProps {
+interface FeedbackDeckLogoProps {
   size?: number;
   className?: string;
 }
 
-export function SujhavLogo({ size = 32, className = "" }: SujhavLogoProps) {
+export function FeedbackDeckLogo({ size = 32, className = "" }: FeedbackDeckLogoProps) {
   return (
     <Image
       src="/icon-192.png"
-      alt="Sujhav"
+      alt="FeedbackDeck"
       width={size}
       height={size}
       className={className}

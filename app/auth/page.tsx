@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import Link from "next/link";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { SujhavLogo } from "@/components/sujhav-logo";
+import { FeedbackDeckLogo } from "@/components/feedbackdeck-logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -68,14 +68,14 @@ function AuthPageContent() {
             className="flex items-center gap-3 self-center font-medium hover:opacity-80 transition-opacity"
           >
             <div className="p-2 bg-primary/10 rounded-xl">
-              <SujhavLogo size={32} />
+              <FeedbackDeckLogo size={32} />
             </div>
-            <span className="text-xl font-bold">Sujhav</span>
+            <span className="text-xl font-bold">FeedbackDeck</span>
           </Link>
           
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">Welcome to Sujhav</CardTitle>
+              <CardTitle className="text-xl">Welcome to FeedbackDeck</CardTitle>
               <CardDescription>Sign in to access your feedback dashboard</CardDescription>
             </CardHeader>
             <CardContent>
