@@ -1,6 +1,6 @@
 {
-  "name": "FeedbackStar - Feedback Collection Widget",
-  "short_name": "FeedbackStar",
+  "name": "Hark - Feedback Collection Widget",
+  "short_name": "Hark",
   "description": "Embeddable feedback widget and analytics dashboard for any website.",
   "start_url": "/",
   "display": "standalone",

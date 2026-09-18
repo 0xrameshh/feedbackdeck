@@ -29,7 +29,7 @@ export const auth = betterAuth({
         httpOnly: true,
     },
     advanced: {
-        cookiePrefix: "feedbackstar",
+        cookiePrefix: "hark",
         database: {
             generateId: () => crypto.randomUUID(),
         },

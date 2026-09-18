@@ -192,7 +192,7 @@ export default function PricingPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-4">Frequently Asked Questions</h2>
               <p className="text-xl text-gray-600 dark:text-gray-300">
-                Everything you need to know about FeedbackStar pricing.
+                Everything you need to know about Hark pricing.
               </p>
             </div>
 
@@ -232,7 +232,7 @@ export default function PricingPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-4">Ready to get started?</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              Collect valuable feedback from your users with FeedbackStar.
+              Collect valuable feedback from your users with Hark.
             </p>
             <Link href="/auth">
               <Button size="lg" className="text-lg px-8 py-6">

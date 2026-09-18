@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { MessageSquare, BarChart3, Mail, Zap, Globe, Shield, Star, ArrowRight } from "lucide-react";
 import { HeaderNav } from "@/components/header-nav";
-import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
+import { HarkLogo } from "@/components/hark-logo";
 import { useAuth } from "@/contexts/auth-context";
 
 export default function Home() {
@@ -169,8 +169,8 @@ export default function Home() {
             {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <FeedbackStarLogo size={40} />
-                <span className="text-2xl font-bold">FeedbackStar</span>
+                <HarkLogo size={40} />
+                <span className="text-2xl font-bold">Hark</span>
               </div>
               <p className="text-muted-foreground mb-6 max-w-md">
                 Beautiful, lightweight feedback widget that helps you collect user insights and improve your product with real data-driven decisions.
@@ -218,7 +218,7 @@ export default function Home() {
           
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground mb-4 md:mb-0">
-              &copy; 2025 FeedbackStar. All rights reserved.
+              &copy; 2025 Hark. All rights reserved.
             </p>
             <div className="text-muted-foreground">
               Built for indie hackers

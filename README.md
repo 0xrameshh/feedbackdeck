@@ -1,19 +1,19 @@
-# FeedbackStar
+# Hark
 
 Full-stack feedback collection platform — embed a lightweight widget on any site, manage submissions in a React dashboard, and track analytics over time.
 
-[![Live Demo](https://img.shields.io/badge/demo-feedbackstar.vercel.app-2563eb?style=for-the-badge)](https://feedbackstar.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-hark.vercel.app-2563eb?style=for-the-badge)](https://hark.vercel.app)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Drizzle-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://orm.drizzle.team)
 
-**Live app:** [feedbackstar.vercel.app](https://feedbackstar.vercel.app)
+**Live app:** [hark.vercel.app](https://hark.vercel.app)
 
 ---
 
 ## Overview
 
-FeedbackStar is a production-ready SaaS for collecting in-product feedback. Site owners embed a single script tag; visitors submit bug reports, feature requests, praise, or general comments with optional star ratings. Owners review everything in a multi-project dashboard with category filters, response workflows, and analytics charts.
+Hark is a production-ready SaaS for collecting in-product feedback. Site owners embed a single script tag; visitors submit bug reports, feature requests, praise, or general comments with optional star ratings. Owners review everything in a multi-project dashboard with category filters, response workflows, and analytics charts.
 
 Built as a full-stack TypeScript application with multi-tenant organizations, subscription billing, and email notifications.
 
@@ -71,7 +71,7 @@ flowchart LR
 ## Project structure
 
 ```
-feedbackstar/
+hark/
 ├── app/                    # Next.js routes (dashboard, API, auth, pricing)
 ├── components/             # React UI (forms, charts, shadcn components)
 ├── db/                     # Drizzle schema + connection
@@ -92,8 +92,8 @@ feedbackstar/
 ### Setup
 
 ```bash
-git clone https://github.com/0xrameshh/feedbackstar.git
-cd feedbackstar
+git clone https://github.com/0xrameshh/hark.git
+cd hark
 pnpm install
 cp .env.example .env.local
 # Fill in DATABASE_URL and auth secrets in .env.local
@@ -127,7 +127,7 @@ Copy `.env.example` to `.env.local` and configure:
 
 ```html
 <script
-  src="https://feedbackstar.vercel.app/widget/widget.js"
+  src="https://hark.vercel.app/widget/widget.js"
   data-project-id="YOUR_PROJECT_ID"
   defer
 ></script>

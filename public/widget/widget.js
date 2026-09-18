@@ -2,7 +2,7 @@
   'use strict';
 
   // Prevent multiple initializations
-  if (window.FeedbackStarWidget) {
+  if (window.HarkWidget) {
     return;
   }
 
@@ -22,9 +22,9 @@
   
   const CONFIG = {
     API_BASE: getApiBase(),
-    WIDGET_ID: 'feedbackstar-widget',
-    TRIGGER_ID: 'feedbackstar-trigger',
-    MODAL_ID: 'feedbackstar-modal'
+    WIDGET_ID: 'hark-widget',
+    TRIGGER_ID: 'hark-trigger',
+    MODAL_ID: 'hark-modal'
   };
 
   class FeedbackWidget {
@@ -66,10 +66,10 @@
     }
 
     injectStyles() {
-      if (document.getElementById('feedbackstar-styles')) return;
+      if (document.getElementById('hark-styles')) return;
       const styles = `
-        /* FeedbackStar Logo */
-        .feedbackstar-logo {
+        /* Hark Logo */
+        .hark-logo {
           width: 18px;
           height: 18px;
           background-image: url("${CONFIG.API_BASE}/icon-192.png");
@@ -118,7 +118,7 @@
         }
 
         /* Backdrop */
-        .feedbackstar-backdrop {
+        .hark-backdrop {
           position: fixed;
           top: 0;
           left: 0;
@@ -132,7 +132,7 @@
           transition: all 0.3s ease;
         }
 
-        .feedbackstar-backdrop.show {
+        .hark-backdrop.show {
           opacity: 1;
           visibility: visible;
         }
@@ -158,7 +158,7 @@
         }
 
         /* Modal Content */
-        .feedbackstar-modal-content {
+        .hark-modal-content {
           background: rgba(255, 255, 255, 0.98);
           backdrop-filter: blur(16px);
           border-radius: 24px 24px 24px 0;
@@ -171,14 +171,14 @@
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
-          .feedbackstar-modal-content {
+          .hark-modal-content {
             background: rgba(31, 41, 55, 0.98);
             color: #f9fafb;
             border-color: rgba(255, 255, 255, 0.1);
           }
           
-          .feedbackstar-input,
-          .feedbackstar-textarea {
+          .hark-input,
+          .hark-textarea {
             background: rgba(55, 65, 81, 0.8) !important;
             border-color: rgba(75, 85, 99, 0.6) !important;
             color: #f9fafb !important;
@@ -186,7 +186,7 @@
         }
 
         /* Header */
-        .feedbackstar-header {
+        .hark-header {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           margin: -24px -24px 24px -24px;
           padding: 16px 24px;
@@ -197,25 +197,25 @@
           color: white;
         }
 
-        .feedbackstar-header-left {
+        .hark-header-left {
           display: flex;
           align-items: center;
           gap: 8px;
         }
 
-        .feedbackstar-header-logo {
+        .hark-header-logo {
           padding: 6px;
           background: rgba(255, 255, 255, 0.1);
           border-radius: 8px;
         }
 
-        .feedbackstar-title {
+        .hark-title {
           font-size: 16px;
           font-weight: 600;
           margin: 0;
         }
 
-        .feedbackstar-close {
+        .hark-close {
           background: none;
           border: none;
           color: rgba(255, 255, 255, 0.7);
@@ -231,44 +231,44 @@
           transition: all 0.2s ease;
         }
 
-        .feedbackstar-close:hover {
+        .hark-close:hover {
           background: rgba(255, 255, 255, 0.2);
           color: white;
           transform: scale(1.1);
         }
 
         /* Form */
-        .feedbackstar-form {
+        .hark-form {
           display: flex;
           flex-direction: column;
           gap: 12px;
         }
 
-        .feedbackstar-field {
+        .hark-field {
           display: flex;
           flex-direction: column;
           gap: 4px;
         }
 
-        .feedbackstar-label {
+        .hark-label {
           font-size: 14px;
           font-weight: 500;
           color: #1f2937;
         }
 
         @media (prefers-color-scheme: dark) {
-          .feedbackstar-label {
+          .hark-label {
             color: #f9fafb;
           }
         }
 
-        .feedbackstar-rating-label {
+        .hark-rating-label {
           text-align: center;
           margin-bottom: 8px;
         }
 
         /* Star Rating */
-        .feedbackstar-rating {
+        .hark-rating {
           display: flex;
           justify-content: center;
           gap: 1px;
@@ -279,12 +279,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .feedbackstar-rating {
+          .hark-rating {
             background: rgba(255, 255, 255, 0.05);
           }
         }
 
-        .feedbackstar-star {
+        .hark-star {
           font-size: 20px;
           color: #d1d5db;
           cursor: pointer;
@@ -294,20 +294,20 @@
           user-select: none;
         }
 
-        .feedbackstar-star:hover,
-        .feedbackstar-star.active {
+        .hark-star:hover,
+        .hark-star.active {
           color: #f59e0b;
           transform: scale(1.1);
           background: rgba(245, 158, 11, 0.1);
         }
 
-        .feedbackstar-star.filled {
+        .hark-star.filled {
           color: #f59e0b;
           transform: scale(1.1);
         }
 
         /* Rating Messages */
-        .feedbackstar-rating-message {
+        .hark-rating-message {
           text-align: center;
           font-size: 12px;
           color: #6b7280;
@@ -316,9 +316,9 @@
         }
 
         /* Inputs */
-        .feedbackstar-input,
-        .feedbackstar-textarea,
-        .feedbackstar-select {
+        .hark-input,
+        .hark-textarea,
+        .hark-select {
           padding: 10px 14px;
           border: 2px solid rgba(209, 213, 219, 0.6);
           border-radius: 10px;
@@ -330,15 +330,15 @@
           outline: none;
         }
 
-        .feedbackstar-input:focus,
-        .feedbackstar-textarea:focus,
-        .feedbackstar-select:focus {
+        .hark-input:focus,
+        .hark-textarea:focus,
+        .hark-select:focus {
           border-color: ${this.settings.primaryColor};
           box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
           background: rgba(255, 255, 255, 0.9);
         }
 
-        .feedbackstar-select {
+        .hark-select {
           cursor: pointer;
           appearance: none;
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -348,18 +348,18 @@
           padding-right: 36px;
         }
 
-        .feedbackstar-textarea {
+        .hark-textarea {
           resize: vertical;
           min-height: 70px;
         }
 
-        .feedbackstar-input::placeholder,
-        .feedbackstar-textarea::placeholder {
+        .hark-input::placeholder,
+        .hark-textarea::placeholder {
           color: #9ca3af;
         }
 
         /* Submit Button */
-        .feedbackstar-submit {
+        .hark-submit {
           background: linear-gradient(135deg, ${this.settings.primaryColor}, ${this.darkenColor(this.settings.primaryColor, 10)});
           color: white;
           border: none;
@@ -372,28 +372,28 @@
           box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
         }
 
-        .feedbackstar-submit:hover:not(:disabled) {
+        .hark-submit:hover:not(:disabled) {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
         }
 
-        .feedbackstar-submit:active {
+        .hark-submit:active {
           transform: translateY(0);
         }
 
-        .feedbackstar-submit:disabled {
+        .hark-submit:disabled {
           opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
 
         /* Success State */
-        .feedbackstar-success {
+        .hark-success {
           text-align: center;
           padding: 32px 20px;
         }
 
-        .feedbackstar-success-icon {
+        .hark-success-icon {
           width: 56px;
           height: 56px;
           background: linear-gradient(135deg, #10b981, #059669);
@@ -406,29 +406,29 @@
           color: white;
         }
 
-        .feedbackstar-success-title {
+        .hark-success-title {
           font-size: 18px;
           font-weight: 600;
           margin-bottom: 8px;
           color: #1f2937;
         }
 
-        .feedbackstar-success-message {
+        .hark-success-message {
           font-size: 14px;
           color: #6b7280;
         }
 
         @media (prefers-color-scheme: dark) {
-          .feedbackstar-success-title {
+          .hark-success-title {
             color: #f9fafb;
           }
-          .feedbackstar-success-message {
+          .hark-success-message {
             color: #9ca3af;
           }
         }
 
         /* Branding */
-        .feedbackstar-branding {
+        .hark-branding {
           text-align: center;
           margin-top: 20px;
           padding-top: 16px;
@@ -436,12 +436,12 @@
         }
 
         @media (prefers-color-scheme: dark) {
-          .feedbackstar-branding {
+          .hark-branding {
             border-top-color: rgba(255, 255, 255, 0.1);
           }
         }
 
-        .feedbackstar-branding a {
+        .hark-branding a {
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -454,7 +454,7 @@
           border: 1px solid transparent;
         }
 
-        .feedbackstar-branding a:hover {
+        .hark-branding a:hover {
           color: ${this.settings.primaryColor};
           border-color: rgba(234, 88, 12, 0.2);
           background: rgba(234, 88, 12, 0.05);
@@ -475,7 +475,7 @@
             transform: translateY(0);
           }
           
-          .feedbackstar-modal-content {
+          .hark-modal-content {
             border-radius: 24px 24px 0 0;
             max-height: 80vh;
             overflow-y: auto;
@@ -484,7 +484,7 @@
       `;
 
       const styleSheet = document.createElement('style');
-      styleSheet.id = 'feedbackstar-styles';
+      styleSheet.id = 'hark-styles';
       styleSheet.textContent = styles;
       document.head.appendChild(styleSheet);
     }
@@ -514,37 +514,37 @@
 
     createModal() {
       const backdrop = document.createElement('div');
-      backdrop.className = 'feedbackstar-backdrop';
-      backdrop.id = 'feedbackstar-backdrop';
+      backdrop.className = 'hark-backdrop';
+      backdrop.id = 'hark-backdrop';
       
       const modal = document.createElement('div');
       modal.id = CONFIG.MODAL_ID;
       modal.innerHTML = `
-        <div class="feedbackstar-modal-content">
-          <div class="feedbackstar-header">
-            <div class="feedbackstar-header-left">
-              <h3 class="feedbackstar-title">Share Your Feedback</h3>
+        <div class="hark-modal-content">
+          <div class="hark-header">
+            <div class="hark-header-left">
+              <h3 class="hark-title">Share Your Feedback</h3>
             </div>
-            <button class="feedbackstar-close">×</button>
+            <button class="hark-close">×</button>
           </div>
           
-          <div id="feedbackstar-form-view">
-            <form class="feedbackstar-form" id="feedbackstar-form">
-              <div class="feedbackstar-field">
-                <label class="feedbackstar-label feedbackstar-rating-label">Rate your experience</label>
-                <div class="feedbackstar-rating" id="feedbackstar-rating">
-                  <span class="feedbackstar-star" data-rating="1">★</span>
-                  <span class="feedbackstar-star" data-rating="2">★</span>
-                  <span class="feedbackstar-star" data-rating="3">★</span>
-                  <span class="feedbackstar-star" data-rating="4">★</span>
-                  <span class="feedbackstar-star" data-rating="5">★</span>
+          <div id="hark-form-view">
+            <form class="hark-form" id="hark-form">
+              <div class="hark-field">
+                <label class="hark-label hark-rating-label">Rate your experience</label>
+                <div class="hark-rating" id="hark-rating">
+                  <span class="hark-star" data-rating="1">★</span>
+                  <span class="hark-star" data-rating="2">★</span>
+                  <span class="hark-star" data-rating="3">★</span>
+                  <span class="hark-star" data-rating="4">★</span>
+                  <span class="hark-star" data-rating="5">★</span>
                 </div>
-                <div class="feedbackstar-rating-message" id="feedbackstar-rating-message"></div>
+                <div class="hark-rating-message" id="hark-rating-message"></div>
               </div>
               
-              <div class="feedbackstar-field">
-                <label class="feedbackstar-label">Type of feedback</label>
-                <select id="feedbackstar-category" class="feedbackstar-select">
+              <div class="hark-field">
+                <label class="hark-label">Type of feedback</label>
+                <select id="hark-category" class="hark-select">
                   <option value="general">💬 General feedback</option>
                   <option value="bug">🐛 Bug report</option>
                   <option value="feature">✨ Feature request</option>
@@ -552,48 +552,48 @@
                 </select>
               </div>
               
-              <div class="feedbackstar-field">
-                <label class="feedbackstar-label">
+              <div class="hark-field">
+                <label class="hark-label">
                   Tell us more <span style="color: #9ca3af; font-weight: normal;">(optional)</span>
                 </label>
                 <textarea 
-                  id="feedbackstar-message" 
-                  class="feedbackstar-textarea" 
+                  id="hark-message" 
+                  class="hark-textarea" 
                   placeholder="Share your thoughts, suggestions, or what we can improve..."
                 ></textarea>
               </div>
               
-              <div class="feedbackstar-field">
-                <label class="feedbackstar-label">
+              <div class="hark-field">
+                <label class="hark-label">
                   Email <span style="color: #9ca3af; font-weight: normal;">(for follow-up)</span>
                 </label>
                 <input 
                   type="email" 
-                  id="feedbackstar-email" 
-                  class="feedbackstar-input" 
+                  id="hark-email" 
+                  class="hark-input" 
                   placeholder="your@email.com"
                 />
               </div>
               
-              <button type="submit" class="feedbackstar-submit" id="feedbackstar-submit">
+              <button type="submit" class="hark-submit" id="hark-submit">
                 Send Feedback
               </button>
             </form>
           </div>
           
-          <div id="feedbackstar-success-view" style="display: none;">
-            <div class="feedbackstar-success">
-              <div class="feedbackstar-success-icon">✓</div>
-              <h4 class="feedbackstar-success-title">Thank you!</h4>
-              <p class="feedbackstar-success-message">Your feedback helps us improve</p>
+          <div id="hark-success-view" style="display: none;">
+            <div class="hark-success">
+              <div class="hark-success-icon">✓</div>
+              <h4 class="hark-success-title">Thank you!</h4>
+              <p class="hark-success-message">Your feedback helps us improve</p>
             </div>
           </div>
           
-          <div class="feedbackstar-branding">
-            <a href="https://feedbackstar.vercel.app" target="_blank" rel="noopener noreferrer">
+          <div class="hark-branding">
+            <a href="https://hark.vercel.app" target="_blank" rel="noopener noreferrer">
               <span style="font-weight: 500;">Powered by</span>
-              <div class="feedbackstar-logo"></div>
-              <span style="font-weight: 600;">FeedbackStar</span>
+              <div class="hark-logo"></div>
+              <span style="font-weight: 600;">Hark</span>
               <span style="font-size: 10px;">↗</span>
             </a>
           </div>
@@ -607,11 +607,11 @@
     bindEvents() {
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('feedbackstar-backdrop');
-      const closeBtn = modal.querySelector('.feedbackstar-close');
-      const form = modal.querySelector('#feedbackstar-form');
-      const stars = modal.querySelectorAll('.feedbackstar-star');
-      const ratingMessage = modal.querySelector('#feedbackstar-rating-message');
+      const backdrop = document.getElementById('hark-backdrop');
+      const closeBtn = modal.querySelector('.hark-close');
+      const form = modal.querySelector('#hark-form');
+      const stars = modal.querySelectorAll('.hark-star');
+      const ratingMessage = modal.querySelector('#hark-rating-message');
 
       // Open modal
       trigger.addEventListener('click', () => this.openModal());
@@ -641,7 +641,7 @@
         });
       });
 
-      const ratingContainer = modal.querySelector('.feedbackstar-rating');
+      const ratingContainer = modal.querySelector('.hark-rating');
       ratingContainer.addEventListener('mouseleave', () => {
         this.hoveredStar = 0;
         this.updateStars();
@@ -652,7 +652,7 @@
     }
 
     updateStars() {
-      const stars = document.querySelectorAll('.feedbackstar-star');
+      const stars = document.querySelectorAll('.hark-star');
       const displayRating = this.hoveredStar || this.rating;
       
       stars.forEach((star, index) => {
@@ -670,13 +670,13 @@
         5: "Awesome! Thank you! 🎉"
       };
       
-      const messageEl = document.getElementById('feedbackstar-rating-message');
+      const messageEl = document.getElementById('hark-rating-message');
       messageEl.textContent = this.rating > 0 ? messages[this.rating] : '';
     }
 
     openModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('feedbackstar-backdrop');
+      const backdrop = document.getElementById('hark-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = true;
@@ -687,14 +687,14 @@
       document.body.style.overflow = 'hidden';
       
       setTimeout(() => {
-        const messageInput = document.getElementById('feedbackstar-message');
+        const messageInput = document.getElementById('hark-message');
         if (messageInput) messageInput.focus();
       }, 400);
     }
 
     closeModal() {
       const modal = document.getElementById(CONFIG.MODAL_ID);
-      const backdrop = document.getElementById('feedbackstar-backdrop');
+      const backdrop = document.getElementById('hark-backdrop');
       const trigger = document.getElementById(CONFIG.TRIGGER_ID);
       
       this.isOpen = false;
@@ -709,10 +709,10 @@
     }
 
     resetForm() {
-      const form = document.getElementById('feedbackstar-form');
-      const formView = document.getElementById('feedbackstar-form-view');
-      const successView = document.getElementById('feedbackstar-success-view');
-      const submitBtn = document.getElementById('feedbackstar-submit');
+      const form = document.getElementById('hark-form');
+      const formView = document.getElementById('hark-form-view');
+      const successView = document.getElementById('hark-success-view');
+      const submitBtn = document.getElementById('hark-submit');
       
       form.reset();
       formView.style.display = 'block';
@@ -729,10 +729,10 @@
     async handleSubmit(e) {
       e.preventDefault();
       
-      const submitBtn = document.getElementById('feedbackstar-submit');
-      const message = document.getElementById('feedbackstar-message').value;
-      const email = document.getElementById('feedbackstar-email').value;
-      const category = document.getElementById('feedbackstar-category').value;
+      const submitBtn = document.getElementById('hark-submit');
+      const message = document.getElementById('hark-message').value;
+      const email = document.getElementById('hark-email').value;
+      const category = document.getElementById('hark-category').value;
       
       if (this.rating === 0) {
         alert('Please rate your experience before submitting');
@@ -783,8 +783,8 @@
     }
 
     showSuccess() {
-      const formView = document.getElementById('feedbackstar-form-view');
-      const successView = document.getElementById('feedbackstar-success-view');
+      const formView = document.getElementById('hark-form-view');
+      const successView = document.getElementById('hark-success-view');
       
       formView.style.display = 'none';
       successView.style.display = 'block';
@@ -856,16 +856,16 @@
     
     const projectId = script.getAttribute('data-project-id');
     if (!projectId) {
-      console.error('FeedbackStar: Missing data-project-id attribute');
+      console.error('Hark: Missing data-project-id attribute');
       return;
     }
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
-        window.FeedbackStarWidget = new FeedbackWidget(projectId);
+        window.HarkWidget = new FeedbackWidget(projectId);
       });
     } else {
-      window.FeedbackStarWidget = new FeedbackWidget(projectId);
+      window.HarkWidget = new FeedbackWidget(projectId);
     }
   }
 

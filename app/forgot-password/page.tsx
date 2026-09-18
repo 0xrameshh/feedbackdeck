@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ForgotPasswordForm } from "@/components/forms/forgot-password-form";
-import { FeedbackStarLogo } from "@/components/feedbackstar-logo";
+import { HarkLogo } from "@/components/hark-logo";
 
 export default function ForgotPasswordPage() {
   return (
@@ -10,8 +10,8 @@ export default function ForgotPasswordPage() {
           href="/"
           className="flex items-center gap-2 self-center font-medium"
         >
-          <FeedbackStarLogo size={24} />
-          FeedbackStar
+          <HarkLogo size={24} />
+          Hark
         </Link>
         <ForgotPasswordForm />
       </div>
