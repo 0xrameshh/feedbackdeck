@@ -590,7 +590,7 @@
           </div>
           
           <div class="hark-branding">
-            <a href="https://hark.vercel.app" target="_blank" rel="noopener noreferrer">
+            <a href="https://usehark.vercel.app" target="_blank" rel="noopener noreferrer">
               <span style="font-weight: 500;">Powered by</span>
               <div class="hark-logo"></div>
               <span style="font-weight: 600;">Hark</span>

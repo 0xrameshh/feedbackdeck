@@ -4,7 +4,7 @@
   "description": "Embeddable feedback widget and analytics dashboard — Next.js, PostgreSQL, Better Auth, Polar.sh",
   "author": "Ramesh Kumar <https://github.com/0xrameshh>",
   "license": "MIT",
-  "homepage": "https://hark.vercel.app",
+  "homepage": "https://usehark.vercel.app",
   "repository": {
     "type": "git",
     "url": "https://github.com/0xrameshh/hark.git"

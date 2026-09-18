@@ -7,7 +7,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { Analytics } from "@vercel/analytics/next";
 
 
-const siteUrl = "https://hark.vercel.app";
+const siteUrl = "https://usehark.vercel.app";
 
 export const metadata: Metadata = {
   title: "Hark - Turn Feedback Into Growth",

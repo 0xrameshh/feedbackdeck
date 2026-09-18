@@ -2,12 +2,12 @@
 
 Full-stack feedback collection platform — embed a lightweight widget on any site, manage submissions in a React dashboard, and track analytics over time.
 
-[![Live Demo](https://img.shields.io/badge/demo-hark.vercel.app-2563eb?style=for-the-badge)](https://hark.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-usehark.vercel.app-2563eb?style=for-the-badge)](https://usehark.vercel.app)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Drizzle-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://orm.drizzle.team)
 
-**Live app:** [hark.vercel.app](https://hark.vercel.app)
+**Live app:** [usehark.vercel.app](https://usehark.vercel.app)
 
 ---
 
@@ -127,7 +127,7 @@ Copy `.env.example` to `.env.local` and configure:
 
 ```html
 <script
-  src="https://hark.vercel.app/widget/widget.js"
+  src="https://usehark.vercel.app/widget/widget.js"
   data-project-id="YOUR_PROJECT_ID"
   defer
 ></script>
